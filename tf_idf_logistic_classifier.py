@@ -16,7 +16,7 @@ total = pd.read_csv('data/ProgrammerWeb/programweb-data.csv', encoding='utf-8', 
 
 domain = pd.read_csv('data/ProgrammerWeb/domainnet.csv', encoding='utf-8', sep='\t')
 
-class_names = domain['source'].drop_duplicates().values
+class_names = domain['from'].drop_duplicates().values
 
 test = total.sample(frac=0.2,axis=0,random_state=0)
 train = total[~total['id'].isin(test['id'].values)]
