@@ -11,7 +11,7 @@ from scipy.sparse import hstack
 
 # class_names = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
 
-total = pd.read_csv('data/ProgrammerWeb/programweb-data.csv', error_bad_lines=False).fillna(' ')
+total = pd.read_csv('data/ProgrammerWeb/programweb-data.csv',  encoding='utf-8', error_bad_lines=False).fillna(' ')
 # test = pd.read_csv('../data/test.csv').fillna(' ')
 print(total)
 
@@ -21,7 +21,7 @@ print(domain)
 
 class_names = domain['from'].drop_duplicates().values
 
-test = total.sample(frac=0.2,axis=0,random_state=0)
+test = total.sample(frac=0.2, axis=0, random_state=0)
 train = total[~total['id'].isin(test['id'].values)]
 
 
@@ -111,7 +111,7 @@ mAP = list()
 for cla in tqdm(class_names2):
     ap = sm.average_precision_score(gt_labels[cla],submission[cla])
     mAP.append(ap)
-np.mean(mAP)
+print(np.mean(mAP))
 
 
 
