@@ -76,7 +76,9 @@ class GCNBert(nn.Module):
         x = self.gc2(x, self.adj)
 
         x = x.transpose(0, 1)
+        print(x)
         x = torch.matmul(sentence_feat, x)
+
 
         # linear = nn.Linear(len(sentence_feat), len(tag_embedding))
         # x = linear(sentence_feat)
