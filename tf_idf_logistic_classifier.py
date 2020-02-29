@@ -11,7 +11,7 @@ from scipy.sparse import hstack
 
 # class_names = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
 
-total = pd.read_csv('data/ProgrammerWeb/programweb-data.csv', encoding='utf-8', sep='\t').fillna(' ')
+total = pd.read_csv('data/ProgrammerWeb/pw2.csv', encoding='utf-8', sep='\t').fillna(' ')
 # test = pd.read_csv('../data/test.csv').fillna(' ')
 print(total)
 
