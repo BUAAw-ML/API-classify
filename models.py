@@ -79,11 +79,11 @@ class GCNBert(nn.Module):
         #
         # x = torch.matmul(sentence_feat, x)
 
-        linear1 = nn.Linear(sentence_feat.size()[1], 500).cuda()
-        dropout = nn.Dropout(p=0.5)
-        linear2 = nn.Linear(500, 81).cuda()
-        x = linear1(sentence_feat)
-        x = dropout(x)
+        # linear1 = nn.Linear(sentence_feat.size()[1], 500).cuda()
+        # dropout = nn.Dropout(p=0.5)
+        linear2 = nn.Linear(sentence_feat.size()[1], 81).cuda()
+        # x = linear1(sentence_feat)
+        # x = dropout(x)
         x = linear2(x)
 
         return x
