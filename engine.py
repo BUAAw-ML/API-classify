@@ -424,7 +424,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
         self.state['output'] = model(ids, token_type_ids, attention_mask, self.state['encoded_tag'],
                                      self.state['tag_mask'])
         self.state['loss'] = criterion(self.state['output'], target_var)
-        print(target_var.size())
+
 
         if training:
             self.state['train_iters'] += 1
