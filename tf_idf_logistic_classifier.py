@@ -11,10 +11,10 @@ from scipy.sparse import hstack
 
 # class_names = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
 
-total = pd.read_csv('data/ProgrammerWeb/programweb-data.csv', encoding='utf-8', sep='\t').fillna(' ')
+total = pd.read_csv('data/ProgrammerWeb/programweb-data.csv', encoding='utf-8').fillna(' ')
 # test = pd.read_csv('../data/test.csv').fillna(' ')
 
-domain = pd.read_csv('data/ProgrammerWeb/domainnet.csv', encoding='utf-8', sep='\t')
+domain = pd.read_csv('data/ProgrammerWeb/domainnet.csv', encoding='utf-8')
 
 print(domain)
 
