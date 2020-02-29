@@ -76,7 +76,7 @@ class GCNBert(nn.Module):
         x = self.gc2(x, self.adj)
 
         x = x.transpose(0, 1)
-        x.shape()
+        x.size()
         x = torch.matmul(sentence_feat, x)
 
 
