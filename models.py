@@ -68,23 +68,25 @@ class GCNBert(nn.Module):
             / torch.sum(attention_mask, dim=1, keepdim=True)
 
         embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
-        # x = self.gc1(tag_embedding, self.adj)
-        # x = self.relu(x)
-        # x = self.gc2(x, self.adj)
-        #
-        # x = x.transpose(0, 1)
-        #
-        # x = torch.matmul(sentence_feat, x)
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
+        x = self.gc1(tag_embedding, self.adj)
+        x = self.relu(x)
+        x = self.gc2(x, self.adj)
+
+        x = x.transpose(0, 1)
+        print(x.size())
+        x = torch.matmul(sentence_feat, x)
+        print(x.size())
+        exit()
 
         # linear1 = nn.Linear(sentence_feat.size()[1], 500).cuda()
         # dropout = nn.Dropout(p=0.5)
-        linear2 = nn.Linear(sentence_feat.size()[1], 81).cuda()
+        # linear2 = nn.Linear(sentence_feat.size()[1], 81).cuda()
         # x = linear1(sentence_feat)
         # x = dropout(x)
-        x = linear2(sentence_feat)
+        # x = linear2(sentence_feat)
 
         return x
 
