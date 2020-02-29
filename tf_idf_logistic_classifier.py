@@ -14,7 +14,9 @@ from scipy.sparse import hstack
 total = pd.read_csv('data/ProgrammerWeb/programweb-data.csv', encoding='utf-8', sep='\t').fillna(' ')
 # test = pd.read_csv('../data/test.csv').fillna(' ')
 
-domain = pd.read_csv('data/ProgrammerWeb/domainnet.csv', encoding='utf-8', sep='\t')
+domain = pd.read_csv('data/ProgrammerWeb/domain.csv', encoding='utf-8', sep='\t')
+
+print(domain)
 
 class_names = domain['from'].drop_duplicates().values
 
