@@ -84,7 +84,7 @@ class GCNBert(nn.Module):
         linear2 = nn.Linear(sentence_feat.size()[1], 81).cuda()
         # x = linear1(sentence_feat)
         # x = dropout(x)
-        x = linear2(x)
+        x = linear2(sentence_feat)
 
         return x
 
