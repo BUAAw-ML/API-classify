@@ -81,12 +81,12 @@ class GCNBert(nn.Module):
 
         # linear1 = nn.Linear(sentence_feat.size()[1], 768).cuda()
         #
-        # linear2 = nn.Linear(768, 81).cuda()
+        linear2 = nn.Linear(768, 81).cuda()
         # x = linear1(sentence_feat)
         # x = self.relu(x)
-        # x = linear2(x)
+        x = linear2(sentence_feat)
 
-        return sentence_feat
+        return x
 
     def get_config_optim(self, lr, lrp):
         return [
