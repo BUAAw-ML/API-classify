@@ -238,7 +238,7 @@ def gen_A(num_classes, t, co_occur_mat):
 #     # with open('adj.json', 'w') as f:
 #     #     json.dump(_adj, f)
 
-    return _adj
+ #   return _adj
 
 def gen_adj(A):
     D = torch.pow(A.sum(1), -0.5)
