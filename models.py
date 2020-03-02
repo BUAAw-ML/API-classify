@@ -68,6 +68,9 @@ class GCNBert(nn.Module):
             / torch.sum(attention_mask, dim=1, keepdim=True)
         print(token_feat)
         print(attention_mask.unsqueeze(-1))
+        print(token_feat * attention_mask.unsqueeze(-1))
+        print(torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1))
+        print(torch.sum(attention_mask, dim=1, keepdim=True))
         exit()
 
 
