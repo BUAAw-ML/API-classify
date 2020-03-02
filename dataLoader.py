@@ -41,8 +41,7 @@ class ProgramWebDataset(Dataset):
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
 
         tfidf_result = ProgramWebDataset.get_idf_dict(document)
-        print(tfidf_result)
-        exit()
+
         return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_result)
 
     @classmethod
@@ -112,9 +111,9 @@ class ProgramWebDataset(Dataset):
     @classmethod
     def get_idf_dict(cls, document):
 
-        tfidf_result = TfidfVectorizer().fit_transform(document).todense()
-        print(tfidf_result)
-
+        tfidf_model = TfidfVectorizer().fit()
+        tfidf_result = tfidf_model.transform(document)
+        tfidf_result = tfidf_result.todense()
         return tfidf_result
 
     @classmethod

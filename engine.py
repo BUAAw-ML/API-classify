@@ -422,7 +422,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
 
         # compute output
         self.state['output'] = model(ids, token_type_ids, attention_mask, self.state['encoded_tag'],
-                                     self.state['tag_mask'])
+                                     self.state['tag_mask'], self.state['tfidf_result'])
         self.state['loss'] = criterion(self.state['output'], target_var)
 
 

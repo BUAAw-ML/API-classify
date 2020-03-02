@@ -60,14 +60,16 @@ class GCNBert(nn.Module):
         _adj = torch.FloatTensor(_adj)
         self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)
 
-    def forward(self, ids, token_type_ids, attention_mask, encoded_tag, tag_mask):
+    def forward(self, ids, token_type_ids, attention_mask, encoded_tag, tag_mask, tfidf_result):
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]
+
+        print(tfidf_result)
+
+
         sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
             / torch.sum(attention_mask, dim=1, keepdim=True)
-
-
 
         embed = self.bert.get_input_embeddings()
         tag_embedding = embed(encoded_tag)
