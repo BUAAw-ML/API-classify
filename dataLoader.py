@@ -10,19 +10,22 @@ from torch.utils.data import Dataset
 from transformers import BertTokenizer
 import numpy as np
 
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
 
 token_table = {'ecommerce': 'electronic commerce'}
 
 
 class ProgramWebDataset(Dataset):
-    def __init__(self, data, co_occur_mat, tag2id, id2tag=None):
+    def __init__(self, data, co_occur_mat, tag2id, id2tag=None, tfidf_result=None):
         self.data = data
         self.co_occur_mat = co_occur_mat
         self.tag2id = tag2id
         if id2tag is None:
             id2tag = {v: k for k, v in tag2id.items()}
         self.id2tag = id2tag
+        self.tfidf_result = tfidf_result
 
     @classmethod
     def from_dict(cls, data_dict):
@@ -33,16 +36,22 @@ class ProgramWebDataset(Dataset):
 
     @classmethod
     def from_csv(cls, api_csvfile, net_csvfile, ignored_tags=None):
-        data, tag2id, id2tag = ProgramWebDataset.load(api_csvfile, ignored_tags=ignored_tags)
+        data, tag2id, id2tag, document = ProgramWebDataset.load(api_csvfile, ignored_tags=ignored_tags)
         co_occur_mat = ProgramWebDataset.stat_cooccurence(data, len(tag2id))
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
-        return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag)
+
+        tfidf_result = ProgramWebDataset.get_idf_dict(document)
+        print(tfidf_result)
+        exit()
+        return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_result)
 
     @classmethod
     def load(cls, f, ignored_tags=None):
         data = []
         tag2id = {}
         id2tag = {}
+        document = []
+
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             next(reader)
@@ -55,18 +64,18 @@ class ProgramWebDataset(Dataset):
                 dscp_tokens = tokenizer.tokenize(dscp.strip())
                 if len(dscp_tokens) > 500:
                     continue
-
-                tokens = []
-                tokens.append("[CLS]")
-                for i_token in title_tokens:
-                    tokens.append(i_token)
-                title_tokens = tokens
-
-                tokens = []
-                for i_token in dscp_tokens:
-                    tokens.append(i_token)
-                tokens.append("[SEP]")
-                dscp_tokens = tokens
+                document.append(title_tokens + dscp_tokens)
+                # tokens = []
+                # tokens.append("[CLS]")
+                # for i_token in title_tokens:
+                #     tokens.append(i_token)
+                # title_tokens = tokens
+                #
+                # tokens = []
+                # for i_token in dscp_tokens:
+                #     tokens.append(i_token)
+                # tokens.append("[SEP]")
+                # dscp_tokens = tokens
 
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
@@ -94,8 +103,15 @@ class ProgramWebDataset(Dataset):
                     'tag_ids': tag_ids,
                     'dscp': dscp
                 })
+
+
         os.makedirs('cache', exist_ok=True)
-        return data, tag2id, id2tag
+        return data, tag2id, id2tag, document
+
+    @classmethod
+    def get_idf_dict(cls, document):
+        tfidf_result = TfidfVectorizer().fit_transform(document).todense()
+        return tfidf_result
 
     @classmethod
     def stat_cooccurence(cls, data, tags_num):
