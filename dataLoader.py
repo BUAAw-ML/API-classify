@@ -64,7 +64,8 @@ class ProgramWebDataset(Dataset):
                 dscp_tokens = tokenizer.tokenize(dscp.strip())
                 if len(dscp_tokens) > 500:
                     continue
-                document.append(title_tokens + dscp_tokens)
+                document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
+
                 # tokens = []
                 # tokens.append("[CLS]")
                 # for i_token in title_tokens:
@@ -111,7 +112,7 @@ class ProgramWebDataset(Dataset):
     @classmethod
     def get_idf_dict(cls, document):
         print(document)
-        document = np.array(document)
+        #document = np.array(document)
         tfidf_model = TfidfVectorizer().fit(document)
         tfidf_result = tfidf_model.transform(document)
         print(tfidf_result)
