@@ -69,7 +69,6 @@ class GCNBert(nn.Module):
 
 
         sentence_feat = token_feat[:,0,:]
-        print(sentence_feat.shape)
 
 
         embed = self.bert.get_input_embeddings()
