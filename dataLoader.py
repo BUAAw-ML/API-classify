@@ -113,7 +113,10 @@ class ProgramWebDataset(Dataset):
 
         tfidf_model = TfidfVectorizer().fit(document)
         tfidf_result = tfidf_model.transform(document)
+        print(tfidf_result)
         tfidf_result = tfidf_result.todense()
+        print(tfidf_result)
+        print(sum(tfidf_result, dim=1))
         return tfidf_result
 
     @classmethod
