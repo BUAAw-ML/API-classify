@@ -67,7 +67,10 @@ class GCNBert(nn.Module):
         # sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
         #     / torch.sum(attention_mask, dim=1, keepdim=True)
 
+        print(token_feat)
         sentence_feat = token_feat[0]
+        print(len(sentence_feat))
+        exit()
 
 
         embed = self.bert.get_input_embeddings()
