@@ -66,25 +66,29 @@ class GCNBert(nn.Module):
             attention_mask=attention_mask)[0]
         sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
             / torch.sum(attention_mask, dim=1, keepdim=True)
+        print(token_feat)
+        print(attention_mask.unsqueeze(-1))
+        exit()
 
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
-        # x = self.gc1(tag_embedding, self.adj)
-        # x = self.relu(x)
-        # x = self.gc2(x, self.adj)
-        #
-        # x = x.transpose(0, 1)
-        # x = torch.matmul(sentence_feat, x)
+
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
+        x = self.gc1(tag_embedding, self.adj)
+        x = self.relu(x)
+        x = self.gc2(x, self.adj)
+
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
 
 
         # linear1 = nn.Linear(sentence_feat.size()[1], 768).cuda()
         #
-        linear2 = nn.Linear(768, 81).cuda()
-        # x = linear1(sentence_feat)
-        # x = self.relu(x)
-        x = linear2(sentence_feat)
+        # linear2 = nn.Linear(768, 81).cuda()
+        # # x = linear1(sentence_feat)
+        # # x = self.relu(x)
+        # x = linear2(sentence_feat)
 
         return x
 
