@@ -116,7 +116,7 @@ class ProgramWebDataset(Dataset):
         print(tfidf_result)
         tfidf_result = tfidf_result.todense()
         print(tfidf_result)
-        print(sum(tfidf_result, dim=1))
+        print(np.sum(np.array(tfidf_result), dim=1))
         return tfidf_result
 
     @classmethod
