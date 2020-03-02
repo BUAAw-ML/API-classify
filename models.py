@@ -69,7 +69,7 @@ class GCNBert(nn.Module):
 
         print(token_feat)
         sentence_feat = token_feat[0]
-        print(len(sentence_feat))
+        print(sentence_feat.shape)
         exit()
 
 
