@@ -110,7 +110,13 @@ class ProgramWebDataset(Dataset):
 
     @classmethod
     def get_idf_dict(cls, document):
-        tfidf_result = TfidfVectorizer().fit_transform(document).todense()
+        print(document)
+        tfidf_model = TfidfVectorizer().fit(document)
+        tfidf_result = tfidf_model.transform(document)
+        print(tfidf_result)
+        tfidf_result.todense()
+        print(tfidf_result)
+
         return tfidf_result
 
     @classmethod
