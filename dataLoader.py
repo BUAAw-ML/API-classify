@@ -18,14 +18,14 @@ token_table = {'ecommerce': 'electronic commerce'}
 
 
 class ProgramWebDataset(Dataset):
-    def __init__(self, data, co_occur_mat, tag2id, id2tag=None, tfidf_result=None):
+    def __init__(self, data, co_occur_mat, tag2id, id2tag=None, tfidf_dict=None):
         self.data = data
         self.co_occur_mat = co_occur_mat
         self.tag2id = tag2id
         if id2tag is None:
             id2tag = {v: k for k, v in tag2id.items()}
         self.id2tag = id2tag
-        self.tfidf_result = tfidf_result
+        self.tfidf_dict = tfidf_dict
 
     @classmethod
     def from_dict(cls, data_dict):
@@ -40,9 +40,9 @@ class ProgramWebDataset(Dataset):
         co_occur_mat = ProgramWebDataset.stat_cooccurence(data, len(tag2id))
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
 
-        tfidf_result = ProgramWebDataset.get_idf_dict(document)
+        tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
 
-        return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_result)
+        return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict)
 
     @classmethod
     def load(cls, f, ignored_tags=None):
@@ -63,6 +63,7 @@ class ProgramWebDataset(Dataset):
                 dscp_tokens = tokenizer.tokenize(dscp.strip())
                 if len(dscp_tokens) > 500:
                     continue
+
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
@@ -96,16 +97,13 @@ class ProgramWebDataset(Dataset):
         return data, tag2id, id2tag, document
 
     @classmethod
-    def get_idf_dict(cls, document):
+    def get_tfidf_dict(cls, document):
 
         tfidf_model = TfidfVectorizer().fit(document)
-        tfidf_result = tfidf_model.transform(document)
-        print(tfidf_result)
-        tfidf_result = tfidf_result.todense()
-        print(tfidf_result)
-        print(np.array(tfidf_result).sum(axis = 1))
-        print(np.array(tfidf_result).shape)
-        return tfidf_result
+        return tfidf_model.vocabulary_
+        # tfidf_result = tfidf_model.transform(document)
+        #
+        # return tfidf_result
 
     @classmethod
     def stat_cooccurence(cls, data, tags_num):
