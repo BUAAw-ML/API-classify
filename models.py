@@ -86,7 +86,8 @@ class GCNBert(nn.Module):
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
 
-        x = self.linear1(sentence_feat)
+        x = self.dropout(sentence_feat)
+        x = self.linear1(x)
         x = self.dropout(x)
         x = self.linear2(x)
 
