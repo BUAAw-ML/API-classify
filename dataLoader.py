@@ -204,11 +204,11 @@ class ProgramWebDataset(Dataset):
                 if item in self.tfidf_dict:
                     inputs_tfidf[i,j+1] = self.tfidf_dict[item]
 
-        print(ids)
-        print(inputs_tfidf)
-        print(ids.shape)
-        print(inputs_tfidf.shape)
-        exit()
+        # print(ids)
+        # print(inputs_tfidf)
+        # print(ids.shape)
+        # print(inputs_tfidf.shape)
+        # exit()
 
         return (ids, token_type_ids, attention_mask), tags, dscp
 
