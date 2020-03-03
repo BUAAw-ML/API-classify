@@ -198,7 +198,9 @@ class ProgramWebDataset(Dataset):
         # inputs = [e['dscp_ids'] for e in batch]
         lengths = np.array([len(e) for e in inputs])
         max_len = np.max(lengths)
-        inputs = [tokenizer.prepare_for_model(e, max_length=max_len, pad_to_max_length=True) for e in inputs]
+        inputs = [tokenizer.prepare_for_model(e, max_length=max_len+2, pad_to_max_length=True) for e in inputs]
+        print(inputs)
+        exit()
         ids = torch.LongTensor([e['input_ids'] for e in inputs])
         token_type_ids = torch.LongTensor([e['token_type_ids'] for e in inputs])
         attention_mask = torch.FloatTensor([e['attention_mask'] for e in inputs])
