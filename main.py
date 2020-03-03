@@ -68,7 +68,7 @@ def multiLabel_text_classify():
              'save_model_path': args.save_model_path, 'log_dir': args.log_dir, 'workers': args.workers,
              'epoch_step': args.epoch_step, 'lr': args.lr, 'encoded_tag': encoded_tag, 'tag_mask': tag_mask,
              'device_ids': args.device_ids, 'print_freq': args.print_freq, 'id2tag': train_dataset.id2tag,
-             'tfidf_result': train_dataset.tfidf_result}
+             'tfidf_result': train_dataset.tfidf_dict}
 
     if args.evaluate:
         state['evaluate'] = True
