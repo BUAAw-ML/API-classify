@@ -415,13 +415,13 @@ class MultiLabelMAPEngine(Engine):
 class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
     def on_forward(self, training, model, criterion, data_loader, optimizer=None, display=True):
         target_var = self.state['target']
-        ids, token_type_ids, attention_mask = self.state['input']
+        ids, token_type_ids, attention_mask, inputs_tfidf = self.state['input']
         ids = ids.cuda(self.state['device_ids'][0])
         token_type_ids = token_type_ids.cuda(self.state['device_ids'][0])
         attention_mask = attention_mask.cuda(self.state['device_ids'][0])
 
         # compute output
-        self.state['output'] = model(ids, token_type_ids, attention_mask, self.state['encoded_tag'],
+        self.state['output'] = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
                                      self.state['tag_mask'], self.state['tfidf_result'])
         self.state['loss'] = criterion(self.state['output'], target_var)
 

@@ -210,7 +210,7 @@ class ProgramWebDataset(Dataset):
         # print(inputs_tfidf.shape)
         # exit()
 
-        return (ids, token_type_ids, attention_mask), tags, dscp
+        return (ids, token_type_ids, attention_mask, inputs_tfidf), tags, dscp
 
 
 # def CrossValidationSplitter(dataset, seed):
