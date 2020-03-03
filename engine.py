@@ -419,6 +419,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
         ids = ids.cuda(self.state['device_ids'][0])
         token_type_ids = token_type_ids.cuda(self.state['device_ids'][0])
         attention_mask = attention_mask.cuda(self.state['device_ids'][0])
+        inputs_tfidf = inputs_tfidf.cuda(self.state['device_ids'][0])
 
         # compute output
         self.state['output'] = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
