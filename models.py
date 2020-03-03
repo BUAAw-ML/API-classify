@@ -50,18 +50,19 @@ class GCNBert(nn.Module):
         for m in self.bert.parameters():
             m.requires_grad = True
         
-        self.num_classes = num_classes
-
-        self.gc1 = GraphConvolution(768, 768)
-        self.gc2 = GraphConvolution(768, 768)
-        self.relu = nn.LeakyReLU()#0.2)
-
-        _adj = gen_A(num_classes, t, co_occur_mat)
-        _adj = torch.FloatTensor(_adj)
-        self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)
+        # self.num_classes = num_classes
+        #
+        # self.gc1 = GraphConvolution(768, 768)
+        # self.gc2 = GraphConvolution(768, 768)
+        #self.relu = nn.LeakyReLU()#0.2)
+        #
+        # _adj = gen_A(num_classes, t, co_occur_mat)
+        # _adj = torch.FloatTensor(_adj)
+        # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)
 
         self.linear1 = nn.Linear(768, 768)
-        self.dropout = nn.Dropout(p=0.5)
+        #self.dropout = nn.Dropout(p=0.5)
+        self.relu = nn.LeakyReLU()
         self.linear2 = nn.Linear(768, 81)
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tfidf_result):
