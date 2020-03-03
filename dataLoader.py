@@ -100,6 +100,7 @@ class ProgramWebDataset(Dataset):
     def get_tfidf_dict(cls, document):
         tfidf_dict = {}
         tfidf_model = TfidfVectorizer().fit(document)
+        print(tfidf_model.__dict__)
         for item in tfidf_model.vocabulary_:
             tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
 
@@ -197,6 +198,7 @@ class ProgramWebDataset(Dataset):
         dscp = [e['dscp'] for e in batch]
 
         inputs_tokens = np.array([e['title_tokens'] + e['dscp_tokens'] for e in batch])
+        print(inputs_tokens.shape)
         inputs_tfidf = torch.zeros(size=(len(batch), max_len+2))
         for i in range(len(batch)):
             for j in range(1, max_len+2-1):
