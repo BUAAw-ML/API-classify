@@ -100,10 +100,10 @@ class ProgramWebDataset(Dataset):
     def get_tfidf_dict(cls, document):
 
         tfidf_model = TfidfVectorizer().fit(document)
-        return tfidf_model.vocabulary_
-        # tfidf_result = tfidf_model.transform(document)
-        #
-        # return tfidf_result
+        tfidf_dict = [tfidf_model.idf_[item] for item in tfidf_model.vocabulary_]
+
+        return tfidf_dict
+
 
     @classmethod
     def stat_cooccurence(cls, data, tags_num):
@@ -195,11 +195,12 @@ class ProgramWebDataset(Dataset):
 
         dscp = [e['dscp'] for e in batch]
 
-        print(self.tfidf_dict)
-        inputs_tokens = [e['title_tokens'] + e['dscp_tokens'] for e in batch]
+        print(self.tfidf_dict.keys())
+        inputs_tokens = np.mat([e['title_tokens'] + e['dscp_tokens'] for e in batch])
         inputs_tfidf = torch.zeros(size=(len(batch), max_len+2))
         for i in range(len(batch)):
             for j in range(1, max_len+2-1):
+                print(inputs_tokens[i,j-1])
                 if inputs_tokens[i,j-1] in self.tfidf_dict.keys():
                     inputs_tfidf[i,j] = self.tfidf_dict[inputs_tokens[i,j-1]]
 
