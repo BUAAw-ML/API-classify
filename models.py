@@ -64,6 +64,7 @@ class GCNBert(nn.Module):
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)
+        print(token_feat.shape)
         print(token_feat[0].shape)
         print(token_feat[-1].shape)
 
