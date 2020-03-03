@@ -98,9 +98,10 @@ class ProgramWebDataset(Dataset):
 
     @classmethod
     def get_tfidf_dict(cls, document):
-
+        tfidf_dict = {}
         tfidf_model = TfidfVectorizer().fit(document)
-        tfidf_dict = [tfidf_model.idf_[item] for item in tfidf_model.vocabulary_]
+        for item in tfidf_model.vocabulary_:
+            tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
 
         return tfidf_dict
 
@@ -201,7 +202,7 @@ class ProgramWebDataset(Dataset):
         for i in range(len(batch)):
             for j in range(1, max_len+2-1):
                 print(inputs_tokens[i,j-1])
-                if inputs_tokens[i,j-1] in self.tfidf_dict.keys():
+                if inputs_tokens[i,j-1] in self.tfidf_dict:
                     inputs_tfidf[i,j] = self.tfidf_dict[inputs_tokens[i,j-1]]
 
         print(ids)
