@@ -196,7 +196,7 @@ class ProgramWebDataset(Dataset):
 
         dscp = [e['dscp'] for e in batch]
 
-        inputs_tokens = np.mat([e['title_tokens'] + e['dscp_tokens'] for e in batch])
+        inputs_tokens = np.array([np.array(e['title_tokens'] + e['dscp_tokens']) for e in batch])
         print(inputs_tokens)
         print(inputs_tokens.shape)
         exit()
