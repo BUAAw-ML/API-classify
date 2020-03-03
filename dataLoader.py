@@ -194,6 +194,19 @@ class ProgramWebDataset(Dataset):
             tags[i, batch[i]['tag_ids']] = 1.
 
         dscp = [e['dscp'] for e in batch]
+
+        inputs_tokens = [e['title_tokens'] + e['dscp_tokens'] for e in batch]
+        inputs_tfidf = torch.zeros(size=(len(batch), max_len+2))
+        for i in range(len(batch)):
+            for j in range(1, max_len+2-1):
+                if inputs_tokens[i,j-1] in self.tfidf_dict:
+                    inputs_tfidf[i,j] = self.tfidf_dict[inputs_tokens[i,j-1]]
+
+        print(ids)
+        print(inputs_tfidf)
+        print(ids.shape)
+        print(inputs_tfidf.shape)
+
         return (ids, token_type_ids, attention_mask), tags, dscp
 
 
