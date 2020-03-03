@@ -64,10 +64,8 @@ class ProgramWebDataset(Dataset):
                 if len(dscp_tokens) > 500:
                     continue
 
-                print(dscp_tokens)
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
-                print(dscp_tokens)
-                exit()
+
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
                 tag = tag.strip().split('###')
@@ -199,7 +197,9 @@ class ProgramWebDataset(Dataset):
         dscp = [e['dscp'] for e in batch]
 
         inputs_tokens = np.mat([e['title_tokens'] + e['dscp_tokens'] for e in batch])
+        print(inputs_tokens)
         print(inputs_tokens.shape)
+        exit()
         inputs_tfidf = torch.zeros(size=(len(batch), max_len+2))
         for i in range(len(batch)):
             for j in range(1, max_len+2-1):
