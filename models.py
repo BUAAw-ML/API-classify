@@ -86,8 +86,8 @@ class GCNBert(nn.Module):
         # x = torch.matmul(sentence_feat, x)
 
         x = self.linear1(sentence_feat)
-        x = self.relu(x)
         x = self.linear2(x)
+        x = self.relu(x)
 
         return x
 
