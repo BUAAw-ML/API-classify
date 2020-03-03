@@ -65,18 +65,6 @@ class ProgramWebDataset(Dataset):
                     continue
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
-                # tokens = []
-                # tokens.append("[CLS]")
-                # for i_token in title_tokens:
-                #     tokens.append(i_token)
-                # title_tokens = tokens
-                #
-                # tokens = []
-                # for i_token in dscp_tokens:
-                #     tokens.append(i_token)
-                # tokens.append("[SEP]")
-                # dscp_tokens = tokens
-
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
                 tag = tag.strip().split('###')
@@ -103,7 +91,6 @@ class ProgramWebDataset(Dataset):
                     'tag_ids': tag_ids,
                     'dscp': dscp
                 })
-
 
         os.makedirs('cache', exist_ok=True)
         return data, tag2id, id2tag, document
