@@ -64,8 +64,10 @@ class ProgramWebDataset(Dataset):
                 if len(dscp_tokens) > 500:
                     continue
 
+                print(dscp_tokens)
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
-
+                print(dscp_tokens)
+                exit()
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
                 tag = tag.strip().split('###')
