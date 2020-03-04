@@ -211,8 +211,7 @@ class ProgramWebDataset(Dataset):
 
 
         inputs_tfidf[inputs_tfidf>0]=1
-        inputs_tfidf = torch.LongTensor(inputs_tfidf)
-        ids *= inputs_tfidf
+        ids *= inputs_tfidf.long()
         ids[ids==0]=100
         # print(ids)
         # print(inputs_tfidf)
