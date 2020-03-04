@@ -61,19 +61,19 @@ class GCNBert(nn.Module):
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)
 
         self.linear1 = nn.Linear(768, 768)
-        self.dropout = nn.Dropout(p=0.5)
-        #self.relu = nn.LeakyReLU()
+        #self.dropout = nn.Dropout(p=0.5)
+        self.relu = nn.LeakyReLU(0.2)
         self.linear2 = nn.Linear(768, 81)
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tfidf_result):
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
-            attention_mask=attention_mask)[0]
+            attention_mask=attention_mask)[1]
 
-        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1) * inputs_tfidf.unsqueeze(-1), dim=1) \
-            / torch.sum(attention_mask, dim=1, keepdim=True)
+        # sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1) * inputs_tfidf.unsqueeze(-1), dim=1) \
+        #     / torch.sum(attention_mask, dim=1, keepdim=True)
 
-        #sentence_feat = token_feat[:,5,:]
+        sentence_feat = token_feat#[:,5,:]
 
         # embed = self.bert.get_input_embeddings()
         # tag_embedding = embed(encoded_tag)
@@ -87,7 +87,8 @@ class GCNBert(nn.Module):
         # x = torch.matmul(sentence_feat, x)
 
         x = self.linear1(sentence_feat)
-        x = self.dropout(x)
+        #x = self.dropout(x)
+        x = self.relu(x)
         x = self.linear2(x)
 
         return x
