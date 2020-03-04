@@ -66,6 +66,10 @@ class GCNBert(nn.Module):
         self.linear2 = nn.Linear(768, 81)
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tfidf_result):
+
+        print(ids.shape)
+        print(inputs_tfidf.shape)
+        exit()
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]
