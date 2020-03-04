@@ -108,7 +108,7 @@ class ProgramWebDataset(Dataset):
                                         max_features=10000).fit(document)
         for item in tfidf_model.vocabulary_:
             tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
-        print(tfidf_model.idf_)
+        print(tfidf_dict)
         exit()
         return tfidf_dict
 
