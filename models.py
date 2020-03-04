@@ -67,9 +67,9 @@ class GCNBert(nn.Module):
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tfidf_result):
 
-        torch.where(inputs_tfidf>0,inputs_tfidf,ids)
-        ids = inputs_tfidf
-        print(ids)
+        inputs_tfidf[inputs_tfidf>0]=1
+        inputs_tfidf = torch.LongTensor(inputs_tfidf)
+        ids *= inputs_tfidf
         ids[ids==0]=100
         print(ids)
         exit()
