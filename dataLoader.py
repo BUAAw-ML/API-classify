@@ -209,7 +209,6 @@ class ProgramWebDataset(Dataset):
                 if item in self.tfidf_dict:
                     inputs_tfidf[i, j+1] = self.tfidf_dict[item]
 
-
         inputs_tfidf[inputs_tfidf>0]=1
         ids *= inputs_tfidf.long()
         ids[ids==0]=100
@@ -273,7 +272,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
         val_dataset = copy.copy(dataset)
         ind = np.random.permutation(len(data))
 
-        train_dataset.data = data[ind[:3000]].tolist()
+        train_dataset.data = data[ind[:-2000]].tolist()
         val_dataset.data = data[ind[-2000:]].tolist()
 
         torch.save(train_dataset.to_dict(), os.path.join('cache', cache_file_head + '.train'))
