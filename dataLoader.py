@@ -66,10 +66,6 @@ class ProgramWebDataset(Dataset):
 
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
-                a = tokenizer.convert_tokens_to_ids("[UNK]")
-                print(a)
-                exit()
-
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
                 tag = tag.strip().split('###')
