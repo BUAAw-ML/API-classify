@@ -68,7 +68,11 @@ class GCNBert(nn.Module):
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tfidf_result):
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
-            attention_mask=attention_mask)[1]
+            attention_mask=attention_mask)
+
+        print(token_feat[0][0,0,:])
+        print(token_feat[1][0, :])
+        exit()
 
         # sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1) * inputs_tfidf.unsqueeze(-1), dim=1) \
         #     / torch.sum(attention_mask, dim=1, keepdim=True)
