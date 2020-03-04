@@ -99,7 +99,13 @@ class ProgramWebDataset(Dataset):
     @classmethod
     def get_tfidf_dict(cls, document):
         tfidf_dict = {}
-        tfidf_model = TfidfVectorizer().fit(document)
+        tfidf_model = TfidfVectorizer(sublinear_tf=True,
+                                        strip_accents='unicode',
+                                        analyzer='word',
+                                        token_pattern=r'\w{1,}',
+                                        stop_words='english',
+                                        ngram_range=(1, 1),
+                                        max_features=10000).fit(document)
         for item in tfidf_model.vocabulary_:
             tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
         print(tfidf_model.idf_)
