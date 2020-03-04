@@ -70,8 +70,12 @@ class GCNBert(nn.Module):
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]
 
+        torch.set_printoptions(threshold=np.inf)
+
         print(inputs_tfidf)
         print(inputs_tfidf.shape)
+        for tfidf in inputs_tfidf:
+            print(len(tfidf[tfidf>0]))
         print(token_feat.shape)
         exit()
 
