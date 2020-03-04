@@ -67,7 +67,6 @@ class GCNBert(nn.Module):
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tfidf_result):
 
-        ids = self.dropout(ids)
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]
