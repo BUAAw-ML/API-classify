@@ -73,7 +73,7 @@ class GCNBert(nn.Module):
         torch.set_printoptions(threshold=np.inf)
 
 
-        print(attention_mask.unsqueeze * inputs_tfidf.unsqueeze)
+        print(attention_mask.unsqueeze(-1) * inputs_tfidf.unsqueeze(-1))
         # print(inputs_tfidf.shape)
         # for tfidf in inputs_tfidf:
         #     print(len(tfidf[tfidf>0]))
