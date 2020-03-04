@@ -102,7 +102,8 @@ class ProgramWebDataset(Dataset):
         tfidf_model = TfidfVectorizer().fit(document)
         for item in tfidf_model.vocabulary_:
             tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
-
+        print(tfidf_dict)
+        exit()
         return tfidf_dict
 
 
