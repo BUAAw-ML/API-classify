@@ -14,9 +14,9 @@ parser.add_argument('-seed', default=0, type=int, metavar='N',
                     help='random seed')
 parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                     help='number of data loading workers (default: 4)')
-parser.add_argument('--epochs', default=15, type=int, metavar='N',
+parser.add_argument('--epochs', default=10, type=int, metavar='N',
                     help='number of total epochs to run')
-parser.add_argument('--epoch_step', default=[12, 80], type=int, nargs='+',
+parser.add_argument('--epoch_step', default=[7, 80], type=int, nargs='+',
                     help='number of epochs to change learning rate')
 parser.add_argument('--device_ids', default=[1], type=int, nargs='+',
                     help='')
@@ -52,7 +52,7 @@ def multiLabel_text_classify():
     train_dataset, val_dataset, encoded_tag, tag_mask = \
         load_dataset('data/ProgrammerWeb/programweb-data.csv', 'data/ProgrammerWeb/domainnet.csv')
 
-    model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.4, co_occur_mat=train_dataset.co_occur_mat)
+    model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.8, co_occur_mat=train_dataset.co_occur_mat)
 
     # define loss function (criterion)
     criterion = nn.MultiLabelSoftMarginLoss()
