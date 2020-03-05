@@ -48,7 +48,7 @@ class GCNBert(nn.Module):
         
         self.add_module('bert', bert)
         for m in self.bert.parameters():
-            m.requires_grad = False
+            m.requires_grad = True
         
         self.num_classes = num_classes
 
@@ -58,7 +58,7 @@ class GCNBert(nn.Module):
 
         _adj = gen_A(num_classes, t, co_occur_mat)
         _adj = torch.FloatTensor(_adj)
-        self.adj = nn.Parameter(gen_adj(_adj), requires_grad=True)
+        self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)
         #self.dropout = nn.Dropout(p=0.5)
         # self.linear1 = nn.Linear(768, 768)
         # #
