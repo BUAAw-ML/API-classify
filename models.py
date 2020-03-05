@@ -54,6 +54,7 @@ class GCNBert(nn.Module):
 
         self.gc1 = GraphConvolution(768, 768)
         self.gc2 = GraphConvolution(768, 768)
+        self.gc3 = GraphConvolution(768, 768)
         self.relu = nn.LeakyReLU(0.2)
 
         _adj = gen_A(num_classes, t, co_occur_mat)
@@ -85,6 +86,8 @@ class GCNBert(nn.Module):
         x = self.gc1(tag_embedding, self.adj)
         x = self.relu(x)
         x = self.gc2(x, self.adj)
+        x = self.relu(x)
+        x = self.gc3(x, self.adj)
 
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
