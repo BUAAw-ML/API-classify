@@ -52,9 +52,8 @@ class GCNBert(nn.Module):
         
         self.num_classes = num_classes
 
-        self.gc1 = GraphConvolution(768, 1768)
-        self.gc2 = GraphConvolution(1768, 1768)
-        self.gc3 = GraphConvolution(1768, 768)
+        self.gc1 = GraphConvolution(768, 768)
+        self.gc2 = GraphConvolution(768, 768)
         self.relu = nn.LeakyReLU(0.2)
 
         _adj = gen_A(num_classes, t, co_occur_mat)
