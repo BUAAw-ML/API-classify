@@ -64,8 +64,6 @@ class ProgramWebDataset(Dataset):
                 if len(title_tokens) + len(dscp_tokens) > 510:
                     continue
 
-                dscp_tokens = dscp_tokens[:50]
-
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
@@ -110,6 +108,16 @@ class ProgramWebDataset(Dataset):
                                         max_features=10000).fit(document)
         for item in tfidf_model.vocabulary_:
             tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
+
+        # tfidf_model = TfidfVectorizer(sublinear_tf=True,
+        #                                 strip_accents='unicode',
+        #                                 analyzer='char',
+        #                                 stop_words='english',
+        #                                 ngram_range=(2, 6),
+        #                                 max_features=50000).fit(document)
+        # for item in tfidf_model.vocabulary_:
+        #     tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
+
         return tfidf_dict
 
 
@@ -211,9 +219,9 @@ class ProgramWebDataset(Dataset):
                 if item in self.tfidf_dict:
                     inputs_tfidf[i, j+1] = self.tfidf_dict[item]
 
-        # inputs_tfidf[inputs_tfidf>0]=1
-        # ids *= inputs_tfidf.long()
-        # ids[ids==0]=103
+        inputs_tfidf[inputs_tfidf>0]=1
+        ids *= inputs_tfidf.long()
+        ids[ids==0]=103
 
         return (ids, token_type_ids, attention_mask, inputs_tfidf), tags, dscp
 
