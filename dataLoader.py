@@ -213,7 +213,6 @@ class ProgramWebDataset(Dataset):
         # ids *= inputs_tfidf.long()
         # ids[ids==0]=103
 
-
         return (ids, token_type_ids, attention_mask, inputs_tfidf), tags, dscp
 
 

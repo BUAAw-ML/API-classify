@@ -48,22 +48,22 @@ class GCNBert(nn.Module):
         
         self.add_module('bert', bert)
         for m in self.bert.parameters():
-            m.requires_grad = True
+            m.requires_grad = False
         
-        # self.num_classes = num_classes
-        #
-        # self.gc1 = GraphConvolution(768, 768)
-        # self.gc2 = GraphConvolution(768, 768)
-        #self.relu = nn.LeakyReLU()#0.2)
-        #
-        # _adj = gen_A(num_classes, t, co_occur_mat)
-        # _adj = torch.FloatTensor(_adj)
-        # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)
-        self.dropout = nn.Dropout(p=0.5)
-        self.linear1 = nn.Linear(768, 768)
-        #
-        self.relu = nn.LeakyReLU()
-        self.linear2 = nn.Linear(768, 81)
+        self.num_classes = num_classes
+
+        self.gc1 = GraphConvolution(768, 768)
+        self.gc2 = GraphConvolution(768, 768)
+        self.relu = nn.LeakyReLU(0.2)
+
+        _adj = gen_A(num_classes, t, co_occur_mat)
+        _adj = torch.FloatTensor(_adj)
+        self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)
+        #self.dropout = nn.Dropout(p=0.5)
+        # self.linear1 = nn.Linear(768, 768)
+        # #
+        # self.relu = nn.LeakyReLU()
+        # self.linear2 = nn.Linear(768, 81)
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tfidf_result):
 
@@ -73,26 +73,26 @@ class GCNBert(nn.Module):
 
         #torch.set_printoptions(threshold=np.inf)
 
-        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1) * inputs_tfidf.unsqueeze(-1), dim=1) \
+        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
             / torch.sum(attention_mask, dim=1, keepdim=True)
 
-        #sentence_feat = token_feat#[:,5,:]
+        #sentence_feat = token_feat#[:,5,:]  * inputs_tfidf.unsqueeze(-1)
 
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
-        # x = self.gc1(tag_embedding, self.adj)
-        # x = self.relu(x)
-        # x = self.gc2(x, self.adj)
-        #
-        # x = x.transpose(0, 1)
-        # x = torch.matmul(sentence_feat, x)
-
-        x = self.linear1(sentence_feat)
-        #x = self.dropout(x)
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
+        x = self.gc1(tag_embedding, self.adj)
         x = self.relu(x)
-        x = self.linear2(x)
+        x = self.gc2(x, self.adj)
+
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
+
+        # x = self.linear1(sentence_feat)
+        # #x = self.dropout(x)
+        # x = self.relu(x)
+        # x = self.linear2(x)
 
         return x
 
