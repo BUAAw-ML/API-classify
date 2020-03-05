@@ -279,7 +279,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
         ind = np.random.permutation(len(data))
 
         train_dataset.data = data[ind[:-2000]].tolist()
-        val_dataset.data = data[ind[-100:]].tolist()
+        val_dataset.data = data[ind[-2000:]].tolist()
 
         torch.save(train_dataset.to_dict(), os.path.join('cache', cache_file_head + '.train'))
         torch.save(val_dataset.to_dict(), os.path.join('cache', cache_file_head + '.eval'))
