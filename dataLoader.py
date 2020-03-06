@@ -68,7 +68,7 @@ class ProgramWebDataset(Dataset):
 
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
-                tag = tag.strip().split('###')
+                tag = tag.strip().split('###')[0]
                 tag = [t for t in tag if t != '']
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
