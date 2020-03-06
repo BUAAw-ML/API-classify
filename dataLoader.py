@@ -44,59 +44,6 @@ class ProgramWebDataset(Dataset):
 
         return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict)
 
-    # @classmethod
-    # def load(cls, f, ignored_tags=None):
-    #     data = []
-    #     tag2id = {}
-    #     id2tag = {}
-    #     document = []
-    #
-    #     with open(f, newline='') as csvfile:
-    #         reader = csv.reader(csvfile, delimiter=',')
-    #         next(reader)
-    #         for row in reader:
-    #             if len(row) != 4:
-    #                 continue
-    #             id, title, dscp, tag = row
-    #
-    #             title_tokens = tokenizer.tokenize(title.strip())
-    #             dscp_tokens = tokenizer.tokenize(dscp.strip())
-    #             if len(title_tokens) + len(dscp_tokens) > 510:
-    #                 continue
-    #
-    #             document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
-    #
-    #             title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
-    #             dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
-    #             tag = tag.strip().split('###')
-    #             tag = [t for t in tag if t != '']
-    #             if ignored_tags is not None:
-    #                 tag = [t for t in tag if t not in ignored_tags]
-    #             if len(tag) == 0:
-    #                 continue
-    #             for t in tag:
-    #                 if t not in tag2id:
-    #                     # tag_tokens = tokenizer.tokenize(t)
-    #                     # if np.any([token.startswith('##') for token in tag_tokens]):
-    #                     #     print(t, ':', tag_tokens)
-    #                     tag_id = len(tag2id)
-    #                     tag2id[t] = tag_id
-    #                     id2tag[tag_id] = t
-    #             tag_ids = [tag2id[t] for t in tag]
-    #             data.append({
-    #                 'id': int(id),
-    #                 'title_ids': title_ids,
-    #                 'title_tokens': title_tokens,
-    #                 'dscp_ids': dscp_ids,
-    #                 'dscp_tokens': dscp_tokens,
-    #                 'tag_ids': tag_ids,
-    #                 'dscp': dscp
-    #             })
-    #
-    #     os.makedirs('cache', exist_ok=True)
-    #     return data, tag2id, id2tag, document
-
-
     @classmethod
     def load(cls, f, ignored_tags=None):
         data = []
@@ -105,23 +52,23 @@ class ProgramWebDataset(Dataset):
         document = []
 
         with open(f, newline='') as csvfile:
-            csv.field_size_limit(500 * 1024 * 1024)
             reader = csv.reader(csvfile, delimiter=',')
             next(reader)
             for row in reader:
                 if len(row) != 4:
                     continue
-                id, _, tag, dscp = row
+                id, title, dscp, tag = row
 
+                title_tokens = tokenizer.tokenize(title.strip())
                 dscp_tokens = tokenizer.tokenize(dscp.strip())
-                if len(dscp_tokens) > 510:
-                    dscp_tokens = dscp_tokens[:510]
-                    #continue
+                if len(title_tokens) + len(dscp_tokens) > 510:
+                    continue
 
-                document.append(" ".join(dscp_tokens))
+                document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
+                title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
-                tag = tag.strip().split()
+                tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
@@ -138,6 +85,8 @@ class ProgramWebDataset(Dataset):
                 tag_ids = [tag2id[t] for t in tag]
                 data.append({
                     'id': int(id),
+                    'title_ids': title_ids,
+                    'title_tokens': title_tokens,
                     'dscp_ids': dscp_ids,
                     'dscp_tokens': dscp_tokens,
                     'tag_ids': tag_ids,
@@ -246,9 +195,8 @@ class ProgramWebDataset(Dataset):
     def collate_fn(self, batch):
         result = {}
         # construct input
-       # inputs = [e['title_ids'] + e['dscp_ids'] for e in batch]
-        inputs = [e['dscp_ids'] for e in batch]
-        # inputs = [e['dscp_ids'] for e in batch]
+        inputs = [e['title_ids'] + e['dscp_ids'] for e in batch]
+
         lengths = np.array([len(e) for e in inputs])
         max_len = np.max(lengths)
         inputs = [tokenizer.prepare_for_model(e, max_length=max_len+2, pad_to_max_length=True) for e in inputs]
@@ -271,10 +219,9 @@ class ProgramWebDataset(Dataset):
                 if item in self.tfidf_dict:
                     inputs_tfidf[i, j+1] = self.tfidf_dict[item]
 
-        # inputs_tfidf[inputs_tfidf>0]=1
-        # ids *= inputs_tfidf.long()
-        # ids[ids==0]=103
-
+        inputs_tfidf[inputs_tfidf>0]=1
+        ids *= inputs_tfidf.long()
+        ids[ids==0]=103
 
         return (ids, token_type_ids, attention_mask, inputs_tfidf), tags, dscp
 
@@ -300,7 +247,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
     if os.path.isfile(os.path.join('cache', cache_file_head + '.train')) \
             and os.path.isfile(os.path.join('cache', cache_file_head + '.eval')) \
             and os.path.isfile(os.path.join('cache', cache_file_head + '.encoded_tag')) \
-            and os.path.isfile(os.path.join('cache', cache_file_head + '.tag_mask')):
+            and os.path.isfile(os.path.join('cache', cache_file_head + '.tag_mask')) and False:
 
         print("load dataset from cache")
 
@@ -330,9 +277,8 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
         val_dataset = copy.copy(dataset)
         ind = np.random.permutation(len(data))
 
-        split = int(len(data) * 0.8)
-        train_dataset.data = data[ind[:split]].tolist()
-        val_dataset.data = data[ind[split:]].tolist()
+        train_dataset.data = data[ind[:-2000]].tolist()
+        val_dataset.data = data[ind[-2000:]].tolist()
 
         torch.save(train_dataset.to_dict(), os.path.join('cache', cache_file_head + '.train'))
         torch.save(val_dataset.to_dict(), os.path.join('cache', cache_file_head + '.eval'))
