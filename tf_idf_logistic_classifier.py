@@ -11,15 +11,18 @@ from scipy.sparse import hstack
 
 # class_names = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
 
-total = pd.read_csv('data/ProgrammerWeb/programweb-data.csv',  encoding='utf-8', error_bad_lines=False).fillna(' ')
+total = pd.read_csv('data/news_group20.csv',  encoding='utf-8', error_bad_lines=False).fillna(' ')
 # test = pd.read_csv('../data/test.csv').fillna(' ')
 print(total)
+exit()
 
-domain = pd.read_csv('data/ProgrammerWeb/domainnet.csv', encoding='utf-8')
+# domain = pd.read_csv('data/ProgrammerWeb/domainnet.csv', encoding='utf-8')
+#
+# print(domain)
 
-print(domain)
 
-class_names = domain['from'].drop_duplicates().values
+
+class_names = total['tag'].drop_duplicates().values
 
 test = total.sample(frac=0.2, axis=0, random_state=0)
 train = total[~total['id'].isin(test['id'].values)]

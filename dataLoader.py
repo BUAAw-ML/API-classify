@@ -121,7 +121,7 @@ class ProgramWebDataset(Dataset):
                 document.append(" ".join(dscp_tokens))
 
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
-                tag = tag.strip().split('###')
+                tag = tag.strip().split()
                 tag = [t for t in tag if t != '']
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
@@ -300,7 +300,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
     if os.path.isfile(os.path.join('cache', cache_file_head + '.train')) \
             and os.path.isfile(os.path.join('cache', cache_file_head + '.eval')) \
             and os.path.isfile(os.path.join('cache', cache_file_head + '.encoded_tag')) \
-            and os.path.isfile(os.path.join('cache', cache_file_head + '.tag_mask')) and False:
+            and os.path.isfile(os.path.join('cache', cache_file_head + '.tag_mask')):
 
         print("load dataset from cache")
 
