@@ -105,6 +105,7 @@ class ProgramWebDataset(Dataset):
         document = []
 
         with open(f, newline='') as csvfile:
+            csv.field_size_limit(500 * 1024 * 1024)
             reader = csv.reader(csvfile, delimiter=',')
             next(reader)
             for row in reader:
@@ -114,7 +115,8 @@ class ProgramWebDataset(Dataset):
 
                 dscp_tokens = tokenizer.tokenize(dscp.strip())
                 if len(dscp_tokens) > 510:
-                    continue
+                    dscp_tokens = dscp_tokens[:510]
+                    #continue
 
                 document.append(" ".join(dscp_tokens))
 
