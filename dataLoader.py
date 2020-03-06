@@ -44,6 +44,59 @@ class ProgramWebDataset(Dataset):
 
         return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict)
 
+    # @classmethod
+    # def load(cls, f, ignored_tags=None):
+    #     data = []
+    #     tag2id = {}
+    #     id2tag = {}
+    #     document = []
+    #
+    #     with open(f, newline='') as csvfile:
+    #         reader = csv.reader(csvfile, delimiter=',')
+    #         next(reader)
+    #         for row in reader:
+    #             if len(row) != 4:
+    #                 continue
+    #             id, title, dscp, tag = row
+    #
+    #             title_tokens = tokenizer.tokenize(title.strip())
+    #             dscp_tokens = tokenizer.tokenize(dscp.strip())
+    #             if len(title_tokens) + len(dscp_tokens) > 510:
+    #                 continue
+    #
+    #             document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
+    #
+    #             title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
+    #             dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
+    #             tag = tag.strip().split('###')
+    #             tag = [t for t in tag if t != '']
+    #             if ignored_tags is not None:
+    #                 tag = [t for t in tag if t not in ignored_tags]
+    #             if len(tag) == 0:
+    #                 continue
+    #             for t in tag:
+    #                 if t not in tag2id:
+    #                     # tag_tokens = tokenizer.tokenize(t)
+    #                     # if np.any([token.startswith('##') for token in tag_tokens]):
+    #                     #     print(t, ':', tag_tokens)
+    #                     tag_id = len(tag2id)
+    #                     tag2id[t] = tag_id
+    #                     id2tag[tag_id] = t
+    #             tag_ids = [tag2id[t] for t in tag]
+    #             data.append({
+    #                 'id': int(id),
+    #                 'title_ids': title_ids,
+    #                 'title_tokens': title_tokens,
+    #                 'dscp_ids': dscp_ids,
+    #                 'dscp_tokens': dscp_tokens,
+    #                 'tag_ids': tag_ids,
+    #                 'dscp': dscp
+    #             })
+    #
+    #     os.makedirs('cache', exist_ok=True)
+    #     return data, tag2id, id2tag, document
+
+
     @classmethod
     def load(cls, f, ignored_tags=None):
         data = []
@@ -57,17 +110,14 @@ class ProgramWebDataset(Dataset):
             for row in reader:
                 if len(row) != 4:
                     continue
-                id, title, dscp, tag = row
+                id, _, tag, dscp = row
 
-                title_tokens = tokenizer.tokenize(title.strip())
-                dscp_tokens0 = tokenizer.tokenize(dscp.strip())
-                if len(title_tokens) + len(dscp_tokens0) > 510:
+                dscp_tokens = tokenizer.tokenize(dscp.strip())
+                if len(dscp_tokens) > 510:
                     continue
 
-                document.append(" ".join(title_tokens) + " ".join(dscp_tokens0))
+                document.append(" ".join(dscp_tokens))
 
-                dscp_tokens = dscp_tokens0[:40]
-                title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
@@ -86,22 +136,6 @@ class ProgramWebDataset(Dataset):
                 tag_ids = [tag2id[t] for t in tag]
                 data.append({
                     'id': int(id),
-                    'title_ids': title_ids,
-                    'title_tokens': title_tokens,
-                    'dscp_ids': dscp_ids,
-                    'dscp_tokens': dscp_tokens,
-                    'tag_ids': tag_ids,
-                    'dscp': dscp
-                })
-
-                dscp_tokens = dscp_tokens0[10:]
-                title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
-                dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
-
-                data.append({
-                    'id': int(id),
-                    'title_ids': title_ids,
-                    'title_tokens': title_tokens,
                     'dscp_ids': dscp_ids,
                     'dscp_tokens': dscp_tokens,
                     'tag_ids': tag_ids,
@@ -210,7 +244,8 @@ class ProgramWebDataset(Dataset):
     def collate_fn(self, batch):
         result = {}
         # construct input
-        inputs = [e['title_ids'] + e['dscp_ids'] for e in batch]
+       # inputs = [e['title_ids'] + e['dscp_ids'] for e in batch]
+        inputs = [e['dscp_ids'] for e in batch]
         # inputs = [e['dscp_ids'] for e in batch]
         lengths = np.array([len(e) for e in inputs])
         max_len = np.max(lengths)
@@ -226,7 +261,7 @@ class ProgramWebDataset(Dataset):
 
         dscp = [e['dscp'] for e in batch]
 
-        inputs_tokens = [e['title_tokens'] + e['dscp_tokens'] for e in batch]
+        inputs_tokens = [e['dscp_tokens'] for e in batch]
         inputs_tfidf = torch.zeros(size=(len(batch), max_len+2))
 
         for i, token_list in enumerate(inputs_tokens):

@@ -26,7 +26,7 @@ parser.add_argument('-b', '--batch-size', default=16, type=int,
                     metavar='N', help='mini-batch size (default: 256)')
 parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
                     metavar='LR', help='initial learning rate')
-parser.add_argument('--lrp', '--learning-rate-pretrained', default=0.001, type=float,
+parser.add_argument('--lrp', '--learning-rate-pretrained', default=0.1, type=float,
                     metavar='LR', help='learning rate for pre-trained layers')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum')
@@ -50,7 +50,7 @@ def multiLabel_text_classify():
 
     use_gpu = torch.cuda.is_available()
     train_dataset, val_dataset, encoded_tag, tag_mask = \
-        load_dataset('data/ProgrammerWeb/programweb-data.csv', 'data/ProgrammerWeb/domainnet.csv')
+        load_dataset('data/news_group20.csv', 'data/ProgrammerWeb/domainnet.csv')  #'data/ProgrammerWeb/programweb-data.csv
 
     model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.4, co_occur_mat=train_dataset.co_occur_mat)
 
