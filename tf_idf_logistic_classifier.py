@@ -13,8 +13,6 @@ from scipy.sparse import hstack
 
 total = pd.read_csv('data/news_group20.csv',  encoding='utf-8', error_bad_lines=False).fillna(' ')
 # test = pd.read_csv('../data/test.csv').fillna(' ')
-print(total)
-exit()
 
 # domain = pd.read_csv('data/ProgrammerWeb/domainnet.csv', encoding='utf-8')
 #
@@ -22,21 +20,21 @@ exit()
 
 
 
-class_names = total['tag'].drop_duplicates().values
+class_names = total['category'].drop_duplicates().values
 
 test = total.sample(frac=0.2, axis=0, random_state=0)
-train = total[~total['id'].isin(test['id'].values)]
+train = total[~total['Unnamed: 0'].isin(test['Unnamed: 0'].values)]
 
 
-train_text = train['descr']
-test_text = test['descr']
+train_text = train['text']
+test_text = test['text']
 all_text = pd.concat([train_text, test_text])
 
 labels = dict()
 for cla in tqdm(class_names):
     clist = list()
     for idx, row in train.iterrows():
-        if row['tags2'].find(cla) == -1:
+        if row['category'].find(cla) == -1:
             clist.append(0)
         else:
             clist.append(1)
@@ -87,7 +85,7 @@ test_features = hstack([test_char_features, test_word_features])
 
 
 scores = []
-submission = pd.DataFrame.from_dict({'id': test['id']})
+submission = pd.DataFrame.from_dict({'Unnamed: 0': test['Unnamed: 0']})
 for class_name in tqdm(class_names2):
     train_target = labels[class_name]
     classifier = LogisticRegression(C=0.1, solver='sag')
@@ -103,7 +101,7 @@ gt_labels = dict()
 for cla in tqdm(class_names2):
     clist = list()
     for idx, row in test.iterrows():
-        if row['tags2'].find(cla) == -1:
+        if row['category'].find(cla) == -1:
             clist.append(0)
         else:
             clist.append(1)
