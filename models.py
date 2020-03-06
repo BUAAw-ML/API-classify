@@ -48,12 +48,12 @@ class GCNBert(nn.Module):
         
         self.add_module('bert', bert)
         for m in self.bert.parameters():
-            m.requires_grad = True
+            m.requires_grad = False
         
         self.num_classes = num_classes
 
-        self.gc1 = GraphConvolution(768, 768)
-        self.gc2 = GraphConvolution(768, 768)
+        self.gc1 = GraphConvolution(1024, 1024)
+        self.gc2 = GraphConvolution(1024, 1024)
         self.relu = nn.LeakyReLU(0.2)
 
         _adj = gen_A(num_classes, t, co_occur_mat)
@@ -111,5 +111,5 @@ class GCNBert(nn.Module):
 
 
 def gcn_bert(num_classes, t, co_occur_mat=None):
-    bert = BertModel.from_pretrained('bert-base-uncased')
+    bert = BertModel.from_pretrained('bert-large-uncased') #'bert-base-uncased')
     return GCNBert(bert, num_classes, t=t, co_occur_mat=co_occur_mat)
