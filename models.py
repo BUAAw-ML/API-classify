@@ -112,6 +112,7 @@ class GCNBert(nn.Module):
 
 def gcn_bert(num_classes, t, co_occur_mat=None):
     bert = BertModel.from_pretrained('bert-base-uncased')
+    bert.config["hidden_dropout_prob"] = 0.2
     print(bert.config)
     exit()
 
