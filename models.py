@@ -111,5 +111,5 @@ class GCNBert(nn.Module):
 
 
 def gcn_bert(num_classes, t, co_occur_mat=None):
-    bert = BertModel.from_pretrained('bert-large-uncased') #'bert-base-uncased')
+    bert = BertModel.from_pretrained('bert-base-uncased')
     return GCNBert(bert, num_classes, t=t, co_occur_mat=co_occur_mat)
