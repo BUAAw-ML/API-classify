@@ -66,8 +66,37 @@ class ProgramWebDataset(Dataset):
 
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
+
+
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
-                dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
+                dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens[:30])
+                tag = tag.strip().split('###')
+                tag = [t for t in tag if t != '']
+                if ignored_tags is not None:
+                    tag = [t for t in tag if t not in ignored_tags]
+                if len(tag) == 0:
+                    continue
+                for t in tag:
+                    if t not in tag2id:
+                        # tag_tokens = tokenizer.tokenize(t)
+                        # if np.any([token.startswith('##') for token in tag_tokens]):
+                        #     print(t, ':', tag_tokens)
+                        tag_id = len(tag2id)
+                        tag2id[t] = tag_id
+                        id2tag[tag_id] = t
+                tag_ids = [tag2id[t] for t in tag]
+                data.append({
+                    'id': int(id),
+                    'title_ids': title_ids,
+                    'title_tokens': title_tokens,
+                    'dscp_ids': dscp_ids,
+                    'dscp_tokens': dscp_tokens,
+                    'tag_ids': tag_ids,
+                    'dscp': dscp
+                })
+
+                title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
+                dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens[30:])
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
                 if ignored_tags is not None:
@@ -278,8 +307,8 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
         val_dataset = copy.copy(dataset)
         ind = np.random.permutation(len(data))
 
-        train_dataset.data = data[ind[:-500]].tolist()
-        val_dataset.data = data[ind[-500:]].tolist()
+        train_dataset.data = data[ind[:-2000]].tolist()
+        val_dataset.data = data[ind[-2000:]].tolist()
 
         torch.save(train_dataset.to_dict(), os.path.join('cache', cache_file_head + '.train'))
         torch.save(val_dataset.to_dict(), os.path.join('cache', cache_file_head + '.eval'))
