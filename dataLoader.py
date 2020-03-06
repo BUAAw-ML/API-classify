@@ -60,16 +60,15 @@ class ProgramWebDataset(Dataset):
                 id, title, dscp, tag = row
 
                 title_tokens = tokenizer.tokenize(title.strip())
-                dscp_tokens = tokenizer.tokenize(dscp.strip())
+                dscp_tokens0 = tokenizer.tokenize(dscp.strip())
                 if len(title_tokens) + len(dscp_tokens) > 510:
                     continue
 
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
-
-
+                dscp_tokens = dscp_tokens0[:30]
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
-                dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens[:30])
+                dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
                 if ignored_tags is not None:
@@ -95,23 +94,10 @@ class ProgramWebDataset(Dataset):
                     'dscp': dscp
                 })
 
+                dscp_tokens = dscp_tokens0[30:]
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
-                dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens[30:])
-                tag = tag.strip().split('###')
-                tag = [t for t in tag if t != '']
-                if ignored_tags is not None:
-                    tag = [t for t in tag if t not in ignored_tags]
-                if len(tag) == 0:
-                    continue
-                for t in tag:
-                    if t not in tag2id:
-                        # tag_tokens = tokenizer.tokenize(t)
-                        # if np.any([token.startswith('##') for token in tag_tokens]):
-                        #     print(t, ':', tag_tokens)
-                        tag_id = len(tag2id)
-                        tag2id[t] = tag_id
-                        id2tag[tag_id] = t
-                tag_ids = [tag2id[t] for t in tag]
+                dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
+
                 data.append({
                     'id': int(id),
                     'title_ids': title_ids,
