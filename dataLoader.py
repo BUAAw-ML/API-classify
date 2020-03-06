@@ -219,9 +219,9 @@ class ProgramWebDataset(Dataset):
                 if item in self.tfidf_dict:
                     inputs_tfidf[i, j+1] = self.tfidf_dict[item]
 
-        inputs_tfidf[inputs_tfidf>0]=1
-        ids *= inputs_tfidf.long()
-        ids[ids==0]=103
+        # inputs_tfidf[inputs_tfidf>0]=1
+        # ids *= inputs_tfidf.long()
+        # ids[ids==0]=103
 
         return (ids, token_type_ids, attention_mask, inputs_tfidf), tags, dscp
 
