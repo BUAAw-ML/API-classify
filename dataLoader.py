@@ -66,7 +66,7 @@ class ProgramWebDataset(Dataset):
 
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens0))
 
-                dscp_tokens = dscp_tokens0[:30]
+                dscp_tokens = dscp_tokens0[:40]
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
                 tag = tag.strip().split('###')
@@ -94,7 +94,7 @@ class ProgramWebDataset(Dataset):
                     'dscp': dscp
                 })
 
-                dscp_tokens = dscp_tokens0[30:]
+                dscp_tokens = dscp_tokens0[10:]
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
