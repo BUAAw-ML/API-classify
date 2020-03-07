@@ -68,7 +68,7 @@ class ProgramWebDataset(Dataset):
 
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
-                tag = tag.strip().split('###')[0]
+                tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
@@ -217,7 +217,7 @@ class ProgramWebDataset(Dataset):
         for i, token_list in enumerate(inputs_tokens):
             for j, item in enumerate(token_list):
                 if item in self.tfidf_dict:
-                    inputs_tfidf[i, j+1] = self.tfidf_dict[item]
+                    inputs_tfidf[i, j+1] = 1#self.tfidf_dict[item]
 
         # inputs_tfidf[inputs_tfidf>0]=1
         # ids *= inputs_tfidf.long()
