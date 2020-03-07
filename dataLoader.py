@@ -86,7 +86,7 @@ class ProgramWebDataset(Dataset):
 
         ignored_tags = set()
         for tag in tag_occurance:
-            if tag_occurance[tag] < 100:
+            if tag_occurance[tag] < 200:
                 ignored_tags.add(tag)
 
         for row in buf:
@@ -246,7 +246,7 @@ class ProgramWebDataset(Dataset):
 
         # inputs_tfidf[inputs_tfidf>0]=1
         # ids *= inputs_tfidf.long()
-        # ids[ids==0]=100
+        # ids[ids==0]=103
 
         return (ids, token_type_ids, attention_mask, inputs_tfidf), tags, dscp
 
