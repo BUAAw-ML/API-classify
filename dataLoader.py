@@ -74,10 +74,6 @@ class ProgramWebDataset(Dataset):
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
 
-                if len(tag) == 0:
-                    print("a")
-                    continue
-
                 buf.append((id, title_ids, dscp_ids, tag))
 
                 for t in tag:
