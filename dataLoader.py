@@ -53,7 +53,7 @@ class ProgramWebDataset(Dataset):
         document = []
         tag_occurance = {}
         buf = []
-        ignored_tags = set()
+
 
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
@@ -81,19 +81,16 @@ class ProgramWebDataset(Dataset):
                 buf.append((id, title_ids, dscp_ids, tag))
 
                 for t in tag:
-                    if t not in tag2id:
-                        tag_id = len(tag2id)
-                        tag2id[t] = tag_id
-                        id2tag[tag_id] = t
+                    if t not in tag_occurance:
                         tag_occurance[t] = 1
                     tag_occurance[t] += 1
 
+        ignored_tags = set()
         for tag in tag_occurance:
             if tag_occurance[tag] < 100:
                 ignored_tags.add(tag)
 
         print("The number of tags for training: {}".format(len(tag2id) - len(ignored_tags)))
-
 
         for row in buf:
 
@@ -104,6 +101,12 @@ class ProgramWebDataset(Dataset):
 
             if len(tag) == 0:
                 continue
+
+            for t in tag:
+                if t not in tag2id:
+                    tag_id = len(tag2id)
+                    tag2id[t] = tag_id
+                    id2tag[tag_id] = t
 
             tag_ids = [tag2id[t] for t in tag]
 
@@ -116,7 +119,7 @@ class ProgramWebDataset(Dataset):
                 'tag_ids': tag_ids,
                 'dscp': dscp
             })
-
+        print(len(tag2id))
         os.makedirs('cache', exist_ok=True)
         return data, tag2id, id2tag, document
 
