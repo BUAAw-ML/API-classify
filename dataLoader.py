@@ -73,8 +73,8 @@ class ProgramWebDataset(Dataset):
 
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
-                if ignored_tags is not None:
-                    tag = [t for t in tag if t not in ignored_tags]
+                # if ignored_tags is not None:
+                #     tag = [t for t in tag if t not in ignored_tags]
                 if len(tag) == 0:
                     continue
                 for t in tag:
@@ -101,6 +101,7 @@ class ProgramWebDataset(Dataset):
                 })
         print("The number of tags: {}".format(len(tag2id)))
         print(tag_occurance)
+        sorted(tag_occurance, key = lambda item: item[1], reverse = True)
         exit()
 
         os.makedirs('cache', exist_ok=True)
