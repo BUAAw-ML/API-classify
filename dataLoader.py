@@ -101,7 +101,7 @@ class ProgramWebDataset(Dataset):
                 })
         print("The number of tags: {}".format(len(tag2id)))
         print(tag_occurance)
-        sorted(tag_occurance, key = lambda item: item[1], reverse = True)
+        sorted(tag_occurance.items(), key = lambda item: item[1], reverse = True)
         exit()
 
         os.makedirs('cache', exist_ok=True)
