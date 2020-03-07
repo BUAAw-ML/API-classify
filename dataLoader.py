@@ -64,10 +64,14 @@ class ProgramWebDataset(Dataset):
                 if len(title_tokens) + len(dscp_tokens) > 510:
                     continue
 
+                dscp_tokens = ["MASK"] + ["CLS"] + ["SEP"] + ["UNK"]
+
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
+                print(dscp_ids)
+                exit()
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
                 if ignored_tags is not None:
