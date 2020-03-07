@@ -53,6 +53,7 @@ class ProgramWebDataset(Dataset):
         document = []
         tag_occurance = {}
         buf = []
+        ignored_tags = set()
 
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
@@ -87,29 +88,34 @@ class ProgramWebDataset(Dataset):
                         tag_occurance[t] = 1
                     tag_occurance[t] += 1
 
+        for tag in tag_occurance:
+            if tag_occurance[tag] < 100:
+                ignored_tags.add(tag)
 
-            for row in buf:
-
-                id, title_ids, dscp_ids, tag = row
-
-                # if ignored_tags is not None:
-                #     tag = [t for t in tag if t not in ignored_tags]
-
-                tag_ids = [tag2id[t] for t in tag]
-
-                data.append({
-                    'id': int(id),
-                    'title_ids': title_ids,
-                    'title_tokens': title_tokens,
-                    'dscp_ids': dscp_ids,
-                    'dscp_tokens': dscp_tokens,
-                    'tag_ids': tag_ids,
-                    'dscp': dscp
-                })
-        print("The number of tags: {}".format(len(tag2id)))
+        print("The number of tags for training: {}".format(len(tag2id) - len(ignored_tags)))
 
         print(sorted(tag_occurance.items(), key=lambda item: item[1], reverse=True))
         exit()
+
+
+        for row in buf:
+
+            id, title_ids, dscp_ids, tag = row
+
+            # if ignored_tags is not None:
+            #     tag = [t for t in tag if t not in ignored_tags]
+
+            tag_ids = [tag2id[t] for t in tag]
+
+            data.append({
+                'id': int(id),
+                'title_ids': title_ids,
+                'title_tokens': title_tokens,
+                'dscp_ids': dscp_ids,
+                'dscp_tokens': dscp_tokens,
+                'tag_ids': tag_ids,
+                'dscp': dscp
+            })
 
         os.makedirs('cache', exist_ok=True)
         return data, tag2id, id2tag, document
