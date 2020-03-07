@@ -35,8 +35,8 @@ class ProgramWebDataset(Dataset):
                                  data_dict.get('id2tag'))
 
     @classmethod
-    def from_csv(cls, api_csvfile, net_csvfile, ignored_tags=None):
-        data, tag2id, id2tag, document = ProgramWebDataset.load(api_csvfile, ignored_tags=ignored_tags)
+    def from_csv(cls, api_csvfile, net_csvfile):
+        data, tag2id, id2tag, document = ProgramWebDataset.load(api_csvfile)
         co_occur_mat = ProgramWebDataset.stat_cooccurence(data, len(tag2id))
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
 
@@ -45,7 +45,7 @@ class ProgramWebDataset(Dataset):
         return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict)
 
     @classmethod
-    def load(cls, f, ignored_tags=None):
+    def load(cls, f):
         data = []
         tag2id = {}
         id2tag = {}
@@ -53,7 +53,6 @@ class ProgramWebDataset(Dataset):
         document = []
         tag_occurance = {}
         buf = []
-
 
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
@@ -90,8 +89,6 @@ class ProgramWebDataset(Dataset):
             if tag_occurance[tag] < 100:
                 ignored_tags.add(tag)
 
-        print("The number of tags for training: {}".format(len(tag2id) - len(ignored_tags)))
-
         for row in buf:
 
             id, title_ids, dscp_ids, tag = row
@@ -119,7 +116,8 @@ class ProgramWebDataset(Dataset):
                 'tag_ids': tag_ids,
                 'dscp': dscp
             })
-        print(len(tag2id))
+
+        print("The number of tags for training: {}".format(len(tag2id) - len(ignored_tags)))
         os.makedirs('cache', exist_ok=True)
         return data, tag2id, id2tag, document
 
@@ -246,9 +244,9 @@ class ProgramWebDataset(Dataset):
                 if item in self.tfidf_dict:
                     inputs_tfidf[i, j+1] = self.tfidf_dict[item]
 
-        inputs_tfidf[inputs_tfidf>0]=1
-        ids *= inputs_tfidf.long()
-        ids[ids==0]=100
+        # inputs_tfidf[inputs_tfidf>0]=1
+        # ids *= inputs_tfidf.long()
+        # ids[ids==0]=100
 
         return (ids, token_type_ids, attention_mask, inputs_tfidf), tags, dscp
 
@@ -291,8 +289,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
         if not os.path.exists('cache'):
             os.makedirs('cache')
 
-        ignored_tags = torch.load('./cache/ignored_tags')
-        dataset = ProgramWebDataset.from_csv(api_csvfile, net_csvfile, ignored_tags=ignored_tags)
+        dataset = ProgramWebDataset.from_csv(api_csvfile, net_csvfile)
 
         encoded_tag, tag_mask = dataset.encode_tag()
 
@@ -303,9 +300,9 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
         train_dataset = dataset
         val_dataset = copy.copy(dataset)
         ind = np.random.permutation(len(data))
-
-        train_dataset.data = data[ind[:-2000]].tolist()
-        val_dataset.data = data[ind[-2000:]].tolist()
+        split = int(len(data) * 0.8)
+        train_dataset.data = data[ind[:split]].tolist()
+        val_dataset.data = data[ind[split:]].tolist()
 
         torch.save(train_dataset.to_dict(), os.path.join('cache', cache_file_head + '.train'))
         torch.save(val_dataset.to_dict(), os.path.join('cache', cache_file_head + '.eval'))
