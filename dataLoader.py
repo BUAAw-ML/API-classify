@@ -94,16 +94,16 @@ class ProgramWebDataset(Dataset):
 
         print("The number of tags for training: {}".format(len(tag2id) - len(ignored_tags)))
 
-        print(sorted(tag_occurance.items(), key=lambda item: item[1], reverse=True))
-        exit()
-
 
         for row in buf:
 
             id, title_ids, dscp_ids, tag = row
 
-            # if ignored_tags is not None:
-            #     tag = [t for t in tag if t not in ignored_tags]
+            if ignored_tags is not None:
+                tag = [t for t in tag if t not in ignored_tags]
+
+            if len(tag) == 0:
+                continue
 
             tag_ids = [tag2id[t] for t in tag]
 
