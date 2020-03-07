@@ -48,7 +48,7 @@ class GCNBert(nn.Module):
         
         self.add_module('bert', bert)
         for m in self.bert.parameters():
-            m.requires_grad = False
+            m.requires_grad = True
         
         # self.num_classes = num_classes
         #
