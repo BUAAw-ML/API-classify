@@ -52,6 +52,7 @@ class ProgramWebDataset(Dataset):
 
         document = []
         tag_occurance = {}
+        buf = []
 
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
@@ -59,6 +60,27 @@ class ProgramWebDataset(Dataset):
             for row in reader:
                 if len(row) != 4:
                     continue
+                _, _, _, tag = row
+
+                tag = tag.strip().split('###')
+                tag = [t for t in tag if t != '']
+
+                if len(tag) == 0:
+                    continue
+                buf.append(row)
+
+                for t in tag:
+                    if t not in tag2id:
+                        tag_id = len(tag2id)
+                        tag2id[t] = tag_id
+                        id2tag[tag_id] = t
+                        tag_occurance[t] = 1
+                    tag_occurance[t] += 1
+
+
+
+            for row in buf:
+
                 id, title, dscp, tag = row
 
                 title_tokens = tokenizer.tokenize(title.strip())
@@ -70,26 +92,11 @@ class ProgramWebDataset(Dataset):
 
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
-
-                tag = tag.strip().split('###')
-                tag = [t for t in tag if t != '']
                 # if ignored_tags is not None:
                 #     tag = [t for t in tag if t not in ignored_tags]
-                if len(tag) == 0:
-                    continue
-                for t in tag:
-                    if t not in tag2id:
-                        # tag_tokens = tokenizer.tokenize(t)
-                        # if np.any([token.startswith('##') for token in tag_tokens]):
-                        #     print(t, ':', tag_tokens)
-                        tag_id = len(tag2id)
-                        tag2id[t] = tag_id
-                        id2tag[tag_id] = t
-
-                        tag_occurance[t] = 1
-                    tag_occurance[t] += 1
 
                 tag_ids = [tag2id[t] for t in tag]
+
                 data.append({
                     'id': int(id),
                     'title_ids': title_ids,
@@ -100,8 +107,8 @@ class ProgramWebDataset(Dataset):
                     'dscp': dscp
                 })
         print("The number of tags: {}".format(len(tag2id)))
-        #print(tag_occurance)
-        print(sorted(tag_occurance.items(), key = lambda item: item[1], reverse = True))
+
+        print(sorted(tag_occurance.items(), key=lambda item: item[1], reverse=True))
         exit()
 
         os.makedirs('cache', exist_ok=True)
