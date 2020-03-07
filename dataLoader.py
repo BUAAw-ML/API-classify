@@ -64,14 +64,11 @@ class ProgramWebDataset(Dataset):
                 if len(title_tokens) + len(dscp_tokens) > 510:
                     continue
 
-                dscp_tokens = ["[MASK]"] + ["[CLS]"] + ["[SEP]"] + ["[UNK]"]
-
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
-                print(dscp_ids)
-                exit()
+
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
                 if ignored_tags is not None:
@@ -224,9 +221,9 @@ class ProgramWebDataset(Dataset):
                 if item in self.tfidf_dict:
                     inputs_tfidf[i, j+1] = self.tfidf_dict[item]
 
-        # inputs_tfidf[inputs_tfidf>0]=1
-        # ids *= inputs_tfidf.long()
-        # ids[ids==0]=103
+        inputs_tfidf[inputs_tfidf>0]=1
+        ids *= inputs_tfidf.long()
+        ids[ids==0]=100
 
         return (ids, token_type_ids, attention_mask, inputs_tfidf), tags, dscp
 
