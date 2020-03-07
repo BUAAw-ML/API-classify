@@ -49,7 +49,9 @@ class ProgramWebDataset(Dataset):
         data = []
         tag2id = {}
         id2tag = {}
+
         document = []
+        tag_occurance = {}
 
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
@@ -83,6 +85,10 @@ class ProgramWebDataset(Dataset):
                         tag_id = len(tag2id)
                         tag2id[t] = tag_id
                         id2tag[tag_id] = t
+
+                        tag_occurance[t] = 1
+                    tag_occurance[t] += 1
+
                 tag_ids = [tag2id[t] for t in tag]
                 data.append({
                     'id': int(id),
@@ -94,6 +100,8 @@ class ProgramWebDataset(Dataset):
                     'dscp': dscp
                 })
         print("The number of tags: {}".format(len(tag2id)))
+        print(tag_occurance)
+        exit()
 
         os.makedirs('cache', exist_ok=True)
         return data, tag2id, id2tag, document
