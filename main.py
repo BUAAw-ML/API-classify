@@ -8,15 +8,14 @@ parser = argparse.ArgumentParser(description='Training Super-parameters')
 #
 # parser.add_argument('data_path', default='data/ProgrammerWeb/', type=str,
 #                     help='path to dataset (e.g. data/')
-# parser.add_argument('-num_classes', default=115, type=int, metavar='N',
-#                     help='number of domains')
+
 parser.add_argument('-seed', default=0, type=int, metavar='N',
                     help='random seed')
 parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                     help='number of data loading workers (default: 4)')
-parser.add_argument('--epochs', default=100, type=int, metavar='N',
+parser.add_argument('--epochs', default=50, type=int, metavar='N',
                     help='number of total epochs to run')
-parser.add_argument('--epoch_step', default=[20, 40, 60, 80], type=int, nargs='+',
+parser.add_argument('--epoch_step', default=[20, 30, 40, 50], type=int, nargs='+',
                     help='number of epochs to change learning rate')
 parser.add_argument('--device_ids', default=[1], type=int, nargs='+',
                     help='')

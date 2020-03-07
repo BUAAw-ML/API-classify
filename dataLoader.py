@@ -66,7 +66,6 @@ class ProgramWebDataset(Dataset):
                 dscp_tokens = tokenizer.tokenize(dscp.strip())
                 if len(title_tokens) + len(dscp_tokens) > 510:
                     continue
-
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
@@ -76,7 +75,9 @@ class ProgramWebDataset(Dataset):
                 tag = [t for t in tag if t != '']
 
                 if len(tag) == 0:
+                    print("a")
                     continue
+
                 buf.append((id, title_ids, dscp_ids, tag))
 
                 for t in tag:
@@ -117,7 +118,7 @@ class ProgramWebDataset(Dataset):
                 'dscp': dscp
             })
 
-        print("The number of tags for training: {}".format(len(tag2id) - len(ignored_tags)))
+        print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
         return data, tag2id, id2tag, document
 
