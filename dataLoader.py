@@ -64,7 +64,7 @@ class ProgramWebDataset(Dataset):
                 if len(title_tokens) + len(dscp_tokens) > 510:
                     continue
 
-                dscp_tokens = ["MASK"] + ["CLS"] + ["SEP"] + ["UNK"]
+                dscp_tokens = ["[MASK]"] + ["[CLS]"] + ["[SEP]"] + ["[UNK]"]
 
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
