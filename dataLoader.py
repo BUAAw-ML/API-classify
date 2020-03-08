@@ -83,7 +83,7 @@ class ProgramWebDataset(Dataset):
 
         ignored_tags = set()
         for tag in tag_occurance:
-            if tag_occurance[tag] > 900:
+            if tag_occurance[tag] > 200 and tag_occurance[tag] < 300:
                 ignored_tags.add(tag)
 
         for row in buf:
