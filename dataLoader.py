@@ -238,7 +238,7 @@ class ProgramWebDataset(Dataset):
 
         dscp = [e['dscp'] for e in batch]
 
-        inputs_tokens = [e['title_tokens'] + e['dscp_tokens'] for e in batch]
+        inputs_tokens = [e['dscp_tokens'] for e in batch]  #e['title_tokens'] +
         inputs_tfidf = torch.zeros(size=(len(batch), max_len+2))
 
         for i, token_list in enumerate(inputs_tokens):
