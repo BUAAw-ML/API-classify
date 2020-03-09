@@ -3,7 +3,7 @@ from engine import *
 from models import *
 from util import *
 from dataLoader import *
-from transformers.optimization import BertAdam
+import transformers
 
 parser = argparse.ArgumentParser(description='Training Super-parameters')
 #
