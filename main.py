@@ -3,7 +3,7 @@ from engine import *
 from models import *
 from util import *
 from dataLoader import *
-import transformers
+from transformers.optimization import AdamW
 
 parser = argparse.ArgumentParser(description='Training Super-parameters')
 #
