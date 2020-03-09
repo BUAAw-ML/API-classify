@@ -349,7 +349,6 @@ class MultiLabelMAPEngine(Engine):
             else:
                 print(self.state['ap_meter'].value())
                 print(map)
-                exit()
                 print('Test: \t Loss {loss:.4f}\t mAP {map:.3f}'.format(loss=loss, map=map))
                 print('OP: {OP:.4f}\t'
                       'OR: {OR:.4f}\t'
