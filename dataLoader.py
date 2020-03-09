@@ -75,8 +75,8 @@ class ProgramWebDataset(Dataset):
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
 
-                if len(tag) == 0:
-                    continue
+                # if len(tag) == 0:
+                #     continue
 
                 buf.append((id, title_ids, dscp_ids, tag))
 
@@ -238,13 +238,13 @@ class ProgramWebDataset(Dataset):
 
         dscp = [e['dscp'] for e in batch]
 
-        inputs_tokens = [e['dscp_tokens'] for e in batch]  #e['title_tokens'] +
-        inputs_tfidf = torch.zeros(size=(len(batch), max_len+2))
-
-        for i, token_list in enumerate(inputs_tokens):
-            for j, item in enumerate(token_list):
-                if item in self.tfidf_dict:
-                    inputs_tfidf[i, j+1] = self.tfidf_dict[item]
+        # inputs_tokens = [e['dscp_tokens'] for e in batch]  #e['title_tokens'] +
+        # inputs_tfidf = torch.zeros(size=(len(batch), max_len+2))
+        #
+        # for i, token_list in enumerate(inputs_tokens):
+        #     for j, item in enumerate(token_list):
+        #         if item in self.tfidf_dict:
+        #             inputs_tfidf[i, j+1] = self.tfidf_dict[item]
 
         # inputs_tfidf[inputs_tfidf>0]=1
         # ids *= inputs_tfidf.long()
