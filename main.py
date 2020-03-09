@@ -62,7 +62,7 @@ def multiLabel_text_classify():
     #                             lr=args.lr,
     #                             momentum=args.momentum,
     #                             weight_decay=args.weight_decay)
-    optimizer = BertAdam(model.get_config_optim(args.lr, args.lrp),
+    optimizer = AdamW(model.get_config_optim(args.lr, args.lrp),
                          lr=args.lr)
 
     state = {'batch_size': args.batch_size, 'max_epochs': args.epochs, 'evaluate': args.evaluate, 'resume': args.resume,
