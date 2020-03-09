@@ -81,10 +81,10 @@ class ProgramWebDataset(Dataset):
                         tag_occurance[t] = 1
                     tag_occurance[t] += 1
 
-        ignored_tags = set(['Tools','Data','Reference','Media','Real Time','Internet of Things'])  #
+        ignored_tags = set()  #
 
         for tag in tag_occurance:
-            if tag_occurance[tag] > 200:
+            if tag_occurance[tag] > 300:
                 ignored_tags.add(tag)
 
         for row in buf:
@@ -236,7 +236,7 @@ class ProgramWebDataset(Dataset):
 
         inputs_tokens = [e['title_tokens'] + e['dscp_tokens'] for e in batch]
         inputs_tfidf = torch.zeros(size=(len(batch), max_len+2))
-        print(max_len+2)
+
         for i, token_list in enumerate(inputs_tokens):
             for j, item in enumerate(token_list):
                 if item in self.tfidf_dict:
