@@ -3,6 +3,7 @@ from engine import *
 from models import *
 from util import *
 from dataLoader import *
+from pytorch_pretrained_bert.optimization import BertAdam
 
 parser = argparse.ArgumentParser(description='Training Super-parameters')
 #
@@ -57,10 +58,12 @@ def multiLabel_text_classify():
     criterion = nn.MultiLabelSoftMarginLoss()
 
     # define optimizer
-    optimizer = torch.optim.SGD(model.get_config_optim(args.lr, args.lrp),
-                                lr=args.lr,
-                                momentum=args.momentum,
-                                weight_decay=args.weight_decay)
+    # optimizer = torch.optim.SGD(model.get_config_optim(args.lr, args.lrp),
+    #                             lr=args.lr,
+    #                             momentum=args.momentum,
+    #                             weight_decay=args.weight_decay)
+    optimizer = BertAdam(model.get_config_optim(args.lr, args.lrp),
+                         lr=args.lr)
 
     state = {'batch_size': args.batch_size, 'max_epochs': args.epochs, 'evaluate': args.evaluate, 'resume': args.resume,
              'num_classes': train_dataset.get_tags_num(), 'difficult_examples': False,
