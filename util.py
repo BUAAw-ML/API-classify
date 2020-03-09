@@ -144,12 +144,6 @@ class AveragePrecisionMeter(object):
             ap[k] = sm.average_precision_score(targets, scores)
             #ap[k] = AveragePrecisionMeter.average_precision(scores, targets, self.difficult_examples)
 
-            if ap.mean() == 'nan':
-                print(targets)
-                print(scores)
-                print(ap)
-                exit()
-
         return ap
 
     @staticmethod
