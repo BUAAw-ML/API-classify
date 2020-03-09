@@ -63,7 +63,7 @@ def multiLabel_text_classify():
     #                             momentum=args.momentum,
     #                             weight_decay=args.weight_decay)
     optimizer = AdamW(model.get_config_optim(args.lr, args.lrp),
-                         lr=args.lr)
+                         lr=args.lr, correct_bias=False)
 
     state = {'batch_size': args.batch_size, 'max_epochs': args.epochs, 'evaluate': args.evaluate, 'resume': args.resume,
              'num_classes': train_dataset.get_tags_num(), 'difficult_examples': False,
