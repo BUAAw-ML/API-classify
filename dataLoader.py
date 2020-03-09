@@ -78,7 +78,7 @@ class ProgramWebDataset(Dataset):
                 # if len(tag) == 0:
                 #     continue
 
-                buf.append((id, title_ids, dscp_ids, tag))
+                buf.append((id, title_ids, title_tokens, dscp_ids, dscp_tokens, tag))
 
                 for t in tag:
                     if t not in tag_occurance:
@@ -93,7 +93,7 @@ class ProgramWebDataset(Dataset):
 
         for row in buf:
 
-            id, title_ids, dscp_ids, tag = row
+            id, title_ids, title_tokens, dscp_ids, dscp_tokens, tag = row
 
             if ignored_tags is not None:
                 tag = [t for t in tag if t not in ignored_tags]
