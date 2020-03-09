@@ -3,7 +3,7 @@ from engine import *
 from models import *
 from util import *
 from dataLoader import *
-from pytorch_pretrained_bert.optimization import BertAdam
+from transformers.optimization import BertAdam
 
 parser = argparse.ArgumentParser(description='Training Super-parameters')
 #
