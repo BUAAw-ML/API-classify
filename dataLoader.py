@@ -68,7 +68,7 @@ class ProgramWebDataset(Dataset):
                         tag_occurance[t] = 1
                     tag_occurance[t] += 1
 
-        ignored_tags = set()  #
+        ignored_tags = set(['Tools','Data','Reference','Media','Real Time','Internet of Things'])  #
         for tag in tag_occurance:
             if tag_occurance[tag] < 200:
                 ignored_tags.add(tag)
