@@ -31,10 +31,13 @@ class GraphConvolution(nn.Module):
     def forward(self, input, adj):
         support = torch.matmul(input, self.weight)
         output = torch.matmul(adj, support)
-        print(support.shape)
-        print(adj.shape)
-        print(output.shape)
-        exit()
+        # print(support.shape)
+        # print(adj.shape)
+        # print(output.shape)
+        # torch.Size([108, 1500])
+        # torch.Size([108, 108])
+        # torch.Size([108, 1500])
+
         if self.bias is not None:
             return output + self.bias
         else:
