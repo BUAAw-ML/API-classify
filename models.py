@@ -83,8 +83,8 @@ class GCNBert(nn.Module):
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        # print(self.adj.shape)
-        # exit()
+        print(self.adj.shape)
+        exit()
 
         x = self.gc1(tag_embedding, self.adj)
         x = self.relu(x)
