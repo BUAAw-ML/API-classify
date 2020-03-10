@@ -31,6 +31,10 @@ class GraphConvolution(nn.Module):
     def forward(self, input, adj):
         support = torch.matmul(input, self.weight)
         output = torch.matmul(adj, support)
+        print(support.shape)
+        print(adj.shape)
+        print(output.shape)
+        exit()
         if self.bias is not None:
             return output + self.bias
         else:
@@ -82,9 +86,6 @@ class GCNBert(nn.Module):
         tag_embedding = embed(encoded_tag)
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
-
-        print(self.adj.shape)
-        exit()
 
         x = self.gc1(tag_embedding, self.adj)
         x = self.relu(x)
