@@ -59,6 +59,7 @@ class GCNBert(nn.Module):
         
         self.num_classes = num_classes
 
+        self.dropout = nn.Dropout(p=0.5)
         self.gc1 = GraphConvolution(768, 3000)
         self.gc2 = GraphConvolution(3000, 768)
         self.relu = nn.LeakyReLU(0.2)
@@ -66,7 +67,7 @@ class GCNBert(nn.Module):
         _adj = gen_A(num_classes, t, co_occur_mat)
         _adj = torch.FloatTensor(_adj)
         self.adj = nn.Parameter(gen_adj(_adj), requires_grad=True)
-        #self.dropout = nn.Dropout(p=0.5)
+        #
         # self.linear1 = nn.Linear(768, 768)
         # #
         # self.relu = nn.LeakyReLU()
@@ -82,6 +83,7 @@ class GCNBert(nn.Module):
 
         sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
             / torch.sum(attention_mask, dim=1, keepdim=True)
+        sentence_feat = self.dropout(sentence_feat)
 
         #sentence_feat = token_feat[:,0,:]
 
@@ -89,6 +91,7 @@ class GCNBert(nn.Module):
         tag_embedding = embed(encoded_tag)
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
+
 
         x = self.gc1(tag_embedding, self.adj)
         x = self.relu(x)
