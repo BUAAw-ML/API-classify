@@ -217,7 +217,7 @@ def gen_A(num_classes, t, co_occur_mat):
     _nums = _adj.diagonal()
     _nums = _nums[:, np.newaxis]
     _adj = _adj / _nums
-    print(_adj>0.1)
+    print(np.sum(_adj>0.1)-num_classes)
     exit()
     _adj[_adj < 0.1] = 0
     #_adj[_adj >= t] = 1
