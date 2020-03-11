@@ -333,7 +333,7 @@ class MultiLabelMAPEngine(Engine):
         self.state['ap_meter'].reset()
 
     def on_end_epoch(self, training, model, criterion, data_loader, optimizer=None, display=True):
-        map = 100 * torch.from_numpy(np.nanmean(self.state['ap_meter'].value().numpy()))
+        map = 100 * torch.tensor(np.nanmean(self.state['ap_meter'].value().numpy()))
 
         loss = self.state['meter_loss'].value()[0]
         OP, OR, OF1, CP, CR, CF1 = self.state['ap_meter'].overall()
