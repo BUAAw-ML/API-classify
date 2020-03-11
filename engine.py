@@ -11,6 +11,8 @@ from torch.utils.tensorboard import SummaryWriter
 from util import *
 from dataLoader import ProgramWebDataset
 
+import numpy as np
+
 import json
 
 tqdm.monitor_interval = 0
@@ -331,7 +333,7 @@ class MultiLabelMAPEngine(Engine):
         self.state['ap_meter'].reset()
 
     def on_end_epoch(self, training, model, criterion, data_loader, optimizer=None, display=True):
-        map = 100 * torch.tensor(np.numpy(self.state['ap_meter'].value()).nanmean())
+        map = 100 * torch.from_numpy(self.state['ap_meter'].value().numpy().nanmean())
 
         loss = self.state['meter_loss'].value()[0]
         OP, OR, OF1, CP, CR, CF1 = self.state['ap_meter'].overall()
