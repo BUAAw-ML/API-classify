@@ -59,7 +59,7 @@ class GCNBert(nn.Module):
         
         self.num_classes = num_classes
 
-        self.dropout = nn.Dropout(p=0.5)
+        #self.dropout = nn.Dropout(p=0.5)
         self.gc1 = GraphConvolution(768, 3000)
         self.gc2 = GraphConvolution(3000, 768)
         self.relu = nn.LeakyReLU(0.2)
