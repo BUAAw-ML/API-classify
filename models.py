@@ -60,9 +60,12 @@ class GCNBert(nn.Module):
         
         self.num_classes = num_classes
 
+        self.tanh1 = nn.Tanh()
+        self.linear0 = nn.Linear(768, 768)
+
         self.w = nn.Parameter(torch.Tensor(768))
 
-        self.tanh1 = nn.Tanh()
+
 
         #self.dropout = nn.Dropout(p=0.5)
         # self.gc1 = GraphConvolution(768, 3000)
@@ -84,8 +87,9 @@ class GCNBert(nn.Module):
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]
 
+
         #print(token_feat.shape)
-        alpha = F.softmax(torch.matmul(self.tanh1(token_feat), self.w), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
+        alpha = F.softmax(torch.matmul(self.tanh1(self.linear0(token_feat)), self.w), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
         token_feat = token_feat * alpha  # [16, seq_len, 768]
 
 
