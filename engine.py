@@ -350,7 +350,7 @@ class MultiLabelMAPEngine(Engine):
                       'CR: {CR:.4f}\t'
                       'CF1: {CF1:.4f}'.format(OP=OP, OR=OR, OF1=OF1, CP=CP, CR=CR, CF1=CF1))
             else:
-                #print(self.state['ap_meter'].value())
+                print(self.state['ap_meter'].value())
                 print('Test: \t Loss {loss:.4f}\t mAP {map:.3f}'.format(loss=loss, map=map))
                 print('OP: {OP:.4f}\t'
                       'OR: {OR:.4f}\t'
