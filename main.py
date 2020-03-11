@@ -52,7 +52,7 @@ def multiLabel_text_classify():
     train_dataset, val_dataset, encoded_tag, tag_mask = \
         load_dataset('data/ProgrammerWeb/programweb-data.csv', 'data/ProgrammerWeb/domainnet.csv')
 
-    model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.05, co_occur_mat=train_dataset.co_occur_mat)
+    model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.2, co_occur_mat=train_dataset.co_occur_mat)
 
     # define loss function (criterion)
     criterion = nn.MultiLabelSoftMarginLoss()
