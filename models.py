@@ -60,26 +60,23 @@ class GCNBert(nn.Module):
         
         self.num_classes = num_classes
 
-        self.tanh1 = nn.Tanh()
-        self.linear0 = nn.Linear(768, 768)
-
-        self.w = nn.Parameter(torch.Tensor(768))
-
-
+        # self.tanh1 = nn.Tanh()
+        # self.linear0 = nn.Linear(768, 768)
+        # self.w = nn.Parameter(torch.Tensor(768))
 
         #self.dropout = nn.Dropout(p=0.5)
-        # self.gc1 = GraphConvolution(768, 3000)
-        # self.gc2 = GraphConvolution(3000, 768)
-        # self.relu = nn.LeakyReLU(0.2)
+        self.gc1 = GraphConvolution(768, 3000)
+        self.gc2 = GraphConvolution(3000, 768)
+        self.relu = nn.LeakyReLU(0.2)
+
+        _adj = gen_A(num_classes, t, co_occur_mat)
+        _adj = torch.FloatTensor(_adj)
+        self.adj = nn.Parameter(gen_adj(_adj), requires_grad=True)
         #
-        # _adj = gen_A(num_classes, t, co_occur_mat)
-        # _adj = torch.FloatTensor(_adj)
-        # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=True)
-        #
-        self.linear1 = nn.Linear(768, 768)
-        #
-        self.relu = nn.LeakyReLU()
-        self.linear2 = nn.Linear(768, num_classes)
+        # self.linear1 = nn.Linear(768, 768)
+        # #
+        # self.relu = nn.LeakyReLU()
+        # self.linear2 = nn.Linear(768, num_classes)
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tfidf_result):
 
@@ -89,9 +86,8 @@ class GCNBert(nn.Module):
 
 
         #print(token_feat.shape)
-        alpha = F.softmax(torch.matmul(self.tanh1(self.linear0(token_feat)), self.w), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
-        token_feat = token_feat * alpha  # [16, seq_len, 768]
-
+        # alpha = F.softmax(torch.matmul(self.tanh1(self.linear0(token_feat)), self.w), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
+        # token_feat = token_feat * alpha  # [16, seq_len, 768]
 
         #torch.set_printoptions(threshold=np.inf)
 
@@ -102,42 +98,39 @@ class GCNBert(nn.Module):
         # print(token_feat.shape)
         # print(sentence_feat.shape)
 
-
-
         #sentence_feat = token_feat[:,0,:]
 
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
-        #
-        #
-        # x = self.gc1(tag_embedding, self.adj)
-        # x = self.relu(x)
-        # x = self.gc2(x, self.adj)
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        # x = x.transpose(0, 1)
-        # x = torch.matmul(sentence_feat, x)
-
-        x = self.linear1(sentence_feat)
-        #x = self.dropout(x)
+        x = self.gc1(tag_embedding, self.adj)
         x = self.relu(x)
-        x = self.linear2(x)
+        x = self.gc2(x, self.adj)
+
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
+
+        # x = self.linear1(sentence_feat)
+        # #x = self.dropout(x)
+        # x = self.relu(x)
+        # x = self.linear2(x)
 
         return x
 
-    # def get_config_optim(self, lr, lrp):
-    #     return [
-    #             {'params': self.bert.parameters(), 'lr': lr * lrp},
-    #             {'params': self.gc1.parameters(), 'lr': lr},
-    #             {'params': self.gc2.parameters(), 'lr': lr},
-    #             ]
     def get_config_optim(self, lr, lrp):
         return [
                 {'params': self.bert.parameters(), 'lr': lr * lrp},
-                {'params': self.linear1.parameters(), 'lr': lr},
-                {'params': self.linear2.parameters(), 'lr': lr},
+                {'params': self.gc1.parameters(), 'lr': lr},
+                {'params': self.gc2.parameters(), 'lr': lr},
                 ]
+    # def get_config_optim(self, lr, lrp):
+    #     return [
+    #             {'params': self.bert.parameters(), 'lr': lr * lrp},
+    #             {'params': self.linear1.parameters(), 'lr': lr},
+    #             {'params': self.linear2.parameters(), 'lr': lr},
+    #             ]
 
 
 def gcn_bert(num_classes, t, co_occur_mat=None):
