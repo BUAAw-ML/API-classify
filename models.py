@@ -59,6 +59,8 @@ class GCNBert(nn.Module):
         
         self.num_classes = num_classes
 
+        self.w = nn.Parameter(torch.Tensor(768))
+
         #self.dropout = nn.Dropout(p=0.5)
         self.gc1 = GraphConvolution(768, 3000)
         self.gc2 = GraphConvolution(3000, 768)
@@ -82,8 +84,11 @@ class GCNBert(nn.Module):
         #torch.set_printoptions(threshold=np.inf)
 
         sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(attention_mask, dim=1, keepdim=True)
+            / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, 512, 768]
         #sentence_feat = self.dropout(sentence_feat)
+
+        alpha = F.softmax(torch.matmul(sentence_feat, self.w), dim=1).unsqueeze(-1)  # [16, 512, 1]
+        sentence_feat = sentence_feat * alpha  # [16, 512, 768]
 
         #sentence_feat = token_feat[:,0,:]
 
