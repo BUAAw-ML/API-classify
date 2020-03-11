@@ -59,7 +59,7 @@ class GCNBert(nn.Module):
         
         self.num_classes = num_classes
 
-        self.dropout = nn.Dropout(p=0.5)
+        #self.dropout = nn.Dropout(p=0.5)
         self.gc1 = GraphConvolution(768, 3000)
         self.gc2 = GraphConvolution(3000, 768)
         self.relu = nn.LeakyReLU(0.2)
@@ -83,7 +83,7 @@ class GCNBert(nn.Module):
 
         sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
             / torch.sum(attention_mask, dim=1, keepdim=True)
-        sentence_feat = self.dropout(sentence_feat)
+        #sentence_feat = self.dropout(sentence_feat)
 
         #sentence_feat = token_feat[:,0,:]
 
