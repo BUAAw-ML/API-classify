@@ -82,14 +82,20 @@ class GCNBert(nn.Module):
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]
 
+        print(token_feat.shape)
+        alpha = F.softmax(torch.matmul(token_feat, self.w), dim=-1).unsqueeze(-1)  # [16, 512, 1]
+        print(alpha.shape)
+        token_feat = token_feat * alpha  # [16, 512, 768]
+        print(token_feat.shape)
+
         #torch.set_printoptions(threshold=np.inf)
 
         sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
             / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, 512, 768]
         #sentence_feat = self.dropout(sentence_feat)
+        print(sentence_feat.shape)
+        exit()
 
-        alpha = F.softmax(torch.matmul(sentence_feat, self.w), dim=-1).unsqueeze(-1)  # [16, 512, 1]
-        sentence_feat = sentence_feat * alpha  # [16, 512, 768]
 
         #sentence_feat = token_feat[:,0,:]
 
