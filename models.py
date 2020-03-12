@@ -66,9 +66,9 @@ class GCNBert(nn.Module):
         # self.w = nn.Parameter(torch.Tensor(768))
 
         #self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 8000)
+        self.gc1 = GraphConvolution(768, 10000)
         self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(8000, 768)
+        self.gc2 = GraphConvolution(10000, 768)
 
         _adj = gen_A(num_classes, t, co_occur_mat)
         _adj = torch.FloatTensor(_adj)
