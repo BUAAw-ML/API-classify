@@ -302,7 +302,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
         data = np.array(dataset.data)
         train_dataset = dataset
         val_dataset = copy.copy(dataset)
-        ind = np.random.RandomState(seed=3).permutation(len(data))
+        ind = np.random.RandomState(seed=16).permutation(len(data))
         split = int(len(data) * 0.9)
         train_dataset.data = data[ind[:split]].tolist()
         val_dataset.data = data[ind[split:]].tolist()
