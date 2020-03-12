@@ -81,27 +81,20 @@
 #     return word_dict
 #
 #
-# def glove_google(word_vectors, word):
-#     return word_vectors[word]
+# def obtain_word_embedding(words, wv='glove', model_path='data/glove'):
 #
-#
-# def obtain_word_embedding(wv='glove', path='data/glove'):
-#
-#     text_file = os.path.join('data', 'invdict_wordntext.json')
-#
-#
-#     if not os.path.exists(save_file):
-#         print('obtain semantic word embedding', save_file)
-#         embed_text_file(text_file, word_vectors, get_vector, save_file)
-#     else:
-#         print('Embedding existed :', save_file, 'Skip!!!')
-#
-#     model_path = path
 #     if wv == 'glove':
 #         save_file = os.path.join(data_dir, 'word_embedding_model', 'glove_word2vec_wordnet.pkl')
 #         if not os.path.exists(save_file):
 #             word_vectors = get_glove_dict(model_path)
-#             get_vector = glove_google
 #     else:
 #         raise NotImplementedError
+#
+#     if not os.path.exists(save_file):
+#         print('obtain semantic word embedding', save_file)
+#         embed_text_file(words, word_vectors, save_file)
+#     else:
+#         print('Embedding existed :', save_file, 'Skip!!!')
+#
+#
 #
