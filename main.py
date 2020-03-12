@@ -49,7 +49,7 @@ def multiLabel_text_classify():
     args = parser.parse_args()
 
     use_gpu = torch.cuda.is_available()
-    train_dataset, val_dataset, encoded_tag, tag_mask = \
+    train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file = \
         load_dataset('data/ProgrammerWeb/programweb-data.csv', 'data/ProgrammerWeb/domainnet.csv')
 
     model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.3, co_occur_mat=train_dataset.co_occur_mat)
@@ -70,7 +70,7 @@ def multiLabel_text_classify():
              'save_model_path': args.save_model_path, 'log_dir': args.log_dir, 'workers': args.workers,
              'epoch_step': args.epoch_step, 'lr': args.lr, 'encoded_tag': encoded_tag, 'tag_mask': tag_mask,
              'device_ids': args.device_ids, 'print_freq': args.print_freq, 'id2tag': train_dataset.id2tag,
-             'tfidf_result': train_dataset.tfidf_dict}
+             'tfidf_result': train_dataset.tfidf_dict, 'tag_embedding_file': tag_embedding_file}
 
     if args.evaluate:
         state['evaluate'] = True

@@ -222,7 +222,7 @@ class ProgramWebDataset(Dataset):
             padded_tag_ids[i, :len(tag_ids[i])] = torch.tensor(tag_ids[i])
         return padded_tag_ids, mask
 
-    def obtain_tag_embedding(self, wv='glove', model_path='data/glove'):
+    def obtain_tag_embedding(self, wv='glove', model_path='data'):
 
         if wv == 'glove':
             save_file = os.path.join('data', 'word_embedding_model', 'glove_word2vec_wordnet.pkl')
@@ -236,11 +236,14 @@ class ProgramWebDataset(Dataset):
             for i in range(self.get_tags_num()):
                 tag = self.id2tag[i]
                 tag_list.append(tag)
+            print(tag_list)
 
             print('obtain semantic word embedding', save_file)
             embed_text_file(tag_list, word_vectors, save_file)
         else:
             print('Embedding existed :', save_file, 'Skip!!!')
+
+        return save_file
 
 
     def collate_fn(self, batch):
@@ -319,8 +322,6 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
 
         encoded_tag, tag_mask = dataset.encode_tag()
 
-        #dataset.obtain_tag_embedding()
-
         torch.save(encoded_tag, os.path.join('cache', cache_file_head + '.encoded_tag'))
         torch.save(tag_mask, os.path.join('cache', cache_file_head + '.tag_mask'))
 
@@ -338,4 +339,6 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
     print("train_data_size: {}".format(len(train_dataset.data)))
     print("val_data_size: {}".format(len(val_dataset.data)))
 
-    return train_dataset, val_dataset, encoded_tag, tag_mask
+    tag_embedding_file = dataset.obtain_tag_embedding()
+
+    return train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file

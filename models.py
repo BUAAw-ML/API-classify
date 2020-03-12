@@ -4,8 +4,9 @@ import torch
 import torch.nn as nn
 from transformers import BertModel
 import torch.nn.functional as F
-
 from torch.autograd import Variable
+import pickle as pkl
+
 
 class GraphConvolution(nn.Module):
     """
@@ -78,7 +79,7 @@ class GCNBert(nn.Module):
         # self.relu = nn.LeakyReLU()
         # self.linear2 = nn.Linear(768, num_classes)
 
-    def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tfidf_result):
+    def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
 
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
@@ -104,9 +105,11 @@ class GCNBert(nn.Module):
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        # with open(wv_file) as fp:
-        #     feats = pkl.load(fp)
-        # feats = feats.tolist()
+        with open(tag_embedding_file) as fp:
+            feats = pkl.load(fp)
+        feats = feats.tolist()
+        print(feats)
+        exit()
 
 
         x = self.gc1(tag_embedding, self.adj)
