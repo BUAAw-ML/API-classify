@@ -16,9 +16,7 @@
 # feat_len = 300
 #
 #
-# def embed_text_file(text_file, word_vectors, get_vector, save_file):
-#     with open(text_file) as fp:
-#         text_list = json.load(fp)
+# def embed_text_file(text_list, word_vectors, save_file):
 #
 #     all_feats = []
 #
@@ -31,10 +29,10 @@
 #             print('%d / %d : %s' % (i, len(text_list), class_name))
 #         feat = np.zeros(feat_len)
 #
-#         options = class_name.split(',')
+#         options = class_name.split()
 #         cnt_word = 0
 #         for j in range(len(options)):
-#             now_feat = get_embedding(options[j].strip(), word_vectors, get_vector)
+#             now_feat = get_embedding(options[j].strip(), word_vectors)
 #             if np.abs(now_feat.sum()) > 0:
 #                 cnt_word += 1
 #                 feat += now_feat
@@ -64,6 +62,31 @@
 #         pkl.dump(all_feats, fp)
 #     print('save to : %s' % save_file)
 #
+#
+# def get_embedding(entity_str, word_vectors):
+#     try:
+#         feat = word_vectors[entity_str]
+#         return feat
+#     except:
+#         feat = np.zeros(feat_len)
+#
+#     str_set = filter(None, re.split("[ \-_]+", entity_str))
+#
+#     cnt_word = 0
+#     for i in range(len(str_set)):
+#         temp_str = str_set[i]
+#         try:
+#             now_feat = word_vectors[temp_str]
+#             feat = feat + now_feat
+#             cnt_word = cnt_word + 1
+#         except:
+#             continue
+#
+#     if cnt_word > 0:
+#         feat = feat / cnt_word
+#     return feat
+#
+#
 # def get_glove_dict(txt_dir):
 #     print('load glove word embedding')
 #     txt_file = os.path.join(txt_dir, 'glove.6B.300d.txt')
@@ -81,7 +104,7 @@
 #     return word_dict
 #
 #
-# def obtain_word_embedding(words, wv='glove', model_path='data/glove'):
+# def obtain_word_embedding(text_list, wv='glove', model_path='data/glove'):
 #
 #     if wv == 'glove':
 #         save_file = os.path.join(data_dir, 'word_embedding_model', 'glove_word2vec_wordnet.pkl')
@@ -92,7 +115,7 @@
 #
 #     if not os.path.exists(save_file):
 #         print('obtain semantic word embedding', save_file)
-#         embed_text_file(words, word_vectors, save_file)
+#         embed_text_file(text_list, word_vectors, save_file)
 #     else:
 #         print('Embedding existed :', save_file, 'Skip!!!')
 #
