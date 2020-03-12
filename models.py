@@ -106,7 +106,7 @@ class GCNBert(nn.Module):
             / torch.sum(tag_mask, dim=1, keepdim=True)
 
         with open(tag_embedding_file, 'rb') as fp:
-            feats = pkl.load(fp, encoding='utf-8')
+            feats = pkl.load(fp)#, encoding='utf-8')
         feats = feats.tolist()
         print(feats)
         exit()
