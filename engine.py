@@ -169,6 +169,8 @@ class Engine(object):
                 self.state['encoded_tag'] = self.state['encoded_tag'].cuda(self.state['device_ids'][0])
             if 'tag_mask' in self.state:
                 self.state['tag_mask'] = self.state['tag_mask'].cuda(self.state['device_ids'][0])
+            if 'tag_embedding_file' in self.state:
+                self.state['tag_embedding_file'] = self.state['tag_embedding_file'].cuda(self.state['device_ids'][0])
             criterion = criterion.cuda(self.state['device_ids'][0])
 
         if self.state['evaluate']:
