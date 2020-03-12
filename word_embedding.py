@@ -69,7 +69,7 @@ def get_embedding(entity_str, word_vectors):
     except:
         feat = np.zeros(feat_len)
 
-    str_set = filter(None, re.split("[ \-_]+", entity_str))
+    str_set = list(filter(None, re.split("[ \-_]+", entity_str)))
 
     cnt_word = 0
     for i in range(len(str_set)):
