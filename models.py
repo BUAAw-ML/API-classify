@@ -108,7 +108,7 @@ class GCNBert(nn.Module):
         with open(tag_embedding_file, 'rb') as fp:
             feats = pkl.load(fp)#, encoding='utf-8')
         feats = feats.tolist()
-        feats = torch.tensor(feats)
+        feats = torch.tensor(feats).cuda(1)
 
         x = self.gc1(feats, self.adj)
         x = self.relu1(x)
