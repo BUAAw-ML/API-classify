@@ -230,6 +230,8 @@ def gen_A(num_classes, t, co_occur_mat):
 
 def gen_adj(A):
     D = torch.pow(A.sum(1), -0.5)
+    print(D)
+    exit()
     D = torch.diag(D)
     adj = torch.matmul(torch.matmul(A, D).t(), D)
     return adj
