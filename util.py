@@ -218,10 +218,10 @@ def gen_A(num_classes, t, co_occur_mat):
     _nums = _nums[:, np.newaxis]
     _adj = _adj / _nums
     print("the number of directed edges in the graph: {}".format(np.sum(_adj>t)-num_classes))
-    _adj[_adj < t] = 0
-    #_adj[_adj >= t] = 1
-    _adj = _adj * 1 / (_adj.sum(0, keepdims=True) + 1e-6)
-    _adj = _adj + 1 * np.identity(num_classes, np.int)
+    # _adj[_adj < t] = 0
+    # #_adj[_adj >= t] = 1
+    # _adj = _adj * 1 / (_adj.sum(0, keepdims=True) + 1e-6)
+    # _adj = _adj + 1 * np.identity(num_classes, np.int)
 
     #     # with open('adj.json', 'w') as f:
     #     #     json.dump(_adj, f)
@@ -230,8 +230,6 @@ def gen_A(num_classes, t, co_occur_mat):
 
 def gen_adj(A):
     D = torch.pow(A.sum(1), -0.5)
-    print(D)
-    exit()
     D = torch.diag(D)
     adj = torch.matmul(torch.matmul(A, D).t(), D)
     return adj
