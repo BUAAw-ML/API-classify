@@ -12,6 +12,8 @@ import numpy as np
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+from word_embedding import *
+
 tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
 
 token_table = {'ecommerce': 'electronic commerce'}
@@ -220,6 +222,27 @@ class ProgramWebDataset(Dataset):
             padded_tag_ids[i, :len(tag_ids[i])] = torch.tensor(tag_ids[i])
         return padded_tag_ids, mask
 
+    def obtain_tag_embedding(self, wv='glove', model_path='data/glove'):
+
+        if wv == 'glove':
+            save_file = os.path.join('data', 'word_embedding_model', 'glove_word2vec_wordnet.pkl')
+            if not os.path.exists(save_file):
+                word_vectors = get_glove_dict(model_path)
+        else:
+            raise NotImplementedError
+
+        if not os.path.exists(save_file):
+            tag_list = []
+            for i in range(self.get_tags_num()):
+                tag = self.id2tag[i]
+                tag_list.append(tag)
+
+            print('obtain semantic word embedding', save_file)
+            embed_text_file(tag_list, word_vectors, save_file)
+        else:
+            print('Embedding existed :', save_file, 'Skip!!!')
+
+
     def collate_fn(self, batch):
         result = {}
         # construct input
@@ -295,6 +318,8 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
         dataset = ProgramWebDataset.from_csv(api_csvfile, net_csvfile)
 
         encoded_tag, tag_mask = dataset.encode_tag()
+
+        #dataset.obtain_tag_embedding()
 
         torch.save(encoded_tag, os.path.join('cache', cache_file_head + '.encoded_tag'))
         torch.save(tag_mask, os.path.join('cache', cache_file_head + '.tag_mask'))
