@@ -158,6 +158,7 @@ class ProgramWebDataset(Dataset):
             tag_ids = data[i]['tag_ids']
             for t1 in range(len(tag_ids)):
                 for t2 in range(len(tag_ids)):
+                    #if tag_ids[t1] != tag_ids[t2]:
                     co_occur_mat[tag_ids[t1], tag_ids[t2]] += 1
         return co_occur_mat
 
