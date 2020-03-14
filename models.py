@@ -66,18 +66,20 @@ class GCNBert(nn.Module):
         # self.w = nn.Parameter(torch.Tensor(768))
 
         #self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 768)
-        self.relu1 = nn.LeakyReLU(0.2)
-        #self.gc2 = GraphConvolution(8000, 768)
-
-        _adj = gen_A(num_classes, t, co_occur_mat)
-        _adj = torch.FloatTensor(_adj)
-        self.adj = nn.Parameter(_adj, requires_grad=False)  #gen_adj(_adj)
+        # self.gc1 = GraphConvolution(768, 768)
+        # self.relu1 = nn.LeakyReLU(0.2)
+        # #self.gc2 = GraphConvolution(8000, 768)
         #
-        # self.linear1 = nn.Linear(768, 8000)
-        # #
-        # self.relu = nn.LeakyReLU()
-        # self.linear2 = nn.Linear(8000, 768)#num_classes)
+        # _adj = gen_A(num_classes, t, co_occur_mat)
+        # _adj = torch.FloatTensor(_adj)
+        # self.adj = nn.Parameter(_adj, requires_grad=False)  #gen_adj(_adj)
+        #
+        self.linear1 = nn.Linear(768, 4000)
+        #
+        self.relu1 = nn.LeakyReLU()
+        self.linear2 = nn.Linear(4000, 8000)#num_classes)
+        self.relu2 = nn.LeakyReLU()
+        self.linear3 = nn.Linear(8000, 768)
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
 
@@ -110,17 +112,22 @@ class GCNBert(nn.Module):
         # tag_embedding = feats.tolist()
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
         #
-        x = self.gc1(tag_embedding, self.adj)
-        x = self.relu1(x)
+        # x = self.gc1(tag_embedding, self.adj)
+        # x = self.relu1(x)
         #x = self.gc2(x, self.adj)
+
+        # x = x.transpose(0, 1)
+        # x = torch.matmul(sentence_feat, x)
+
+        x = self.linear1(tag_embedding)
+        #x = self.dropout(x)
+        x = self.relu1(x)
+        x = self.linear2(x)
+        x = self.relu2(x)
+        x = self.linear3(x)
 
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
-
-        # x = self.linear1(sentence_feat)
-        # #x = self.dropout(x)
-        # x = self.relu(x)
-        # x = self.linear2(x)
 
         return x
 
@@ -128,7 +135,8 @@ class GCNBert(nn.Module):
         return [
                 {'params': self.bert.parameters(), 'lr': lr * lrp},
                 {'params': self.gc1.parameters(), 'lr': lr},
-                #{'params': self.gc2.parameters(), 'lr': lr},
+                {'params': self.gc2.parameters(), 'lr': lr},
+                {'params': self.gc3.parameters(), 'lr': lr},
                 ]
     # def get_config_optim(self, lr, lrp):
     #     return [
