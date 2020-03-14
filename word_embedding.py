@@ -68,6 +68,7 @@ def get_embedding(entity_str, word_vectors):
         return feat
     except:
         feat = np.zeros(feat_len)
+        return
 
     str_set = list(filter(None, re.split("[ \-_]+", entity_str)))
 
