@@ -76,10 +76,8 @@ class GCNBert(nn.Module):
         #
         self.linear1 = nn.Linear(768, 4000)
         #
-        self.relu1 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(4000, 8000)#num_classes)
-        self.relu2 = nn.LeakyReLU()
-        self.linear3 = nn.Linear(8000, 768)
+        #self.relu1 = nn.LeakyReLU()
+        self.linear2 = nn.Linear(4000, 768)#num_classes)
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
 
@@ -121,10 +119,9 @@ class GCNBert(nn.Module):
 
         x = self.linear1(tag_embedding)
         #x = self.dropout(x)
-        x = self.relu1(x)
+        #x = self.relu1(x)
+        x = x.softmax(dim=1)
         x = self.linear2(x)
-        x = self.relu2(x)
-        x = self.linear3(x)
 
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
@@ -142,7 +139,6 @@ class GCNBert(nn.Module):
                 {'params': self.bert.parameters(), 'lr': lr * lrp},
                 {'params': self.linear1.parameters(), 'lr': lr},
                 {'params': self.linear2.parameters(), 'lr': lr},
-                {'params': self.linear3.parameters(), 'lr': lr},
                 ]
 
 
