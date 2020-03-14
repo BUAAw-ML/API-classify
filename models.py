@@ -74,10 +74,10 @@ class GCNBert(nn.Module):
         # _adj = torch.FloatTensor(_adj)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)
         #
-        self.linear1 = nn.Linear(768, 8000)
+        self.linear1 = nn.Linear(768, 20000)
         #
         self.relu = nn.LeakyReLU()
-        self.linear2 = nn.Linear(8000, 768)#num_classes)
+        self.linear2 = nn.Linear(20000, 768)#num_classes)
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
 
