@@ -32,13 +32,7 @@ class GraphConvolution(nn.Module):
 
     def forward(self, input, adj):
         support = torch.matmul(input, self.weight)
-        output = support#torch.matmul(adj, support)
-        # print(support.shape)
-        # print(adj.shape)
-        # print(output.shape)
-        # torch.Size([108, 1500])
-        # torch.Size([108, 108])
-        # torch.Size([108, 1500])
+        output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
@@ -72,7 +66,7 @@ class GCNBert(nn.Module):
 
         _adj = gen_A(num_classes, t, co_occur_mat)
         _adj = torch.FloatTensor(_adj)
-        self.adj = nn.Parameter(_adj, requires_grad=False)  #gen_adj(_adj)
+        self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         #
         # self.linear1 = nn.Linear(768, 4000)
         # #
