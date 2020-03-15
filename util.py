@@ -229,8 +229,8 @@ def gen_A(num_classes, t, co_occur_mat):
 
     _adj *= _adj.diagonal() / _nums.sum()
 
-   # _adj[_adj < 0.01] = 0
-    #_adj[_adj >= t] = 1
+    _adj[_adj < 0.000001] = 0
+    _adj[_adj >= 0.000001] = 1
 
     print(_adj)
 
