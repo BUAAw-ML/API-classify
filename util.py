@@ -225,12 +225,12 @@ def gen_A(num_classes, t, co_occur_mat):
     print("the number of directed edges in the graph: {}".format(np.sum(_adj >= t)-num_classes))
     # exit()
 
-    _adj[_adj < t] = 0
+    #_adj[_adj < t] = 0
     #_adj[_adj >= t] = 1
 
     print(_adj)
 
-    _adj = _adj * 2 / (_adj.sum(0, keepdims=True) + 1e-6)
+    #_adj = _adj * 1 / (_adj.sum(0, keepdims=True) + 1e-6)
     #_adj = _adj + 1 * np.identity(num_classes, np.int)
 
     #     # with open('adj.json', 'w') as f:
