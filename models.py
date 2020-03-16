@@ -112,7 +112,7 @@ class GCNBert(nn.Module):
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
 
-        x = self.linear0(x)
+        #x = self.linear0(x)
 
         x = self.linear1(torch.cat((sentence_feat, x), 1))
         x = self.relu2(x)
