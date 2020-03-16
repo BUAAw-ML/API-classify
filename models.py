@@ -73,11 +73,11 @@ class GCNBert(nn.Module):
         self.fc_hallucinator = nn.Linear(768, 108)
         self.fc_selector = nn.Linear(768, 768)
 
-        self.linear1 = nn.Linear(768, 4000)
-        self.relu2 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(4000, num_classes)
+        # self.linear1 = nn.Linear(768, 4000)
+        # self.relu2 = nn.LeakyReLU()
+        # self.linear2 = nn.Linear(4000, num_classes)
 
-        #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
+        self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
 
@@ -121,9 +121,10 @@ class GCNBert(nn.Module):
         concept_selector = self.fc_selector(sentence_feat)
         concept_selector = concept_selector.tanh()
 
-        x = self.linear1(sentence_feat + concept_selector * x)
-        x = self.relu2(x)
-        x = self.linear2(x)
+        x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
+        # x = self.linear1(sentence_feat + concept_selector * x)
+        # x = self.relu2(x)
+        # x = self.linear2(x)
         return x
 
     # def get_config_optim(self, lr, lrp):
@@ -135,8 +136,8 @@ class GCNBert(nn.Module):
     def get_config_optim(self, lr, lrp):
         return [
                 {'params': self.bert.parameters(), 'lr': lr * lrp},
-                {'params': self.linear1.parameters(), 'lr': lr},
-                {'params': self.linear2.parameters(), 'lr': lr},
+                # {'params': self.linear1.parameters(), 'lr': lr},
+                # {'params': self.linear2.parameters(), 'lr': lr},
                 {'params': self.gc1.parameters(), 'lr': lr},
                 {'params': self.gc2.parameters(), 'lr': lr},
                 ]
