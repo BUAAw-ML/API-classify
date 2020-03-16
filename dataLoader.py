@@ -41,8 +41,8 @@ class ProgramWebDataset(Dataset):
         data, tag2id, id2tag, document = ProgramWebDataset.load(api_csvfile)
         co_occur_mat = ProgramWebDataset.stat_cooccurence(data, len(tag2id))
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
-
-        tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
+        tfidf_dict = {}
+        #tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
 
         return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict)
 
@@ -139,14 +139,14 @@ class ProgramWebDataset(Dataset):
         for item in tfidf_model.vocabulary_:
             tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
 
-        tfidf_model = TfidfVectorizer(sublinear_tf=True,
-                                        strip_accents='unicode',
-                                        analyzer='char',
-                                        stop_words='english',
-                                        ngram_range=(2, 6),
-                                        max_features=50000).fit(document)
-        for item in tfidf_model.vocabulary_:
-            tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
+        # tfidf_model = TfidfVectorizer(sublinear_tf=True,
+        #                                 strip_accents='unicode',
+        #                                 analyzer='char',
+        #                                 stop_words='english',
+        #                                 ngram_range=(2, 6),
+        #                                 max_features=50000).fit(document)
+        # for item in tfidf_model.vocabulary_:
+        #     tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
 
         return tfidf_dict
 
@@ -341,6 +341,6 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
     print("val_data_size: {}".format(len(val_dataset.data)))
 
     tag_embedding_file = ''
-    tag_embedding_file = dataset.obtain_tag_embedding()
+    #tag_embedding_file = dataset.obtain_tag_embedding()
 
     return train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file

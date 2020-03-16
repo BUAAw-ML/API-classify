@@ -110,6 +110,7 @@ class GCNBert(nn.Module):
         #
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
+        x = x.sum(0)
 
         x = self.linear1(sentence_feat + x)
         x = self.relu2(x)

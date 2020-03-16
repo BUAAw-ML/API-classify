@@ -225,7 +225,7 @@ def gen_A(num_classes, t, co_occur_mat):
     print("the number of directed edges in the graph: {}".format(np.sum(_adj >= t)-num_classes))
     # exit()
 
-    _adj *= _adj.diagonal() / _nums.sum()
+    #_adj *= _adj.diagonal() / _nums.sum()
 
     # _adj[_adj < t] = 0
     # _adj[_adj >= t] = 0.2
