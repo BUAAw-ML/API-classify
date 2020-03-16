@@ -61,7 +61,7 @@ class GCNBert(nn.Module):
 
         #self.dropout = nn.Dropout(p=0.5)
         self.gc1 = GraphConvolution(768, 8000)
-        self.relu1 = nn.LeakyReLU(0.2)
+        #self.relu1 = nn.LeakyReLU(0.2)
         self.gc2 = GraphConvolution(8000, 768)
 
         _adj = gen_A(num_classes, t, co_occur_mat)
@@ -107,7 +107,7 @@ class GCNBert(nn.Module):
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
 
         x = self.gc1(tag_embedding, self.adj)
-        x = self.relu1(x)
+        #x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
         # values_memory = self.fc_hallucinator(sentence_feat)
