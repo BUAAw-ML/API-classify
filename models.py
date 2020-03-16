@@ -130,8 +130,8 @@ class GCNBert(nn.Module):
                 {'params': self.bert.parameters(), 'lr': lr * lrp},
                 {'params': self.linear1.parameters(), 'lr': lr},
                 {'params': self.linear2.parameters(), 'lr': lr},
-                {'params': self.gc1.parameters(), 'lr': lr},
-                {'params': self.gc2.parameters(), 'lr': lr},
+                # {'params': self.gc1.parameters(), 'lr': lr},
+                # {'params': self.gc2.parameters(), 'lr': lr},
                 ]
 
 
