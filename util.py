@@ -230,12 +230,12 @@ def gen_A(num_classes, t, co_occur_mat):
     _adj *= _adj.diagonal() / _nums.sum()
 
     _adj[_adj < 0.00001] = 0
-    _adj[_adj >= 0.00001] = 1
+    _adj[_adj >= 0.00001] = 0.2
 
     print(_adj)
 
     #_adj = _adj * 1 / (_adj.sum(0, keepdims=True) + 1e-6)
-    #_adj = _adj + 1 * np.identity(num_classes, np.int)
+    _adj = _adj + 1 * np.identity(num_classes, np.int)
 
     #     # with open('adj.json', 'w') as f:
     #     #     json.dump(_adj, f)
