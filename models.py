@@ -71,7 +71,7 @@ class GCNBert(nn.Module):
         self.linear1 = nn.Linear(768, 4000)
         #
         self.relu1 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(4000, 768)#num_classes)
+        self.linear2 = nn.Linear(4000, num_classes)
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
 
