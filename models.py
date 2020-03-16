@@ -62,7 +62,7 @@ class GCNBert(nn.Module):
         #self.dropout = nn.Dropout(p=0.5)
         self.gc1 = GraphConvolution(768, 8000)
         self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(8000, 768)
+        self.gc2 = GraphConvolution(8000, 108)
 
         _adj = gen_A(num_classes, t, co_occur_mat)
         _adj = torch.FloatTensor(_adj)
@@ -70,6 +70,7 @@ class GCNBert(nn.Module):
         #
         self.linear0 = nn.Linear(108, 768)
 
+        self.fc_hallucinator = nn.Linear(768, 108)
         self.fc_selector = nn.Linear(768, 768)
 
         self.linear1 = nn.Linear(768, 4000)
@@ -110,9 +111,12 @@ class GCNBert(nn.Module):
         x = self.gc1(tag_embedding, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
-        #
+
+        values_memory = self.fc_hallucinator(sentence_feat)
+        values_memory = values_memory.softmax(dim=1)
+
         x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
+        x = torch.matmul(values_memory, x)
 
         x = self.linear0(x)
 
