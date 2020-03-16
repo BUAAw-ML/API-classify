@@ -71,7 +71,7 @@ class GCNBert(nn.Module):
         #self.linear0 = nn.Linear(108, 768)
 
         #self.fc_hallucinator = nn.Linear(768, 108)
-        self.fc_selector = nn.Linear(768, 768)
+        #self.fc_selector = nn.Linear(768, 768)
 
         #self.linear1 = nn.Linear(768, 108)
         # self.relu2 = nn.LeakyReLU()
@@ -117,11 +117,11 @@ class GCNBert(nn.Module):
 
         # x = self.linear0(x)
 
-        concept_selector = self.fc_selector(sentence_feat)
-        concept_selector = concept_selector.tanh()
+        # concept_selector = self.fc_selector(sentence_feat)
+        # concept_selector = concept_selector.tanh()
 
         x = x.transpose(0, 1)
-        x = torch.matmul(concept_selector, x)
+        x = torch.matmul(sentence_feat, x)
 
         #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         #x = self.linear1(x)  #sentence_feat + concept_selector *
