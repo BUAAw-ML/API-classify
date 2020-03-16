@@ -60,15 +60,15 @@ class GCNBert(nn.Module):
         # self.w = nn.Parameter(torch.Tensor(768))
 
         #self.dropout = nn.Dropout(p=0.5)
-        # self.gc1 = GraphConvolution(768, 8000)
-        # self.relu1 = nn.LeakyReLU(0.2)
-        # self.gc2 = GraphConvolution(8000, 768)
+        self.gc1 = GraphConvolution(768, 8000)
+        self.relu1 = nn.LeakyReLU(0.2)
+        self.gc2 = GraphConvolution(8000, 768)
+
+        _adj = gen_A(num_classes, t, co_occur_mat)
+        _adj = torch.FloatTensor(_adj)
+        self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         #
-        # _adj = gen_A(num_classes, t, co_occur_mat)
-        # _adj = torch.FloatTensor(_adj)
-        # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
-        # #
-        # self.linear0 = nn.Linear(108, 768)
+        self.linear0 = nn.Linear(108, 768)
 
         self.linear1 = nn.Linear(768, 4000)
         self.relu2 = nn.LeakyReLU()
@@ -95,26 +95,26 @@ class GCNBert(nn.Module):
 
         #sentence_feat = token_feat[:,0,:]
 
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
-        #
-        # # with open(tag_embedding_file, 'rb') as fp:
-        # #     feats = pkl.load(fp)#, encoding='utf-8')
-        # # tag_embedding = feats.tolist()
-        # # tag_embedding = torch.tensor(tag_embedding).cuda(1)
-        #
-        # x = self.gc1(tag_embedding, self.adj)
-        # x = self.relu1(x)
-        # x = self.gc2(x, self.adj)
-        # #
-        # x = x.transpose(0, 1)
-        # x = torch.matmul(sentence_feat, x)
-        #
-        # x = self.linear0(x)
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        x = self.linear1(sentence_feat)# + x)
+        # with open(tag_embedding_file, 'rb') as fp:
+        #     feats = pkl.load(fp)#, encoding='utf-8')
+        # tag_embedding = feats.tolist()
+        # tag_embedding = torch.tensor(tag_embedding).cuda(1)
+
+        x = self.gc1(tag_embedding, self.adj)
+        x = self.relu1(x)
+        x = self.gc2(x, self.adj)
+        #
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
+
+        x = self.linear0(x)
+
+        x = self.linear1(sentence_feat + x)
         x = self.relu2(x)
         x = self.linear2(x)
         return x
@@ -130,8 +130,8 @@ class GCNBert(nn.Module):
                 {'params': self.bert.parameters(), 'lr': lr * lrp},
                 {'params': self.linear1.parameters(), 'lr': lr},
                 {'params': self.linear2.parameters(), 'lr': lr},
-                # {'params': self.gc1.parameters(), 'lr': lr},
-                # {'params': self.gc2.parameters(), 'lr': lr},
+                {'params': self.gc1.parameters(), 'lr': lr},
+                {'params': self.gc2.parameters(), 'lr': lr},
                 ]
 
 
