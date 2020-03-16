@@ -68,12 +68,12 @@ class GCNBert(nn.Module):
         _adj = torch.FloatTensor(_adj)
         self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         #
-        self.linear0 = nn.Linear(108, 768)
+        #self.linear0 = nn.Linear(108, 768)
 
         self.fc_hallucinator = nn.Linear(768, 108)
-        self.fc_selector = nn.Linear(768, 768)
+        # self.fc_selector = nn.Linear(768, 768)
 
-        self.linear1 = nn.Linear(768, 4000)
+        self.linear1 = nn.Linear(108, 4000)
         self.relu2 = nn.LeakyReLU()
         self.linear2 = nn.Linear(4000, num_classes)
 
@@ -91,10 +91,6 @@ class GCNBert(nn.Module):
 
         sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
             / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
-        #sentence_feat = self.dropout(sentence_feat)
-        # print(alpha.shape)
-        # print(token_feat.shape)
-        # print(sentence_feat.shape)
 
         #sentence_feat = token_feat[:,0,:]
 
@@ -112,18 +108,18 @@ class GCNBert(nn.Module):
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
+
+        # x = self.linear0(x)
+
         values_memory = self.fc_hallucinator(sentence_feat)
         values_memory = values_memory.softmax(dim=1)
 
-        x = x.transpose(0, 1)
-        x = torch.matmul(values_memory, x)
+        # concept_selector = self.fc_selector(sentence_feat)
+        # concept_selector = concept_selector.tanh()
 
-        x = self.linear0(x)
-
-        concept_selector = self.fc_selector(sentence_feat)
-        concept_selector = concept_selector.tanh()
-
-        x = self.linear1(sentence_feat + x * concept_selector)
+        x = self.linear1(values_memory + x)
         x = self.relu2(x)
         x = self.linear2(x)
         return x
