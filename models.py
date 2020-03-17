@@ -72,7 +72,7 @@ class GCNBert(nn.Module):
         #self.linear0 = nn.Linear(768, self.num_classes)
 
         #self.fc_hallucinator = nn.Linear(768, 108)
-        self.fc_selector = nn.Linear(768, 768)
+        self.fc_selector = nn.Linear(300, 768)
 
         # self.linear1 = nn.Linear(108, 4000)
         # self.relu2 = nn.LeakyReLU()
@@ -102,15 +102,15 @@ class GCNBert(nn.Module):
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        # with open(tag_embedding_file, 'rb') as fp:
-        #     feats = pkl.load(fp)#, encoding='utf-8')
-        # tag_embedding = feats.tolist()
-        # tag_embedding = torch.tensor(tag_embedding).cuda(1)
+        with open(tag_embedding_file, 'rb') as fp:
+            feats = pkl.load(fp)#, encoding='utf-8')
+        tag_embedding2 = feats.tolist()
+        tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
 
-        concept_selector = self.fc_selector(sentence_feat)
+        concept_selector = self.fc_selector(tag_embedding)
         concept_selector = concept_selector.tanh()
 
-        x = self.gc1(concept_selector * tag_embedding, self.adj)
+        x = self.gc1(concept_selector * tag_embedding2, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
