@@ -328,6 +328,9 @@ class MultiLabelMAPEngine(Engine):
             self.state['difficult_examples'] = False
         self.state['ap_meter'] = AveragePrecisionMeter(self.state['difficult_examples'])
 
+        self.centroids = np.zeros(108, 768)
+        self.classcount = np.ones(108)
+
     def on_start_epoch(self, training, model, criterion, data_loader, optimizer=None, display=True):
         Engine.on_start_epoch(self, training, model, criterion, data_loader, optimizer)
         self.state['ap_meter'].reset()
@@ -427,9 +430,8 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
 
         # compute output
         self.state['output'] = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
-                                     self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'], target_var)
+                                     self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'], target_var, self.centroids, self.classcount)
         self.state['loss'] = criterion(self.state['output'], target_var)
-
 
 
         if training:
