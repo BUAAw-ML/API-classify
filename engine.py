@@ -436,7 +436,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
         # Add all calculated features to center tensor
         for i in range(len(target_var)):
             label = target_var[i]
-            self.centroids[label > 0] += self.sentence_feat[i]
+            self.centroids[label > 0] += sentence_feat[i]
             self.classcount[label > 0] += 1
 
         # Average summed features with class count
