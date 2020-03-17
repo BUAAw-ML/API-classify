@@ -182,14 +182,14 @@ class Engine(object):
             lr = self.adjust_learning_rate(optimizer)
             print('lr:', lr)
 
-
+            self.cent = self.centroids / self.classcount[:, np.newaxis]
             # train for one epoch
             self.train(train_loader, model, criterion, optimizer, epoch)
 
             # evaluate on validation set
             prec1 = self.validate(val_loader, model, criterion, epoch)
 
-            #self.centroids /= self.classcount[:, np.newaxis]
+
 
             # remember best prec@1 and save checkpoint
             is_best = prec1 > self.state['best_score']
@@ -436,7 +436,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
 
         # compute output
         self.state['output'], sentence_feat = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
-                                     self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'], target_var, self.centroids)
+                                     self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'], target_var, self.cent)
         self.state['loss'] = criterion(self.state['output'], target_var)
 
         # Add all calculated features to center tensor
