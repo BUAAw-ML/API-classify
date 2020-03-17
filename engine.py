@@ -328,8 +328,8 @@ class MultiLabelMAPEngine(Engine):
             self.state['difficult_examples'] = False
         self.state['ap_meter'] = AveragePrecisionMeter(self.state['difficult_examples'])
 
-        self.centroids = np.zeros(108, 768)
-        self.classcount = np.ones(108)
+        self.centroids = torch.zeros(108, 768).cuda(1)
+        self.classcount = torch.ones(108).cuda(1)
 
     def on_start_epoch(self, training, model, criterion, data_loader, optimizer=None, display=True):
         Engine.on_start_epoch(self, training, model, criterion, data_loader, optimizer)
@@ -441,7 +441,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
 
         if training:
             optimizer.zero_grad()
-            self.state['loss'].backward(retain_graph=True)
+            self.state['loss'].backward()
             nn.utils.clip_grad_norm_(model.parameters(), max_norm=10.0)
             optimizer.step()
         else:
