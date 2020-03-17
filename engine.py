@@ -445,12 +445,6 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
             self.centroids[label > 0] += sentence_feat[i]
             self.classcount[label > 0] += 1
 
-        # Average summed features with class count
-
-        # print(self.centroids)
-        # print(self.centroids.shape)
-        # exit()
-
         if training:
             self.state['train_iters'] += 1
         else:
