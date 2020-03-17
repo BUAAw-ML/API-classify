@@ -56,7 +56,7 @@ class GCNBert(nn.Module):
         self.num_classes = num_classes
 
         self.centroids = torch.zeros(self.num_classes, 768).cuda(1)
-        self.classcount = torch.zeros(self.num_classes).cuda(1)
+        self.classcount = torch.ones(self.num_classes).cuda(1)
 
         # self.tanh1 = nn.Tanh()
         # self.linear0 = nn.Linear(768, 768)
@@ -111,14 +111,10 @@ class GCNBert(nn.Module):
             self.centroids[label > 0] += sentence_feat[i]
             self.classcount[label > 0] += 1
 
-
-
         # Average summed features with class count
         self.centroids /= self.classcount[:, np.newaxis]
-        print(self.centroids)
-        exit()
-
-
+        # print(self.centroids)
+        # exit()
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
