@@ -427,10 +427,13 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
         token_type_ids = token_type_ids.cuda(self.state['device_ids'][0])
         attention_mask = attention_mask.cuda(self.state['device_ids'][0])
         inputs_tfidf = inputs_tfidf.cuda(self.state['device_ids'][0])
+        cent = self.centroids
+
+
 
         # compute output
         self.state['output'], sentence_feat = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
-                                     self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'], target_var, self.centroids)
+                                     self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'], target_var, cent)
         self.state['loss'] = criterion(self.state['output'], target_var)
 
         # Add all calculated features to center tensor
@@ -444,7 +447,6 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
         # print(self.centroids)
         # print(self.centroids.shape)
         # exit()
-
 
         if training:
             self.state['train_iters'] += 1
