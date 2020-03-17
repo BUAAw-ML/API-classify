@@ -31,8 +31,8 @@ class GraphConvolution(nn.Module):
             self.bias.data.uniform_(-stdv, stdv)
 
     def forward(self, input, adj):
-        #support = torch.matmul(input, self.weight)
-        output = torch.matmul(adj, self.weight)
+        output = torch.matmul(input, self.weight)
+        #output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
@@ -60,7 +60,7 @@ class GCNBert(nn.Module):
         # self.w = nn.Parameter(torch.Tensor(768))
 
         #self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(num_classes, 8000)
+        self.gc1 = GraphConvolution(108, 8000)
         self.relu1 = nn.LeakyReLU(0.2)
         self.gc2 = GraphConvolution(8000, 768)
 
@@ -106,7 +106,7 @@ class GCNBert(nn.Module):
         # tag_embedding = feats.tolist()
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
 
-        x = self.gc1(tag_embedding, self.adj)
+        x = self.gc1(self.adj, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
