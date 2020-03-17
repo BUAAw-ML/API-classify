@@ -22,7 +22,7 @@ class Engine(object):
     def __init__(self, state={}):
 
         self.centroids = torch.zeros(108, 768).cuda(1)
-        self.classcount = torch.ones(108).cuda(1)
+        self.classcount = torch.zeros(108).cuda(1)
         self.cent = torch.zeros(108, 768).cuda(1)
 
         self.writer = SummaryWriter(state['log_dir'])
