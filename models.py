@@ -114,21 +114,19 @@ class GCNBert(nn.Module):
         # values_memory = self.fc_hallucinator(sentence_feat)
         # values_memory = values_memory.softmax(dim=1)
 
-        x2 = self.linear0(sentence_feat)
-
         # concept_selector = self.fc_selector(sentence_feat)
         # concept_selector = concept_selector.tanh()
 
         x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x) + x2
+        x = torch.matmul(sentence_feat, x)
 
-        # sentence_feat = self.linear0(sentence_feat)
+        sentence_feat = self.linear0(sentence_feat)
         #
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat + x)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
         # x = self.linear2(x)
-        return x
+        return sentence_feat + x
 
     # def get_config_optim(self, lr, lrp):
     #     return [
