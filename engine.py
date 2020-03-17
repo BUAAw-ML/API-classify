@@ -189,7 +189,7 @@ class Engine(object):
             # evaluate on validation set
             prec1 = self.validate(val_loader, model, criterion, epoch)
 
-            self.centroids /= self.classcount[:, np.newaxis]
+            #self.centroids /= self.classcount[:, np.newaxis]
 
             # remember best prec@1 and save checkpoint
             is_best = prec1 > self.state['best_score']
