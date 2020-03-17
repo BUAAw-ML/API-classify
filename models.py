@@ -32,8 +32,8 @@ class GraphConvolution(nn.Module):
             self.bias.data.uniform_(-stdv, stdv)
 
     def forward(self, input, adj):
-        output = torch.matmul(input, self.weight)
-        #output = torch.matmul(adj, support)
+        support = torch.matmul(input, self.weight)
+        output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
@@ -80,7 +80,7 @@ class GCNBert(nn.Module):
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
 
-    def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result, target_var, centroids):
+    def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
 
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
@@ -107,7 +107,7 @@ class GCNBert(nn.Module):
         # tag_embedding = feats.tolist()
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
 
-        x = self.gc1(centroids, self.adj)
+        x = self.gc1(tag_embedding, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 

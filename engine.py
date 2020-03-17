@@ -21,9 +21,9 @@ tqdm.monitor_interval = 0
 class Engine(object):
     def __init__(self, state={}):
 
-        self.centroids = torch.zeros(108, 768).cuda(1)
-        self.classcount = torch.zeros(108).cuda(1)
-        self.cent = torch.zeros(108, 768).cuda(1)
+        # self.centroids = torch.zeros(108, 768).cuda(1)
+        # self.classcount = torch.zeros(108).cuda(1)
+        # self.cent = torch.zeros(108, 768).cuda(1)
 
         self.writer = SummaryWriter(state['log_dir'])
         os.makedirs(state['log_dir'], exist_ok=True)
@@ -194,7 +194,7 @@ class Engine(object):
             # evaluate on validation set
             prec1 = self.validate(val_loader, model, criterion, epoch)
 
-            self.cent = self.centroids / self.classcount[:, np.newaxis]
+            #self.cent = self.centroids / self.classcount[:, np.newaxis]
 
             # remember best prec@1 and save checkpoint
             is_best = prec1 > self.state['best_score']
@@ -432,20 +432,17 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
         token_type_ids = token_type_ids.cuda(self.state['device_ids'][0])
         attention_mask = attention_mask.cuda(self.state['device_ids'][0])
         inputs_tfidf = inputs_tfidf.cuda(self.state['device_ids'][0])
-        #cent = self.centroids.clone()
-
-
 
         # compute output
         self.state['output'], sentence_feat = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
-                                     self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'], target_var, self.cent)
+                                     self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'])
         self.state['loss'] = criterion(self.state['output'], target_var)
 
-        # Add all calculated features to center tensor
-        for i in range(len(target_var)):
-            label = target_var[i]
-            self.centroids[label > 0] += sentence_feat[i]
-            self.classcount[label > 0] += 1
+        # # Add all calculated features to center tensor
+        # for i in range(len(target_var)):
+        #     label = target_var[i]
+        #     self.centroids[label > 0] += sentence_feat[i]
+        #     self.classcount[label > 0] += 1
 
         if training:
             self.state['train_iters'] += 1
