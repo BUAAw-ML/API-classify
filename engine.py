@@ -20,6 +20,11 @@ tqdm.monitor_interval = 0
 
 class Engine(object):
     def __init__(self, state={}):
+
+        self.centroids = torch.zeros(108, 768).cuda(1)
+        self.classcount = torch.ones(108).cuda(1)
+        self.cent = torch.zeros(108, 768).cuda(1)
+
         self.writer = SummaryWriter(state['log_dir'])
         os.makedirs(state['log_dir'], exist_ok=True)
         self.state = state
@@ -182,14 +187,14 @@ class Engine(object):
             lr = self.adjust_learning_rate(optimizer)
             print('lr:', lr)
 
-            self.cent = self.centroids / self.classcount[:, np.newaxis]
+
             # train for one epoch
             self.train(train_loader, model, criterion, optimizer, epoch)
 
             # evaluate on validation set
             prec1 = self.validate(val_loader, model, criterion, epoch)
 
-
+            self.cent = self.centroids / self.classcount[:, np.newaxis]
 
             # remember best prec@1 and save checkpoint
             is_best = prec1 > self.state['best_score']
@@ -330,9 +335,6 @@ class MultiLabelMAPEngine(Engine):
         if self._state('difficult_examples') is None:
             self.state['difficult_examples'] = False
         self.state['ap_meter'] = AveragePrecisionMeter(self.state['difficult_examples'])
-
-        self.centroids = torch.zeros(108, 768).cuda(1)
-        self.classcount = torch.ones(108).cuda(1)
 
     def on_start_epoch(self, training, model, criterion, data_loader, optimizer=None, display=True):
         Engine.on_start_epoch(self, training, model, criterion, data_loader, optimizer)
