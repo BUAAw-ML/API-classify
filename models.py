@@ -107,10 +107,10 @@ class GCNBert(nn.Module):
         tag_embedding2 = feats.tolist()
         tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
 
-        concept_selector = self.fc_selector(tag_embedding)
+        concept_selector = self.fc_selector(tag_embedding2)
         concept_selector = concept_selector.tanh()
 
-        x = self.gc1(concept_selector * tag_embedding2, self.adj)
+        x = self.gc1(concept_selector * tag_embedding, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
