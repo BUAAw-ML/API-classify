@@ -68,14 +68,14 @@ class GCNBert(nn.Module):
         _adj = torch.FloatTensor(_adj)
         self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         #
-        self.linear0 = nn.Linear(768, 108)
+        # self.linear0 = nn.Linear(768, 108)
 
         #self.fc_hallucinator = nn.Linear(768, 108)
         #self.fc_selector = nn.Linear(768, 768)
 
-        self.linear1 = nn.Linear(108, 4000)
-        self.relu2 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(4000, num_classes)
+        # self.linear1 = nn.Linear(108, 4000)
+        # self.relu2 = nn.LeakyReLU()
+        # self.linear2 = nn.Linear(4000, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
 
@@ -121,12 +121,12 @@ class GCNBert(nn.Module):
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
 
-        sentence_feat = self.linear0(sentence_feat)
-
-        #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
-        x = self.linear1(sentence_feat + x)  #sentence_feat + concept_selector *
-        x = self.relu2(x)
-        x = self.linear2(x)
+        # sentence_feat = self.linear0(sentence_feat)
+        #
+        # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
+        # x = self.linear1(sentence_feat + x)  #sentence_feat + concept_selector *
+        # x = self.relu2(x)
+        # x = self.linear2(x)
         return x
 
     # def get_config_optim(self, lr, lrp):
