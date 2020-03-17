@@ -111,7 +111,7 @@ class GCNBert(nn.Module):
         x = self.gc2(x, self.adj)
 
         np.set_printoptions(threshold=np.inf, suppress=True)
-        print(self.adj)
+        print(np.array(self.adj[0]))
         # values_memory = self.fc_hallucinator(sentence_feat)
         # values_memory = values_memory.softmax(dim=1)
 
