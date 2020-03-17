@@ -80,7 +80,7 @@ class GCNBert(nn.Module):
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
 
-    def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result, target_var, centroids, classcount):
+    def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result, target_var, centroids):
 
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
@@ -101,19 +101,6 @@ class GCNBert(nn.Module):
         # tag_embedding = embed(encoded_tag)
         # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
         #     / torch.sum(tag_mask, dim=1, keepdim=True)
-
-
-        # Add all calculated features to center tensor
-        for i in range(len(target_var)):
-            label = target_var[i]
-            centroids[label > 0] += sentence_feat[i]
-            classcount[label > 0] += 1
-
-        # Average summed features with class count
-        centroids /= classcount[:, np.newaxis]
-        # print(self.centroids)
-        # print(self.centroids.shape)
-        # exit()
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
@@ -141,7 +128,7 @@ class GCNBert(nn.Module):
         # x = self.linear1(sentence_feat + x)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
         # x = self.linear2(x)
-        return x
+        return x, sentence_feat
 
     # def get_config_optim(self, lr, lrp):
     #     return [
