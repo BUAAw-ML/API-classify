@@ -370,6 +370,7 @@ def main():
     gutil.gen_graph()
     gutil.cal_degree()
     bert = BertGCNClassifier(hypes, heads, head_threshold, device_num, ft, args.epochs, gutil, label_space, max_seq_len=256)
+
     trn_X_path = ds_path+'/head_data/trn_X-' + str(head_threshold)
     test_X_path = ds_path+'/head_data/test_X-' + str(head_threshold)
     trn_X = load_data(trn_X_path, trn_head_X, bert)
