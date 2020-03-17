@@ -119,14 +119,12 @@ class GCNBert(nn.Module):
 
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
-
-        sentence_feat = self.linear0(sentence_feat)
         #
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat + x)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
         # x = self.linear2(x)
-        return sentence_feat + x
+        return x
 
     # def get_config_optim(self, lr, lrp):
     #     return [

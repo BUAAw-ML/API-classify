@@ -25,6 +25,18 @@ import xbert.rf_util as rf_util
 
 from GCN import GraphConvolution, gen_A, gen_adj
 
+class Hyperparameters():
+    def __init__(self, dataset):
+        self.max_seq_len = 256
+        self.dataset = dataset
+        self.depth=6
+        self.train_batch_size=8
+        self.eval_batch_size=48
+        self.log_interval=100
+        self.eval_interval=400
+        self.learning_rate=1e-4
+        self.warmup_rate=0.1
+
 class GraphUtil():
     def __init__(self, Y, num_labels):
         self.Y = Y
@@ -346,6 +358,7 @@ def main():
     hypes = Hyperparameters(args.dataset)
     ds_path = '../datasets/' + args.dataset
     device_num = args.device_num
+
     head_threshold = args.head_threshold
     with open(ds_path+'/mlc2seq/train_heads_X-'+str(head_threshold), 'rb') as g:
         trn_head_X = pkl.load(g)
@@ -369,6 +382,7 @@ def main():
     gutil = GraphUtil(trn_head_Y, output_dim)
     gutil.gen_graph()
     gutil.cal_degree()
+
     bert = BertGCNClassifier(hypes, heads, head_threshold, device_num, ft, args.epochs, gutil, label_space, max_seq_len=256)
 
     trn_X_path = ds_path+'/head_data/trn_X-' + str(head_threshold)
