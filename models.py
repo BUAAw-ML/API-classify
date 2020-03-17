@@ -104,21 +104,19 @@ class GCNBert(nn.Module):
         # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
         #     / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        print(target_var)
 
         # Add all calculated features to center tensor
         for i in range(len(target_var)):
             label = target_var[i]
-
-            print(self.centroids[label > 0])
-
             self.centroids[label > 0] += sentence_feat[i]
             self.classcount[label > 0] += 1
 
-            exit()
+
 
         # Average summed features with class count
         self.centroids /= self.classcount[:, np.newaxis]
+        print(self.centroids)
+        exit()
 
 
 
