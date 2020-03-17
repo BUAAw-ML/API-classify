@@ -69,10 +69,10 @@ class GCNBert(nn.Module):
         _adj = torch.FloatTensor(_adj)
         self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         #
-        self.linear0 = nn.Linear(768, self.num_classes)
+        #self.linear0 = nn.Linear(768, self.num_classes)
 
         #self.fc_hallucinator = nn.Linear(768, 108)
-        #self.fc_selector = nn.Linear(768, 768)
+        self.fc_selector = nn.Linear(768, self.num_classes)
 
         # self.linear1 = nn.Linear(108, 4000)
         # self.relu2 = nn.LeakyReLU()
@@ -107,7 +107,10 @@ class GCNBert(nn.Module):
         # tag_embedding = feats.tolist()
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
 
-        x = self.gc1(tag_embedding, self.adj)
+        concept_selector = self.fc_selector(sentence_feat)
+        concept_selector = concept_selector.tanh()
+
+        x = self.gc1(concept_selector * tag_embedding, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
