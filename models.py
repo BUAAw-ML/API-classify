@@ -113,8 +113,8 @@ class GCNBert(nn.Module):
 
         # Average summed features with class count
         self.centroids /= self.classcount[:, np.newaxis]
-        print(self.centroids)
-        print(self.centroids.shape)
+        # print(self.centroids)
+        # print(self.centroids.shape)
         # exit()
 
         # with open(tag_embedding_file, 'rb') as fp:
