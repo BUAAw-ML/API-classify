@@ -427,7 +427,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
         token_type_ids = token_type_ids.cuda(self.state['device_ids'][0])
         attention_mask = attention_mask.cuda(self.state['device_ids'][0])
         inputs_tfidf = inputs_tfidf.cuda(self.state['device_ids'][0])
-        cent = self.centroids
+        cent = self.centroids.clone()
 
 
 
