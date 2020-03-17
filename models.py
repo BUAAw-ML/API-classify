@@ -55,12 +55,15 @@ class GCNBert(nn.Module):
 
         self.num_classes = num_classes
 
+        self.centroids = torch.zeros(self.num_classes, 768).cuda(1)
+        self.classcount = torch.zeros(self.num_classes).cuda(1)
+
         # self.tanh1 = nn.Tanh()
         # self.linear0 = nn.Linear(768, 768)
         # self.w = nn.Parameter(torch.Tensor(768))
 
         #self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(300, 8000)
+        self.gc1 = GraphConvolution(768, 8000)
         self.relu1 = nn.LeakyReLU(0.2)
         self.gc2 = GraphConvolution(8000, 768)
 
@@ -79,7 +82,7 @@ class GCNBert(nn.Module):
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
 
-    def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
+    def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result, target_var):
 
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
@@ -101,12 +104,30 @@ class GCNBert(nn.Module):
         # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
         #     / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        with open(tag_embedding_file, 'rb') as fp:
-            feats = pkl.load(fp)#, encoding='utf-8')
-        tag_embedding = feats.tolist()
-        tag_embedding = torch.tensor(tag_embedding).cuda(1)
+        print(target_var)
 
-        x = self.gc1(tag_embedding, self.adj)
+        # Add all calculated features to center tensor
+        for i in range(len(target_var)):
+            label = target_var[i]
+
+            print(self.centroids[label > 0])
+
+            self.centroids[label > 0] += sentence_feat[i]
+            self.classcount[label > 0] += 1
+
+            exit()
+
+        # Average summed features with class count
+        self.centroids /= self.classcount[:, np.newaxis]
+
+
+
+        # with open(tag_embedding_file, 'rb') as fp:
+        #     feats = pkl.load(fp)#, encoding='utf-8')
+        # tag_embedding = feats.tolist()
+        # tag_embedding = torch.tensor(tag_embedding).cuda(1)
+
+        x = self.gc1(self.centroids, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
@@ -149,3 +170,4 @@ def gcn_bert(num_classes, t, co_occur_mat=None):
     bert = BertModel.from_pretrained('bert-base-uncased')
 
     return GCNBert(bert, num_classes, t=t, co_occur_mat=co_occur_mat)
+
