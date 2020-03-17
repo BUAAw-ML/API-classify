@@ -107,9 +107,10 @@ class GCNBert(nn.Module):
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
 
         x = self.gc1(tag_embedding, self.adj)
-        #x = self.relu1(x)
+        x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
+        print(self.adj)
         # values_memory = self.fc_hallucinator(sentence_feat)
         # values_memory = values_memory.softmax(dim=1)
 
