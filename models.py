@@ -60,7 +60,7 @@ class GCNBert(nn.Module):
         # self.w = nn.Parameter(torch.Tensor(768))
 
         #self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(300, 8000)
+        self.gc1 = GraphConvolution(768, 8000)
         self.relu1 = nn.LeakyReLU(0.2)
         self.gc2 = GraphConvolution(8000, 768)
 
@@ -96,15 +96,15 @@ class GCNBert(nn.Module):
 
         #sentence_feat = token_feat[:,0,:]
 
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        with open(tag_embedding_file, 'rb') as fp:
-            feats = pkl.load(fp)#, encoding='utf-8')
-        tag_embedding = feats.tolist()
-        tag_embedding = torch.tensor(tag_embedding).cuda(1)
+        # with open(tag_embedding_file, 'rb') as fp:
+        #     feats = pkl.load(fp)#, encoding='utf-8')
+        # tag_embedding = feats.tolist()
+        # tag_embedding = torch.tensor(tag_embedding).cuda(1)
 
         x = self.gc1(tag_embedding, self.adj)
         x = self.relu1(x)
