@@ -102,15 +102,15 @@ class GCNBert(nn.Module):
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        with open(tag_embedding_file, 'rb') as fp:
-            feats = pkl.load(fp)#, encoding='utf-8')
-        tag_embedding2 = feats.tolist()
-        tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
+        # with open(tag_embedding_file, 'rb') as fp:
+        #     feats = pkl.load(fp)#, encoding='utf-8')
+        # tag_embedding2 = feats.tolist()
+        # tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
 
-        concept_selector = self.fc_selector(tag_embedding2)
-        concept_selector = concept_selector.tanh()
+        # concept_selector = self.fc_selector(tag_embedding2)
+        # concept_selector = concept_selector.tanh()
 
-        x = self.gc1(concept_selector * tag_embedding, self.adj)
+        x = self.gc1(tag_embedding, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 

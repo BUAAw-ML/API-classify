@@ -22,6 +22,8 @@ import random
 import xbert.data_utils as data_utils
 import xbert.rf_linear as rf_linear
 import xbert.rf_util as rf_util
+from dataLoader import *
+
 
 from GCN import GraphConvolution, gen_A, gen_adj
 
@@ -101,20 +103,6 @@ class BertGCN(BertModel):
             _, pooled_output = self.bert(input_ids, output_all_encoded_layers=False)
         return pooled_output
 
-def get_binary_vec(label_list, output_dim, divide=False):
-    if divide:
-        bs = int(len(label_list)/10)
-        res = smat.lil_matrix(np.zeros([len(label_list[:bs]), output_dim]))
-        for step in range(1, int(len(label_list)/bs+1)):
-            t = smat.lil_matrix(np.zeros([len(label_list[step*bs:(step+1)*bs]), output_dim]))
-            res = smat.vstack([res, t])
-        res = smat.lil_matrix(res)
-    else:
-        res = smat.lil_matrix(np.zeros([len(label_list), output_dim]))
-    # print(res.shape)
-    for i, label in enumerate(label_list):
-        res[i, label]=1
-    return res
 
 def get_score(logits, truth, k=5):
     num_corrects = np.zeros(k)
@@ -132,8 +120,7 @@ def get_score(logits, truth, k=5):
         recall[i] = num_corrects[i]/len(truth)
     return precision, recall
 
-def get_tensor(M, dv):
-    return torch.tensor(M).float().to(dv)
+
 
 class BertGCNClassifier():
     def __init__(self, hypes, heads, t, device_num, ft, epochs, gutil, label_space, max_seq_len=512):
@@ -211,8 +198,11 @@ class BertGCNClassifier():
                 # if step % self.hypes.log_interval != 0:
                 #     continue
                 input_ids = all_input_ids[step*bs:(step+1)*bs].to(self.device)
+
                 labels = get_binary_vec(Y[step*bs:(step+1)*bs], self.H.shape[0])
-                labels = get_tensor(labels.toarray(), self.device)
+
+                labels = torch.tensor(labels.toarray()).float().to(self.device)
+
                 c_pred = self.model(input_ids)
                 # print(c_pred.shape)
                 # print(labels.shape)
@@ -287,27 +277,6 @@ class BertGCNClassifier():
         print('Test Precision:', np.round(precisions/eval_t, 4))
         print('Test Recall:', np.round(recalls/eval_t, 4))
 
-    def get_bert_token(self, trn_text, only_CLS=False):
-        X = []
-        # self.model.cuda(1)
-        print('========================================================')
-        print('getting sentence embedding...')
-        for text in tqdm(trn_text):
-            marked_text = "[CLS] " + text + " [SEP]"
-            tokenized_text = self.tokenizer.tokenize(marked_text)
-            if len(tokenized_text) > self.max_seq_len:
-                tokenized_text = tokenized_text[:self.max_seq_len-1] + ['[SEP]']
-
-            indexed_tokens = self.tokenizer.convert_tokens_to_ids(tokenized_text)
-            if len(indexed_tokens) < self.max_seq_len:
-                padding = [0] * (self.max_seq_len - len(indexed_tokens))
-                indexed_tokens += padding
-            else:
-                indexed_tokens = indexed_tokens[:self.max_seq_len]
-
-            X.append(indexed_tokens)
-        print('========================================================')
-        return X
 
     def save(self, output_dir):
         model_to_save = self.model.module if hasattr(self.model, 'module') else self.model
@@ -318,16 +287,26 @@ class BertGCNClassifier():
         torch.save(model_to_save.state_dict(), output_model_file)
         model_to_save.config.to_json_file(output_config_file)
 
-def load_data(X_path, head_X, bert):
-    if os.path.isfile(X_path):
-        with open(X_path, 'rb') as g:
-            X = pkl.load(g)
-    else:
-        X = bert.get_bert_token(head_X)
-        with open(X_path, 'wb') as g:
-            pkl.dump(X, g)
 
-    return X
+def prepare_data(batch):
+    result = {}
+    # construct input
+    inputs = [e['title_ids'] + e['dscp_ids'] for e in batch]  #e['title_ids'] +
+
+    lengths = np.array([len(e) for e in inputs])
+    max_len = np.max(lengths)
+    inputs = [tokenizer.prepare_for_model(e, max_length=max_len+2, pad_to_max_length=True) for e in inputs]
+
+    ids = torch.LongTensor([e['input_ids'] for e in inputs])
+    token_type_ids = torch.LongTensor([e['token_type_ids'] for e in inputs])
+    attention_mask = torch.FloatTensor([e['attention_mask'] for e in inputs])
+    # construct tag
+    tags = torch.zeros(size=(len(batch), self.get_tags_num()))
+    for i in range(len(batch)):
+        tags[i, batch[i]['tag_ids']] = 1.
+
+    return (ids, token_type_ids, attention_mask), tags
+
 
 def load_label(ds_path):
     label_space = smat.load_npz(ds_path+'/L.elmo.npz')
@@ -343,6 +322,27 @@ def load_label(ds_path):
     return label_space
 
 def main():
+    global args, best_prec1, use_gpu
+    args = parser.parse_args()
+
+    use_gpu = torch.cuda.is_available()
+    train_dataset, val_dataset, _, _, _ = \
+        load_dataset('data/ProgrammerWeb/programweb-data.csv', 'data/ProgrammerWeb/domainnet.csv')
+
+
+
+    model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.1, co_occur_mat=train_dataset.co_occur_mat)
+
+    # define loss function (criterion)
+    criterion = nn.MultiLabelSoftMarginLoss()
+
+    # define optimizer
+    optimizer = torch.optim.SGD(model.get_config_optim(args.lr, args.lrp),
+                                lr=args.lr,
+                                momentum=args.momentum,
+                                weight_decay=args.weight_decay)
+
+
     parser = argparse.ArgumentParser(description='')
     parser.add_argument("-ds", "--dataset", default="AmazonCat-13K", type=str, required=True)
     parser.add_argument("-t", "--head_threshold", default=10000, type=int)
@@ -387,8 +387,11 @@ def main():
 
     trn_X_path = ds_path+'/head_data/trn_X-' + str(head_threshold)
     test_X_path = ds_path+'/head_data/test_X-' + str(head_threshold)
-    trn_X = load_data(trn_X_path, trn_head_X, bert)
-    test_X = load_data(test_X_path, test_head_X, bert)
+
+    trn_X, trn_head_Y = prepare_data(train_dataset)
+    test_X, test_head_Y = prepare_data(val_dataset)
+
+
     print('Number of labels:', len(heads))
     print('Number of trn instances:', len(trn_X))
 
