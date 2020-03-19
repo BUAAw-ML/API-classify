@@ -70,7 +70,7 @@ class ProgramWebDataset(Dataset):
                 _, _, _, tag = row
                 #tag = row[2]
 
-                tag = tag.strip().split(',') # '###'
+                tag = tag.strip().split('###') # '###'
                 tag = [t for t in tag if t != '']
 
                 for t in tag:
@@ -82,7 +82,7 @@ class ProgramWebDataset(Dataset):
         #ignored_tags = set()
         ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
         for tag in tag_occurance:
-            if tag_occurance[tag] < 150:
+            if tag_occurance[tag] < 0:
                 ignored_tags.add(tag)
 
         print(ignored_tags)
@@ -108,14 +108,14 @@ class ProgramWebDataset(Dataset):
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
-                tag = tag.strip().split(',')
+                tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
 
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
 
-                # if len(tag) < 2:
-                #     continue
+                if len(tag) < 2:
+                    continue
 
                 if len(tag) == 0:
                     continue

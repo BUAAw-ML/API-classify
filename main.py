@@ -50,9 +50,9 @@ def multiLabel_text_classify():
 
     use_gpu = torch.cuda.is_available()
     train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file = \
-        load_dataset('data/ProgrammerWeb/Programweb-domainFilter.csv', 'data/ProgrammerWeb/domainnet.csv')
+        load_dataset('data/ProgrammerWeb/programweb-data.csv', 'data/ProgrammerWeb/domainnet.csv')
 
-    model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.1, co_occur_mat=train_dataset.co_occur_mat)
+    model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.9, co_occur_mat=train_dataset.co_occur_mat)
 
     # define loss function (criterion)
     criterion = nn.MultiLabelSoftMarginLoss()
