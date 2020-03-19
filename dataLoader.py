@@ -56,7 +56,7 @@ class ProgramWebDataset(Dataset):
         tag_occurance = {}
         csv.field_size_limit(500 * 1024 * 1024)
         with open(f, newline='') as csvfile:
-            reader = csv.reader(csvfile, delimiter=',')
+            reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
             for row in reader:
                 print(row)
@@ -85,7 +85,7 @@ class ProgramWebDataset(Dataset):
         id = 0
 
         with open(f, newline='') as csvfile:
-            reader = csv.reader(csvfile, delimiter=',')
+            reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
             for row in reader:
                 if len(row) != 3:
