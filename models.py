@@ -60,7 +60,7 @@ class GCNBert(nn.Module):
         # self.linear0 = nn.Linear(768, 768)
         # self.w = nn.Parameter(torch.Tensor(768))
 
-        self.dropout = nn.Dropout(p=0.5)
+        #self.dropout = nn.Dropout(p=0.5)
         self.gc1 = GraphConvolution(768, 8000)
         self.relu1 = nn.LeakyReLU(0.2)
         self.gc2 = GraphConvolution(8000, 768)
@@ -121,7 +121,7 @@ class GCNBert(nn.Module):
         # concept_selector = concept_selector.tanh()
 
         x = x.transpose(0, 1)
-        x = torch.matmul(self.dropout(sentence_feat), x)
+        x = torch.matmul(sentence_feat, x)
         #
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat + x)  #sentence_feat + concept_selector *

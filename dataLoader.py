@@ -71,10 +71,10 @@ class ProgramWebDataset(Dataset):
                     tag_occurance[t] += 1
 
         #['Tools','Data','Reference','Media','Real Time','Internet of Things']
-        ignored_tags = set()
-        #ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
+        #ignored_tags = set()
+        ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
         for tag in tag_occurance:
-            if tag_occurance[tag] < 0:
+            if tag_occurance[tag] < 500:
                 ignored_tags.add(tag)
         print(ignored_tags)
 
