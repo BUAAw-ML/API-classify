@@ -84,6 +84,9 @@ class ProgramWebDataset(Dataset):
         for tag in tag_occurance:
             if tag_occurance[tag] < 0:
                 ignored_tags.add(tag)
+        print(tag_occurance)
+        exit()
+
         print(ignored_tags)
         id = 0
 
