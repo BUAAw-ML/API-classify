@@ -63,10 +63,7 @@ class ProgramWebDataset(Dataset):
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
-            next(reader)
-            next(reader)
             for row in reader:
-
 
                 if len(row) != 3:
                     continue
