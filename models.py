@@ -129,18 +129,18 @@ class GCNBert(nn.Module):
         # x = self.linear2(x)
         return x
 
-    # def get_config_optim(self, lr, lrp):
-    #     return [
-    #             {'params': self.bert.parameters(), 'lr': lr * lrp},
-    #             {'params': self.gc1.parameters(), 'lr': lr},
-    #             {'params': self.gc2.parameters(), 'lr': lr},
-    #             ]
     def get_config_optim(self, lr, lrp):
         return [
                 {'params': self.bert.parameters(), 'lr': lr * lrp},
-                {'params': self.linear1.parameters(), 'lr': lr},
-                {'params': self.linear2.parameters(), 'lr': lr},
+                {'params': self.gc1.parameters(), 'lr': lr},
+                {'params': self.gc2.parameters(), 'lr': lr},
                 ]
+    # def get_config_optim(self, lr, lrp):
+    #     return [
+    #             {'params': self.bert.parameters(), 'lr': lr * lrp},
+    #             {'params': self.linear1.parameters(), 'lr': lr},
+    #             {'params': self.linear2.parameters(), 'lr': lr},
+    #             ]
 
 
 def gcn_bert(num_classes, t, co_occur_mat=None):
