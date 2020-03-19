@@ -1,6 +1,10 @@
 import csv
 import copy
 import os
+import sys
+
+
+
 
 from random import shuffle
 
@@ -54,7 +58,8 @@ class ProgramWebDataset(Dataset):
 
         document = []
         tag_occurance = {}
-        csv.field_size_limit(500 * 1024 * 1024)
+        #csv.field_size_limit(500 * 1024 * 1024)
+        csv.field_size_limit(sys.maxsize)
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
