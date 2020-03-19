@@ -86,6 +86,8 @@ class ProgramWebDataset(Dataset):
                 ignored_tags.add(tag)
 
         print(ignored_tags)
+        print(tag_occurance)
+        exit()
 
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)#, delimiter=',')
