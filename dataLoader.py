@@ -99,11 +99,12 @@ class ProgramWebDataset(Dataset):
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
 
-                if len(tag) < 2:
-                    continue
 
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
+
+                if len(tag) < 2:
+                    continue
 
                 if len(tag) == 0:
                     continue
