@@ -60,6 +60,7 @@ class ProgramWebDataset(Dataset):
             next(reader)
             for row in reader:
                 print(row)
+                exit()
                 if len(row) != 3:
                     continue
                 _, _, tag = row
@@ -68,7 +69,7 @@ class ProgramWebDataset(Dataset):
                 tag = tag.strip().split(',') # '###'
                 tag = [t for t in tag if t != '']
                 print(tag)
-                exit()
+
 
                 for t in tag:
                     if t not in tag_occurance:
