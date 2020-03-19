@@ -63,8 +63,6 @@ class ProgramWebDataset(Dataset):
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
-            next(reader)
-            next(reader)
             for row in reader:
 
                 # if len(row) != 3:
@@ -72,12 +70,8 @@ class ProgramWebDataset(Dataset):
                 #_, _, _, tag = row
                 tag = row[2]
 
-
                 tag = tag.strip().split(',') # '###'
                 tag = [t for t in tag if t != '']
-                print(tag)
-                exit()
-
 
                 for t in tag:
                     if t not in tag_occurance:
@@ -116,7 +110,6 @@ class ProgramWebDataset(Dataset):
 
                 tag = tag.strip().split(',')
                 tag = [t for t in tag if t != '']
-
 
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
