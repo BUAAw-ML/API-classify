@@ -114,8 +114,8 @@ class GCNBert(nn.Module):
         # # values_memory = self.fc_hallucinator(sentence_feat)
         # # values_memory = values_memory.softmax(dim=1)
         #
-        concept_selector = self.fc_selector(sentence_feat)
-        concept_selector = concept_selector.tanh()
+        # concept_selector = self.fc_selector(sentence_feat)
+        # concept_selector = concept_selector.tanh()
         #
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
