@@ -69,10 +69,10 @@ class GCNBert(nn.Module):
         _adj = torch.FloatTensor(_adj)
         self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         #
-        self.linear0 = nn.Linear(768, self.num_classes)
+        #self.linear0 = nn.Linear(768, self.num_classes)
 
         #self.fc_hallucinator = nn.Linear(768, 108)
-        self.fc_selector = nn.Linear(768, num_classes)
+        #self.fc_selector = nn.Linear(768, num_classes)
 
         # self.linear1 = nn.Linear(768, 4000)
         # self.relu2 = nn.LeakyReLU()
@@ -120,7 +120,6 @@ class GCNBert(nn.Module):
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
 
-        x = concept_selector * x + self.linear0(sentence_feat)
         #
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
