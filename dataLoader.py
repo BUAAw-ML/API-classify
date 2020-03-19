@@ -82,13 +82,13 @@ class ProgramWebDataset(Dataset):
         #ignored_tags = set()
         ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
         for tag in tag_occurance:
-            if tag_occurance[tag] < 0:
+            if tag_occurance[tag] < 50:
                 ignored_tags.add(tag)
 
         print(ignored_tags)
 
-        print(sorted(tag_occurance.items(), key=lambda item: item[1]))
-        exit()
+        # print(sorted(tag_occurance.items(), key=lambda item: item[1]))
+        # exit()
 
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)#, delimiter=',')
