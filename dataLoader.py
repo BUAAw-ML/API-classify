@@ -59,16 +59,16 @@ class ProgramWebDataset(Dataset):
         document = []
         tag_occurance = {}
         #csv.field_size_limit(500 * 1024 * 1024)
-        csv.field_size_limit(sys.maxsize)
+        #csv.field_size_limit(sys.maxsize)
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
             for row in reader:
 
-                # if len(row) != 3:
-                #     continue
-                #_, _, _, tag = row
-                tag = row[2]
+                if len(row) != 4:
+                    continue
+                _, _, _, tag = row
+                #tag = row[2]
 
                 tag = tag.strip().split(',') # '###'
                 tag = [t for t in tag if t != '']
@@ -84,22 +84,16 @@ class ProgramWebDataset(Dataset):
         for tag in tag_occurance:
             if tag_occurance[tag] < 0:
                 ignored_tags.add(tag)
-        print(tag_occurance)
-        exit()
 
         print(ignored_tags)
-        id = 0
 
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
             for row in reader:
-                # if len(row) != 3:
-                #     continue
-                #id, title, dscp, tag = row
-                title = row[0]
-                dscp = row[1]
-                tag = row[2]
+                if len(row) != 4:
+                    continue
+                id, title, dscp, tag = row
 
                 title_tokens = tokenizer.tokenize(title.strip())
                 dscp_tokens = tokenizer.tokenize(dscp.strip())
@@ -141,7 +135,6 @@ class ProgramWebDataset(Dataset):
                     'dscp': dscp
                 })
 
-                id += 1
 
         print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
