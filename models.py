@@ -61,22 +61,22 @@ class GCNBert(nn.Module):
         # self.w = nn.Parameter(torch.Tensor(768))
 
         #self.dropout = nn.Dropout(p=0.5)
-        # self.gc1 = GraphConvolution(768, 8000)
-        # self.relu1 = nn.LeakyReLU(0.2)
-        # self.gc2 = GraphConvolution(8000, 768)
-        #
-        # _adj = gen_A(num_classes, t, co_occur_mat)
-        # _adj = torch.FloatTensor(_adj)
-        # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
+        self.gc1 = GraphConvolution(768, 8000)
+        self.relu1 = nn.LeakyReLU(0.2)
+        self.gc2 = GraphConvolution(8000, 768)
+
+        _adj = gen_A(num_classes, t, co_occur_mat)
+        _adj = torch.FloatTensor(_adj)
+        self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         #
         #self.linear0 = nn.Linear(768, self.num_classes)
 
         #self.fc_hallucinator = nn.Linear(768, 108)
         #self.fc_selector = nn.Linear(300, 768)
 
-        self.linear1 = nn.Linear(768, 4000)
-        self.relu2 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(4000, num_classes)
+        # self.linear1 = nn.Linear(768, 4000)
+        # self.relu2 = nn.LeakyReLU()
+        # self.linear2 = nn.Linear(4000, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
 
@@ -97,10 +97,10 @@ class GCNBert(nn.Module):
 
         #sentence_feat = token_feat[:,0,:]
 
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
@@ -110,9 +110,9 @@ class GCNBert(nn.Module):
         # concept_selector = self.fc_selector(tag_embedding2)
         # concept_selector = concept_selector.tanh()
 
-        # x = self.gc1(tag_embedding, self.adj)
-        # x = self.relu1(x)
-        # x = self.gc2(x, self.adj)
+        x = self.gc1(tag_embedding, self.adj)
+        x = self.relu1(x)
+        x = self.gc2(x, self.adj)
         #
         # # values_memory = self.fc_hallucinator(sentence_feat)
         # # values_memory = values_memory.softmax(dim=1)
@@ -120,13 +120,13 @@ class GCNBert(nn.Module):
         # # concept_selector = self.fc_selector(sentence_feat)
         # # concept_selector = concept_selector.tanh()
         #
-        # x = x.transpose(0, 1)
-        # x = torch.matmul(sentence_feat, x)
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
         #
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
-        x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
-        x = self.relu2(x)
-        x = self.linear2(x)
+        # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
+        # x = self.relu2(x)
+        # x = self.linear2(x)
         return x
 
     # def get_config_optim(self, lr, lrp):
