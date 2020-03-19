@@ -63,10 +63,12 @@ class ProgramWebDataset(Dataset):
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
+            next(reader)
+            next(reader)
             for row in reader:
 
-                if len(row) != 3:
-                    continue
+                # if len(row) != 3:
+                #     continue
                 #_, _, _, tag = row
                 tag = row[2]
 
@@ -95,9 +97,12 @@ class ProgramWebDataset(Dataset):
             reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
             for row in reader:
-                if len(row) != 3:
-                    continue
-                title, dscp, tag = row
+                # if len(row) != 3:
+                #     continue
+                #id, title, dscp, tag = row
+                title = row[0]
+                dscp = row[1]
+                tag = row[2]
 
                 title_tokens = tokenizer.tokenize(title.strip())
                 dscp_tokens = tokenizer.tokenize(dscp.strip())
