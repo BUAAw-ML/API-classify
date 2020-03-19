@@ -54,7 +54,7 @@ class ProgramWebDataset(Dataset):
 
         document = []
         tag_occurance = {}
-
+        csv.field_size_limit(500 * 1024 * 1024)
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
@@ -78,6 +78,7 @@ class ProgramWebDataset(Dataset):
                 ignored_tags.add(tag)
         print(ignored_tags)
         id = 0
+
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
