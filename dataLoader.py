@@ -59,9 +59,9 @@ class ProgramWebDataset(Dataset):
             reader = csv.reader(csvfile, delimiter=',')
             next(reader)
             for row in reader:
-                if len(row) != 4:
+                if len(row) != 3:
                     continue
-                _, _, _, tag = row
+                _, _, tag = row
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
 
@@ -77,14 +77,14 @@ class ProgramWebDataset(Dataset):
             if tag_occurance[tag] < 0:
                 ignored_tags.add(tag)
         print(ignored_tags)
-
+        id = 0
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             next(reader)
             for row in reader:
-                if len(row) != 4:
+                if len(row) != 3:
                     continue
-                id, title, dscp, tag = row
+                title, dscp, tag = row
 
                 title_tokens = tokenizer.tokenize(title.strip())
                 dscp_tokens = tokenizer.tokenize(dscp.strip())
@@ -103,8 +103,8 @@ class ProgramWebDataset(Dataset):
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
 
-                if len(tag) < 2:
-                    continue
+                # if len(tag) < 2:
+                #     continue
 
                 if len(tag) == 0:
                     continue
@@ -126,6 +126,8 @@ class ProgramWebDataset(Dataset):
                     'tag_ids': tag_ids,
                     'dscp': dscp
                 })
+
+                id += 1
 
         print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
