@@ -86,7 +86,8 @@ class ProgramWebDataset(Dataset):
                 ignored_tags.add(tag)
 
         print(ignored_tags)
-        print(tag_occurance)
+
+        print(sorted(tag_occurance.items(), key=lambda item: item[1]), reversed = True)
         exit()
 
         with open(f, newline='') as csvfile:
