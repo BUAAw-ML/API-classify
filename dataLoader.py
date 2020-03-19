@@ -63,17 +63,21 @@ class ProgramWebDataset(Dataset):
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
+            next(reader)
+            next(reader)
             for row in reader:
-                print(row)
-                exit()
+
+
                 if len(row) != 3:
                     continue
-                _, _, tag = row
+                #_, _, _, tag = row
+                tag = row[2]
 
 
                 tag = tag.strip().split(',') # '###'
                 tag = [t for t in tag if t != '']
                 print(tag)
+                exit()
 
 
                 for t in tag:
