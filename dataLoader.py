@@ -56,13 +56,13 @@ class ProgramWebDataset(Dataset):
         tag_occurance = {}
 
         with open(f, newline='') as csvfile:
-            reader = csv.reader(csvfile, delimiter=',')
+            reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
             for row in reader:
                 if len(row) != 3:
                     continue
                 _, _, tag = row
-                tag = tag.strip().split('###')
+                tag = tag.strip().split(',') # '###'
                 tag = [t for t in tag if t != '']
 
                 for t in tag:
@@ -79,7 +79,7 @@ class ProgramWebDataset(Dataset):
         print(ignored_tags)
         id = 0
         with open(f, newline='') as csvfile:
-            reader = csv.reader(csvfile, delimiter=',')
+            reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
             for row in reader:
                 if len(row) != 3:
@@ -96,7 +96,7 @@ class ProgramWebDataset(Dataset):
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
-                tag = tag.strip().split('###')
+                tag = tag.strip().split(',')
                 tag = [t for t in tag if t != '']
 
 
