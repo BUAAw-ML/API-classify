@@ -214,7 +214,7 @@ class AveragePrecisionMeter(object):
 def gen_A(num_classes, t, co_occur_mat):
     import pickle
     np.set_printoptions(threshold=np.inf,suppress=True)
-    _adj = co_occur_mat.numpy()
+    #_adj = co_occur_mat.numpy()
 
     # _adj[_adj < 30] = 0
     #_adj = _adj + 1 * np.identity(num_classes, np.int)
@@ -223,21 +223,21 @@ def gen_A(num_classes, t, co_occur_mat):
 
     #_adj = _adj / _nums
 
-    _adj = _adj / (_adj.sum(axis=1) + 1e-6)[:, np.newaxis]
+    #_adj = _adj / (_adj.sum(axis=1) + 1e-6)[:, np.newaxis]
     print("the number of directed edges in the graph: {}".format(np.sum(_adj >= t)-num_classes))
 
     #_adj *= _adj.diagonal() / _nums.sum()#* (num >= 1.0 / len(_nums))[:, np.newaxis]
 
-    _adj[_adj < 0.115] = 0
+    #_adj[_adj < 0.115] = 0
 
     #print(_adj)
     #_adj[_adj >= t] = 1
    # _adj *= (num < 1.0 / len(_nums))[:, np.newaxis]
 
     #_adj = _adj * 0.25 / (_adj.sum(0, keepdims=True) + 1e-6)
-    _adj = _adj + np.identity(num_classes, np.int)
+    _adj = np.identity(num_classes, np.int) #_adj +
 
-    print(_adj)
+    #print(_adj)
 
     #     # with open('adj.json', 'w') as f:
     #     #     json.dump(_adj, f)
