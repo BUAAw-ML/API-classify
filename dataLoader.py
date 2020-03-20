@@ -69,6 +69,9 @@ class ProgramWebDataset(Dataset):
         tag2id = {}
         id2tag = {}
 
+        tag2token = {}
+        descr2tags = {}
+
         document = []
         tag_occurance = {}
         #csv.field_size_limit(500 * 1024 * 1024)
@@ -90,6 +93,14 @@ class ProgramWebDataset(Dataset):
                     if t not in tag_occurance:
                         tag_occurance[t] = 1
                     tag_occurance[t] += 1
+
+                    if t not in tag2token:
+                        tag2token[t] = tokenizer.tokenize(t.strip())[0]
+
+                    if t not in tag2id:
+                        tag_id = len(tag2id)
+                        tag2id[t] = tag_id
+                        id2tag[tag_id] = t
 
         #['Tools','Data','Reference','Media','Real Time','Internet of Things']
         #ignored_tags = set()
@@ -133,15 +144,23 @@ class ProgramWebDataset(Dataset):
                 if len(tag) == 0:
                     continue
 
-
-
-                for t in tag:
-                    if t not in tag2id:
-                        tag_id = len(tag2id)
-                        tag2id[t] = tag_id
-                        id2tag[tag_id] = t
+                # for t in tag:
+                #     if t not in tag2id:
+                #         tag_id = len(tag2id)
+                #         tag2id[t] = tag_id
+                #         id2tag[tag_id] = t
 
                 tag_ids = [tag2id[t] for t in tag]
+
+                for t in tag2token:
+                    if tag2token[t] in dscp_tokens:
+                        for tt in tag:
+                            if tt in descr2tags:
+                                descr2tags[tt].append(t)
+                            else:
+                                descr2tags[tt] = [t]
+
+
 
                 data.append({
                     'id': int(id),
@@ -150,9 +169,12 @@ class ProgramWebDataset(Dataset):
                     'dscp_ids': dscp_ids,
                     'dscp_tokens': dscp_tokens,
                     'tag_ids': tag_ids,
-                    'dscp': dscp
+                    'dscp': dscp,
+                    'descr2tags': descr2tags
                 })
 
+        print(descr2tags)
+        exit()
         print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
         return data, tag2id, id2tag, document
@@ -192,36 +214,6 @@ class ProgramWebDataset(Dataset):
                     #if tag_ids[t1] != tag_ids[t2]:
                     co_occur_mat[tag_ids[t1], tag_ids[t2]] += 1
 
-        np.set_printoptions(threshold=np.inf, suppress=True)
-        _adj = co_occur_mat.numpy()
-
-        # _adj[_adj < 30] = 0
-        # _adj = _adj + 1 * np.identity(num_classes, np.int)
-
-        _nums = _adj.diagonal()
-        num = _nums / _nums.sum()
-
-        _nums = _nums[:, np.newaxis]
-
-        _adj = _adj / _nums
-
-        # _adj *= _adj.diagonal() / _nums.sum()
-
-        _adj[_adj < 0.4] = 0
-
-        # print(_adj)
-        # _adj[_adj >= t] = 1
-        _adj *= (num < 1.0 / len(_nums))[:, np.newaxis]
-
-        # _adj = _adj * 0.25 / (_adj.sum(0, keepdims=True) + 1e-6)
-        _adj = _adj + np.identity(tags_num, np.int) * (num >= 1.0 / len(_nums))[:, np.newaxis]
-        for i in range(_adj.shape[0]):
-            m = [id2tag[i]]
-            m.extend([id2tag[j] for j in range(_adj.shape[1]) if _adj[i][j] > 0])
-            if len(m) > 2:
-                print(m)
-
-        exit()
         return co_occur_mat
 
     @classmethod
