@@ -49,6 +49,7 @@ class ProgramWebDataset(Dataset):
         tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
         i = 0
         for id in range(len(id2tag)):
+            print(id2tag[id])
             if id2tag[id] in tfidf_dict:
                 print("{} : \t {}".format(id2tag[id],tfidf_dict[id2tag[id]]))
                 i += 1
