@@ -102,7 +102,9 @@ class ProgramWebDataset(Dataset):
 
         # print(sorted(tag_occurance.items(), key=lambda item: item[1]))
         # exit()
-
+        l = 0
+        i = 0
+        j = 0
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)#, delimiter=',')
             next(reader)
@@ -127,11 +129,15 @@ class ProgramWebDataset(Dataset):
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
 
-                # if len(tag) < 2:
-                #     continue
+                if len(tag) >= 2:
+                    j += 1
+                    #continue
 
                 if len(tag) == 0:
                     continue
+
+                l +=  len(tag)
+                i += 1
 
                 for t in tag:
                     if t not in tag2id:
@@ -150,8 +156,9 @@ class ProgramWebDataset(Dataset):
                     'tag_ids': tag_ids,
                     'dscp': dscp
                 })
-
-
+        print(i)
+        print(j)
+        print(l / i)
         print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
         return data, tag2id, id2tag, document
