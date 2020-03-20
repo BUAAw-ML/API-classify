@@ -94,8 +94,9 @@ class GCNBert(nn.Module):
 
         # print(inputs_tfidf)
         # exit()
+        # * inputs_tfidf.unsqueeze(-1)
 
-        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1) * inputs_tfidf.unsqueeze(-1), dim=1) \
+        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
             / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
         #sentence_feat = token_feat[:,0,:]
