@@ -3,9 +3,6 @@ import copy
 import os
 import sys
 
-
-from collections import defaultdict
-
 from random import shuffle
 
 import numpy as np
@@ -70,7 +67,7 @@ class ProgramWebDataset(Dataset):
         id2tag = {}
 
         tag2token = {}
-        tag_based = {}
+
 
         document = []
         tag_occurance = {}
@@ -152,14 +149,18 @@ class ProgramWebDataset(Dataset):
 
                 tag_ids = [tag2id[t] for t in tag]
 
+                tag_based = {}
                 for t in tag2token:
                     if tag2token[t] in dscp_tokens and t not in ignored_tags:
                         for tt in tag:
                             if tt in tag_based:
-                                tag_based[tt] = defaultdict(int)
-                                tag_based[tt][t] = 1
+                                if t not in tag_based[tt]:
+                                    tag_based[tt][t] = 1
+                                else:
+                                    tag_based[tt][t] += 1
                             else:
-                                tag_based[tt][t] += 1
+                                tag_based[tt] = {}
+                                tag_based[tt][t] = 1
 
 
 
@@ -170,8 +171,7 @@ class ProgramWebDataset(Dataset):
                     'dscp_ids': dscp_ids,
                     'dscp_tokens': dscp_tokens,
                     'tag_ids': tag_ids,
-                    'dscp': dscp,
-                    'tag_based': tag_based
+                    'dscp': dscp
                 })
 
         print(tag_based)
