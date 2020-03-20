@@ -164,7 +164,6 @@ class ProgramWebDataset(Dataset):
 
 
                 print(tag_based)
-                exit()
 
 
                 data.append({
@@ -177,7 +176,7 @@ class ProgramWebDataset(Dataset):
                     'dscp': dscp
                 })
 
-        print(tag_based)
+        #print(tag_based)
         exit()
         print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
