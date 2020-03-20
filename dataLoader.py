@@ -40,7 +40,7 @@ class ProgramWebDataset(Dataset):
     @classmethod
     def from_csv(cls, api_csvfile, net_csvfile):
         data, tag2id, id2tag, document,tag_based = ProgramWebDataset.load(api_csvfile)
-        co_occur_mat = ProgramWebDataset.stat_cooccurence(tag_based,len(tag2id))
+        co_occur_mat = ProgramWebDataset.stat_cooccurence(tag_based,len(tag2id),tag2id)
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
         #tfidf_dict = {}
         tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
@@ -156,14 +156,14 @@ class ProgramWebDataset(Dataset):
                 for t in tag2token:
                     if tag2token[t] in dscp_tokens and t not in ignored_tags:
                         for tt in tag:
-                            if tag2id[tt] in tag_based:
-                                if tag2id[t] not in tag_based[tt]:
-                                    tag_based[tag2id[tt]][tag2id[t]] = 1
+                            if tt in tag_based:
+                                if t not in tag_based[tt]:
+                                    tag_based[tt][t] = 1
                                 else:
-                                    tag_based[tag2id[tt]][tag2id[t]] += 1
+                                    tag_based[tt][t] += 1
                             else:
-                                tag_based[tag2id[tt]] = {}
-                                tag_based[tag2id[tt]][tag2id[t]] = 1
+                                tag_based[tt] = {}
+                                tag_based[tt][t] = 1
 
                 data.append({
                     'id': int(id),
@@ -207,11 +207,11 @@ class ProgramWebDataset(Dataset):
 
 
     @classmethod
-    def stat_cooccurence(cls, data, tags_num):
+    def stat_cooccurence(cls, data, tags_num,tag2id):
         co_occur_mat = torch.zeros(size=(tags_num, tags_num))
         for i in data:
             for j in data[i]:
-                co_occur_mat[i, j] = data[i][j]
+                co_occur_mat[tag2id[i], tag2id[j]] = data[i][j]
         # co_occur_mat = torch.zeros(size=(tags_num, tags_num))
         # for i in range(len(data)):
         #     tag_ids = data[i]['tag_ids']
