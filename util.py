@@ -216,6 +216,8 @@ def gen_A(num_classes, t, co_occur_mat):
     np.set_printoptions(threshold=np.inf,suppress=True)
     _adj = co_occur_mat.numpy()
 
+    print(_adj)
+    exit()
     # _adj[_adj < 30] = 0
     #_adj = _adj + 1 * np.identity(num_classes, np.int)
 

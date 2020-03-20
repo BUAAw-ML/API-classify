@@ -39,11 +39,14 @@ class ProgramWebDataset(Dataset):
 
     @classmethod
     def from_csv(cls, api_csvfile, net_csvfile):
-        data, tag2id, id2tag, document = ProgramWebDataset.load(api_csvfile)
-        co_occur_mat = ProgramWebDataset.stat_cooccurence(data, len(tag2id),id2tag)
+        data, tag2id, id2tag, document,tag_based = ProgramWebDataset.load(api_csvfile)
+        co_occur_mat = ProgramWebDataset.stat_cooccurence(tag_based,len(tag2id))
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
         #tfidf_dict = {}
         tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
+
+
+
         # i = 0
         # for id in range(len(id2tag)):
         #     tag_tfidf = []
@@ -101,7 +104,7 @@ class ProgramWebDataset(Dataset):
 
         #['Tools','Data','Reference','Media','Real Time','Internet of Things']
         #ignored_tags = set()
-        ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
+        ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service','Invoicing'])  #
         for tag in tag_occurance:
             if tag_occurance[tag] < 0:
                 ignored_tags.add(tag)
@@ -153,14 +156,14 @@ class ProgramWebDataset(Dataset):
                 for t in tag2token:
                     if tag2token[t] in dscp_tokens and t not in ignored_tags:
                         for tt in tag:
-                            if tt in tag_based:
-                                if t not in tag_based[tt]:
-                                    tag_based[tt][t] = 1
+                            if tag2id[tt] in tag_based:
+                                if tag2id[t] not in tag_based[tt]:
+                                    tag_based[tag2id[tt]][tag2id[t]] = 1
                                 else:
-                                    tag_based[tt][t] += 1
+                                    tag_based[tag2id[tt]][tag2id[t]] += 1
                             else:
-                                tag_based[tt] = {}
-                                tag_based[tt][t] = 1
+                                tag_based[tag2id[tt]] = {}
+                                tag_based[tag2id[tt]][tag2id[t]] = 1
 
                 data.append({
                     'id': int(id),
@@ -172,11 +175,11 @@ class ProgramWebDataset(Dataset):
                     'dscp': dscp
                 })
 
-        print(tag_based)
-        exit()
+        #print(tag_based)
+
         print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
-        return data, tag2id, id2tag, document
+        return data, tag2id, id2tag, document, tag_based
 
     @classmethod
     def get_tfidf_dict(cls, document):
@@ -204,14 +207,18 @@ class ProgramWebDataset(Dataset):
 
 
     @classmethod
-    def stat_cooccurence(cls, data, tags_num, id2tag):
+    def stat_cooccurence(cls, data, tags_num):
         co_occur_mat = torch.zeros(size=(tags_num, tags_num))
-        for i in range(len(data)):
-            tag_ids = data[i]['tag_ids']
-            for t1 in range(len(tag_ids)):
-                for t2 in range(len(tag_ids)):
-                    #if tag_ids[t1] != tag_ids[t2]:
-                    co_occur_mat[tag_ids[t1], tag_ids[t2]] += 1
+        for i in data:
+            for j in data[i]:
+                co_occur_mat[i, j] = data[i][j]
+        # co_occur_mat = torch.zeros(size=(tags_num, tags_num))
+        # for i in range(len(data)):
+        #     tag_ids = data[i]['tag_ids']
+        #     for t1 in range(len(tag_ids)):
+        #         for t2 in range(len(tag_ids)):
+        #             #if tag_ids[t1] != tag_ids[t2]:
+        #             co_occur_mat[tag_ids[t1], tag_ids[t2]] += 1
 
         return co_occur_mat
 
