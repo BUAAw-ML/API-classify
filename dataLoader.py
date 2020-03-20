@@ -292,9 +292,12 @@ class ProgramWebDataset(Dataset):
                 if item in self.tfidf_dict:
                     inputs_tfidf[i, j+1] = 1#self.tfidf_dict[item]
 
-        # print(inputs_tokens[0])
-        # print(inputs_tfidf[0])
-        # exit()
+        print(inputs_tokens[0])
+        print(inputs_tfidf[0])
+        for id in batch[0]["tag_ids"]:
+            print(self.id2tag[id])
+
+        exit()
 
         # inputs_tfidf[inputs_tfidf>0]=1
         # ids *= inputs_tfidf.long()
