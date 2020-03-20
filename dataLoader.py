@@ -163,6 +163,9 @@ class ProgramWebDataset(Dataset):
                                 tag_based[tt][t] = 1
 
 
+                print(tag_based)
+                exit()
+
 
                 data.append({
                     'id': int(id),
