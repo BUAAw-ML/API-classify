@@ -57,7 +57,7 @@ class ProgramWebDataset(Dataset):
                     tag_tfidf.append(tfidf_dict[token])
                 else:
                     tag_tfidf.append(0)
-            print("{} \t {}".format(tokenizer.tokenize(id2tag[id].strip()), tag_tfidf))
+            print("{} \t {.4f}".format(tokenizer.tokenize(id2tag[id].strip()), tag_tfidf))
 
         exit()
 
