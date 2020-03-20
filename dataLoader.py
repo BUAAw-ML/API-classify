@@ -43,7 +43,7 @@ class ProgramWebDataset(Dataset):
     @classmethod
     def from_csv(cls, api_csvfile, net_csvfile):
         data, tag2id, id2tag, document = ProgramWebDataset.load(api_csvfile)
-        co_occur_mat = ProgramWebDataset.stat_cooccurence(data, len(tag2id))
+        co_occur_mat = ProgramWebDataset.stat_cooccurence(data, len(tag2id),id2tag)
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
         #tfidf_dict = {}
         tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
@@ -183,7 +183,7 @@ class ProgramWebDataset(Dataset):
 
 
     @classmethod
-    def stat_cooccurence(cls, data, tags_num):
+    def stat_cooccurence(cls, data, tags_num, id2tag):
         co_occur_mat = torch.zeros(size=(tags_num, tags_num))
         for i in range(len(data)):
             tag_ids = data[i]['tag_ids']
@@ -191,6 +191,35 @@ class ProgramWebDataset(Dataset):
                 for t2 in range(len(tag_ids)):
                     #if tag_ids[t1] != tag_ids[t2]:
                     co_occur_mat[tag_ids[t1], tag_ids[t2]] += 1
+
+        np.set_printoptions(threshold=np.inf, suppress=True)
+        _adj = co_occur_mat.numpy()
+
+        # _adj[_adj < 30] = 0
+        # _adj = _adj + 1 * np.identity(num_classes, np.int)
+
+        _nums = _adj.diagonal()
+        num = _nums / _nums.sum()
+
+        _nums = _nums[:, np.newaxis]
+
+        _adj = _adj / _nums
+        print("the number of directed edges in the graph: {}".format(np.sum(_adj >= t) - num_classes))
+
+        # _adj *= _adj.diagonal() / _nums.sum()
+
+        _adj[_adj < 0.4] = 0
+
+        # print(_adj)
+        # _adj[_adj >= t] = 1
+        _adj *= (num < 1.0 / len(_nums))[:, np.newaxis]
+
+        # _adj = _adj * 0.25 / (_adj.sum(0, keepdims=True) + 1e-6)
+        _adj = _adj + np.identity(tags_num, np.int) * (num >= 1.0 / len(_nums))[:, np.newaxis]
+        for i in range(len(_adj.shape[0])):
+            print([id2tag[_adj[i][j]] for j in range(len(_adj.shape[1])) if _adj[i][j] > 0])
+
+        exit()
         return co_occur_mat
 
     @classmethod
