@@ -204,7 +204,6 @@ class ProgramWebDataset(Dataset):
         _nums = _nums[:, np.newaxis]
 
         _adj = _adj / _nums
-        print("the number of directed edges in the graph: {}".format(np.sum(_adj >= t) - num_classes))
 
         # _adj *= _adj.diagonal() / _nums.sum()
 
