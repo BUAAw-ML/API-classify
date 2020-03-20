@@ -47,19 +47,19 @@ class ProgramWebDataset(Dataset):
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
         #tfidf_dict = {}
         tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
-        i = 0
-        for id in range(len(id2tag)):
-            tag_tfidf = []
-
-            for token in tokenizer.tokenize(id2tag[id].strip()):
-
-                if token in tfidf_dict:
-                    tag_tfidf.append(tfidf_dict[token])
-                else:
-                    tag_tfidf.append(0)
-            print("{} \t {.4f}".format(tokenizer.tokenize(id2tag[id].strip()), tag_tfidf))
-
-        exit()
+        # i = 0
+        # for id in range(len(id2tag)):
+        #     tag_tfidf = []
+        #
+        #     for token in tokenizer.tokenize(id2tag[id].strip()):
+        #
+        #         if token in tfidf_dict:
+        #             tag_tfidf.append(tfidf_dict[token])
+        #         else:
+        #             tag_tfidf.append(0)
+        #     print("{} \t {}".format(tokenizer.tokenize(id2tag[id].strip()), tag_tfidf))
+        #
+        # exit()
 
         return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict)
 
@@ -95,7 +95,7 @@ class ProgramWebDataset(Dataset):
         #ignored_tags = set()
         ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
         for tag in tag_occurance:
-            if tag_occurance[tag] < 0:
+            if tag_occurance[tag] < 500:
                 ignored_tags.add(tag)
 
         print(ignored_tags)
