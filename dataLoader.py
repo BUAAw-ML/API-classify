@@ -127,8 +127,7 @@ class ProgramWebDataset(Dataset):
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
 
-                if len(tag) >= 2:
-                    j += 1
+                # if len(tag) >= 2:
                     #continue
 
                 if len(tag) == 0:
