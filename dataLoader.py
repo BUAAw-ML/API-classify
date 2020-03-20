@@ -267,8 +267,6 @@ class ProgramWebDataset(Dataset):
     def collate_fn(self, batch):
         result = {}
         # construct input
-        print(batch[1])
-        exit()
 
         inputs = [e['title_ids'] + e['dscp_ids'] for e in batch]  #e['title_ids'] +
 
