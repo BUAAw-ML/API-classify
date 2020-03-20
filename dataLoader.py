@@ -70,7 +70,7 @@ class ProgramWebDataset(Dataset):
         id2tag = {}
 
         tag2token = {}
-        descr2tags = {}
+        tag_based = {}
 
         document = []
         tag_occurance = {}
@@ -153,12 +153,13 @@ class ProgramWebDataset(Dataset):
                 tag_ids = [tag2id[t] for t in tag]
 
                 for t in tag2token:
-                    if tag2token[t] in dscp_tokens:
+                    if tag2token[t] in dscp_tokens and t not in ignored_tags:
                         for tt in tag:
-                            if tt in descr2tags:
-                                descr2tags[tt].append(t)
+                            if tt in tag_based:
+                                tag_based[tt] = {}
+                                tag_based[tt][t] = 1
                             else:
-                                descr2tags[tt] = [t]
+                                tag_based[tt][t] += 1
 
 
 
@@ -170,10 +171,10 @@ class ProgramWebDataset(Dataset):
                     'dscp_tokens': dscp_tokens,
                     'tag_ids': tag_ids,
                     'dscp': dscp,
-                    'descr2tags': descr2tags
+                    'tag_based': tag_based
                 })
 
-        print(descr2tags)
+        print(tag_based)
         exit()
         print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
