@@ -45,8 +45,8 @@ class ProgramWebDataset(Dataset):
         data, tag2id, id2tag, document = ProgramWebDataset.load(api_csvfile)
         co_occur_mat = ProgramWebDataset.stat_cooccurence(data, len(tag2id))
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
-        tfidf_dict = {}
-        #tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
+        #tfidf_dict = {}
+        tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
 
         return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict)
 
