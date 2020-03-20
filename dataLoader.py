@@ -47,6 +47,13 @@ class ProgramWebDataset(Dataset):
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
         #tfidf_dict = {}
         tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
+        i = 0
+        for id in id2tag:
+            if id2tag[id] in tfidf_dict:
+                print("{} : \t {}".format(id2tag[id],tfidf_dict[id2tag[id]]))
+                i += 1
+        print(i)
+        exit()
 
         return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict)
 
@@ -292,11 +299,10 @@ class ProgramWebDataset(Dataset):
                 if item in self.tfidf_dict:
                     inputs_tfidf[i, j+1] = self.tfidf_dict[item]
 
-        print(inputs_tokens[0])
-        print(inputs_tfidf[0])
-        print([self.id2tag[id] for id in batch[0]["tag_ids"]])
-
-        exit()
+        # print(inputs_tokens[0])
+        # print(inputs_tfidf[0])
+        # print([self.id2tag[id] for id in batch[0]["tag_ids"]])
+        # exit()
 
         # inputs_tfidf[inputs_tfidf>0]=1
         # ids *= inputs_tfidf.long()
