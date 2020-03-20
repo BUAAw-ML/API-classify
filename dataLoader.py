@@ -216,7 +216,7 @@ class ProgramWebDataset(Dataset):
         # _adj = _adj * 0.25 / (_adj.sum(0, keepdims=True) + 1e-6)
         _adj = _adj + np.identity(tags_num, np.int) * (num >= 1.0 / len(_nums))[:, np.newaxis]
         for i in range(_adj.shape[0]):
-            print([id2tag[_adj[i][j]] for j in range(len(_adj.shape[1])) if _adj[i][j] > 0])
+            print([id2tag[_adj[i][j]] for j in range(_adj.shape[1]) if _adj[i][j] > 0])
 
         exit()
         return co_occur_mat
