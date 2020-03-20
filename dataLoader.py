@@ -49,11 +49,16 @@ class ProgramWebDataset(Dataset):
         tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
         i = 0
         for id in range(len(id2tag)):
-            print(id2tag[id])
-            if id2tag[id] in tfidf_dict:
-                print("{} : \t {}".format(id2tag[id],tfidf_dict[id2tag[id]]))
-                i += 1
-        print(i)
+            tag_tfidf = []
+
+            for token in tokenizer.tokenize(id2tag[id].strip()):
+
+                if token in tfidf_dict:
+                    tag_tfidf.append(tfidf_dict[token])
+                else:
+                    tag_tfidf.append(0)
+            print("{} \t {}".format(tokenizer.tokenize(id2tag[id].strip()), tag_tfidf))
+
         exit()
 
         return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict)
