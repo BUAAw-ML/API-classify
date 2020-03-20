@@ -159,6 +159,7 @@ class ProgramWebDataset(Dataset):
         print(i)
         print(j)
         print(l / i)
+        exit()
         print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
         return data, tag2id, id2tag, document
