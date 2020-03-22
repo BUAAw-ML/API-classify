@@ -94,13 +94,8 @@ class ProgramWebDataset(Dataset):
                         tag_occurance[t] = 1
                     tag_occurance[t] += 1
 
-                    if t not in tag2token:
-                        tag2token[t] = tokenizer.tokenize(t.strip())[0]
-
-                    if t not in tag2id:
-                        tag_id = len(tag2id)
-                        tag2id[t] = tag_id
-                        id2tag[tag_id] = t
+                    # if t not in tag2token:
+                    #     tag2token[t] = tokenizer.tokenize(t.strip())[0]
 
         #['Tools','Data','Reference','Media','Real Time','Internet of Things']
         #ignored_tags = set()
@@ -138,32 +133,31 @@ class ProgramWebDataset(Dataset):
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
 
-                # if len(tag) >= 2:
-                    #continue
+                if len(tag) >= 2:
+                    continue
 
                 if len(tag) == 0:
                     continue
 
-                # for t in tag:
-                #     if t not in tag2id:
-                #         tag_id = len(tag2id)
-                #         tag2id[t] = tag_id
-                #         id2tag[tag_id] = t
+                for t in tag:
+                    if t not in tag2id:
+                        tag_id = len(tag2id)
+                        tag2id[t] = tag_id
+                        id2tag[tag_id] = t
 
                 tag_ids = [tag2id[t] for t in tag]
 
-
-                for t in tag2token:
-                    if tag2token[t] in dscp_tokens and t not in ignored_tags:
-                        for tt in tag:
-                            if tt in tag_based:
-                                if t not in tag_based[tt]:
-                                    tag_based[tt][t] = 1
-                                else:
-                                    tag_based[tt][t] += 1
-                            else:
-                                tag_based[tt] = {}
-                                tag_based[tt][t] = 1
+                # for t in tag2token:
+                #     if tag2token[t] in dscp_tokens and t not in ignored_tags:
+                #         for tt in tag:
+                #             if tt in tag_based:
+                #                 if t not in tag_based[tt]:
+                #                     tag_based[tt][t] = 1
+                #                 else:
+                #                     tag_based[tt][t] += 1
+                #             else:
+                #                 tag_based[tt] = {}
+                #                 tag_based[tt][t] = 1
 
                 data.append({
                     'id': int(id),
@@ -174,9 +168,6 @@ class ProgramWebDataset(Dataset):
                     'tag_ids': tag_ids,
                     'dscp': dscp
                 })
-
-        print(tag_based)
-        exit()
 
         print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
@@ -209,17 +200,14 @@ class ProgramWebDataset(Dataset):
 
     @classmethod
     def stat_cooccurence(cls, data, tags_num,tag2id):
+
         co_occur_mat = torch.zeros(size=(tags_num, tags_num))
-        for i in data:
-            for j in data[i]:
-                co_occur_mat[tag2id[i], tag2id[j]] = data[i][j]
-        # co_occur_mat = torch.zeros(size=(tags_num, tags_num))
-        # for i in range(len(data)):
-        #     tag_ids = data[i]['tag_ids']
-        #     for t1 in range(len(tag_ids)):
-        #         for t2 in range(len(tag_ids)):
-        #             #if tag_ids[t1] != tag_ids[t2]:
-        #             co_occur_mat[tag_ids[t1], tag_ids[t2]] += 1
+        for i in range(len(data)):
+            tag_ids = data[i]['tag_ids']
+            for t1 in range(len(tag_ids)):
+                for t2 in range(len(tag_ids)):
+                    #if tag_ids[t1] != tag_ids[t2]:
+                    co_occur_mat[tag_ids[t1], tag_ids[t2]] += 1
 
         return co_occur_mat
 

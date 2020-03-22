@@ -219,29 +219,29 @@ def gen_A(num_classes, t, co_occur_mat):
     # _adj[_adj < 30] = 0
     #_adj = _adj + 1 * np.identity(num_classes, np.int)
 
-    #_nums = _nums[:, np.newaxis]
+    _nums = _adj.diagonal()
+    _nums = _nums[:, np.newaxis]
+    _adj = _adj / _nums
 
-    #_adj = _adj / _nums
-
-    _adj = _adj / (_adj.sum(axis=1) + 1e-6)[:, np.newaxis]
-    #print("the number of directed edges in the graph: {}".format(np.sum(_adj >= t)-num_classes))
+    # _adj = _adj / (_adj.sum(axis=1) + 1e-6)[:, np.newaxis]
+    print("the number of directed edges in the graph: {}".format(np.sum(_adj >= 0.3)-num_classes))
 
     #_adj *= _adj.diagonal() / _nums.sum()#* (num >= 1.0 / len(_nums))[:, np.newaxis]
 
-    _adj[_adj < 0.15] = 0
+    _adj[_adj < 0.3] = 0
 
     #print(_adj)
-    _adj[_adj >= 0.15] = 1
+    # _adj[_adj >= 0.15] = 1
    # _adj *= (num < 1.0 / len(_nums))[:, np.newaxis]
 
     #_adj = _adj * 0.25 / (_adj.sum(0, keepdims=True) + 1e-6)
-    _adj = _adj + np.identity(num_classes, np.int) #
+    # _adj = _adj + np.identity(num_classes, np.int) #
 
     #print(_adj)
 
     #     # with open('adj.json', 'w') as f:
     #     #     json.dump(_adj, f)
-
+    exit()
     return _adj
 
 def gen_adj(A):
