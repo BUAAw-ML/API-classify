@@ -264,11 +264,11 @@ class Engine(object):
             self.state['input'] = input
             self.state['target'] = target
 
-            for i in range(len(target)):
-                tns = target[i].numpy().sum()
-                if tns == 1:
-                    print(target[i])
-                    exit()
+            # for i in range(len(target)):
+            #     tns = target[i].numpy().sum()
+            #     if tns == 1:
+            #         print(target[i])
+            #         exit()
 
             self.on_start_batch(False, model, criterion, data_loader)
 
