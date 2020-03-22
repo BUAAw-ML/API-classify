@@ -40,7 +40,7 @@ class ProgramWebDataset(Dataset):
     @classmethod
     def from_csv(cls, api_csvfile, net_csvfile):
         data, tag2id, id2tag, document,tag_based = ProgramWebDataset.load(api_csvfile)
-        co_occur_mat = ProgramWebDataset.stat_cooccurence(tag_based,len(tag2id),tag2id)
+        co_occur_mat = ProgramWebDataset.stat_cooccurence(tag_based,len(tag2id))
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
         #tfidf_dict = {}
         tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
@@ -199,7 +199,7 @@ class ProgramWebDataset(Dataset):
 
 
     @classmethod
-    def stat_cooccurence(cls, data, tags_num,tag2id):
+    def stat_cooccurence(cls, data, tags_num):
 
         co_occur_mat = torch.zeros(size=(tags_num, tags_num))
         for i in range(len(data)):
