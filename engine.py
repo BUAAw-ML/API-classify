@@ -264,6 +264,12 @@ class Engine(object):
             self.state['input'] = input
             self.state['target'] = target
 
+            for i in range(len(target)):
+                tns = target[i].numpy().sum()
+                if tns == 1:
+                    print(target[i])
+                    exit()
+
             self.on_start_batch(False, model, criterion, data_loader)
 
             if self.state['use_gpu']:
@@ -288,10 +294,6 @@ class Engine(object):
     def recordResult(self, target, output):
         result = []
         for i in range(len(target)):
-            tns = target[i].numpy().sum()
-            if tns == 1:
-                print(tns)
-                exit()
             buf = [self.state['dscp'][i],
                    [self.state['id2tag'][index] for (index, value) in enumerate(target[i]) if value == 1],
                    [self.state['id2tag'][index] for index in
