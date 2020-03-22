@@ -313,10 +313,6 @@ class ProgramWebDataset(Dataset):
         for i in range(len(batch)):
             tags[i, batch[i]['tag_ids']] = 1.
 
-            if len(batch[i]['tag_ids']) == 1:
-                print(batch[i]['tag_ids'])
-                exit()
-
         dscp = [e['dscp'] for e in batch]
 
         inputs_tokens = [e['title_tokens'] + e['dscp_tokens'] for e in batch]  #

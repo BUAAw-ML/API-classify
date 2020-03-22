@@ -292,6 +292,9 @@ class Engine(object):
                    [self.state['id2tag'][index] for (index, value) in enumerate(target[i]) if value == 1],
                    [self.state['id2tag'][index] for index in
                     sorted(range(len(output[i])), key=lambda k: output[i][k], reverse=True)[:10]]]
+            if len(buf[1]) == 1:
+                print(buf[1])
+                exit()
             if buf[2][0] not in buf[1]:
                 result.append(buf)
 
