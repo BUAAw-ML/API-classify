@@ -40,14 +40,11 @@ class ProgramWebDataset(Dataset):
     @classmethod
     def from_csv(cls, api_csvfile, net_csvfile):
         data, tag2id, id2tag, document,tag_based = ProgramWebDataset.load(api_csvfile)
-        co_occur_mat = ProgramWebDataset.stat_cooccurence(tag_based,len(tag2id))
+        co_occur_mat = ProgramWebDataset.stat_cooccurence(data,len(tag2id))
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
         #tfidf_dict = {}
-        print(co_occur_mat)
-        exit()
+
         tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
-
-
 
         # i = 0
         # for id in range(len(id2tag)):
