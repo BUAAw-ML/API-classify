@@ -264,12 +264,6 @@ class Engine(object):
             self.state['input'] = input
             self.state['target'] = target
 
-            # for i in range(len(target)):
-            #     tns = target[i].numpy().sum()
-            #     if tns == 1:
-            #         print(target[i])
-            #         exit()
-
             self.on_start_batch(False, model, criterion, data_loader)
 
             if self.state['use_gpu']:
@@ -299,8 +293,8 @@ class Engine(object):
                    [self.state['id2tag'][index] for index in
                     sorted(range(len(output[i])), key=lambda k: output[i][k], reverse=True)[:10]]]
 
-            if buf[2][0] not in buf[1]:
-                result.append(buf)
+           # if buf[2][0] not in buf[1]:
+            result.append(buf)
 
         with open('testResult.json', 'a') as f:
             json.dump(result, f)
