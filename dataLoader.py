@@ -313,15 +313,19 @@ class ProgramWebDataset(Dataset):
         for i in range(len(batch)):
             tags[i, batch[i]['tag_ids']] = 1.
 
+            if len(batch[i]['tag_ids']) == 1:
+                print(batch[i]['tag_ids'])
+                exit()
+
         dscp = [e['dscp'] for e in batch]
 
-        inputs_tokens = [e['title_tokens'] + e['dscp_tokens'] for e in batch]  #
+        #inputs_tokens = [e['title_tokens'] + e['dscp_tokens'] for e in batch]  #
         inputs_tfidf = torch.zeros(size=(len(batch), max_len+2))
         #
-        for i, token_list in enumerate(inputs_tokens):
-            for j, item in enumerate(token_list):
-                if item in self.tfidf_dict:
-                    inputs_tfidf[i, j+1] = self.tfidf_dict[item]
+        # for i, token_list in enumerate(inputs_tokens):
+        #     for j, item in enumerate(token_list):
+        #         if item in self.tfidf_dict:
+        #             inputs_tfidf[i, j+1] = self.tfidf_dict[item]
 
         # print(inputs_tokens[0])
         # print(inputs_tfidf[0])
