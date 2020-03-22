@@ -288,8 +288,9 @@ class Engine(object):
     def recordResult(self, target, output):
         result = []
         for i in range(len(target)):
-            if len(target[1]) == 1:
-                print(target[1])
+            tns = target[i].numpy().sum()
+            if tns == 1:
+                print(tns)
                 exit()
             buf = [self.state['dscp'][i],
                    [self.state['id2tag'][index] for (index, value) in enumerate(target[i]) if value == 1],
