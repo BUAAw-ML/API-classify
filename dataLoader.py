@@ -137,6 +137,7 @@ class ProgramWebDataset(Dataset):
                 if len(tag) == 0:
                     continue
 
+
                 for t in tag:
                     if t not in tag2id:
                         tag_id = len(tag2id)
@@ -166,6 +167,11 @@ class ProgramWebDataset(Dataset):
                     'tag_ids': tag_ids,
                     'dscp': dscp
                 })
+
+        for item in data:
+            if len(item['tag_ids']) == 1:
+                print(item['tag_ids'])
+        exit()
 
         print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
@@ -383,7 +389,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
         train_dataset = dataset
         val_dataset = copy.copy(dataset)
         ind = np.random.RandomState(seed=10).permutation(len(data))
-        split = int(len(data) * 0.9)
+        split = int(len(data) * 0.85)
         train_dataset.data = data[ind[:split]].tolist()
         val_dataset.data = data[ind[split:]].tolist()
 
