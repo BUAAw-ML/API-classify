@@ -131,12 +131,10 @@ class ProgramWebDataset(Dataset):
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
 
-                if len(tag) < 2:
-                    continue
+
 
                 if len(tag) == 0:
                     continue
-
 
                 for t in tag:
                     if t not in tag2id:
@@ -145,6 +143,9 @@ class ProgramWebDataset(Dataset):
                         id2tag[tag_id] = t
 
                 tag_ids = [tag2id[t] for t in tag]
+
+                if len(tag_ids) < 2:
+                    continue
 
                 # for t in tag2token:
                 #     if tag2token[t] in dscp_tokens and t not in ignored_tags:
@@ -312,12 +313,6 @@ class ProgramWebDataset(Dataset):
         tags = torch.zeros(size=(len(batch), self.get_tags_num()))
         for i in range(len(batch)):
             tags[i, batch[i]['tag_ids']] = 1.
-
-        for i in range(len(tags)):
-            tns = tags[i].numpy().sum()
-            if tns == 1:
-                print(batch[i]['tag_ids'])
-                exit()
 
         dscp = [e['dscp'] for e in batch]
 
