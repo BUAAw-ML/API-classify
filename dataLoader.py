@@ -313,7 +313,7 @@ class ProgramWebDataset(Dataset):
         for i in range(len(batch)):
             tags[i, batch[i]['tag_ids']] = 1.
 
-            if len(batch[i]['tag_ids']):
+            if len(batch[i]['tag_ids']) == 1:
                 print(batch[i]['tag_ids'])
                 exit()
 
