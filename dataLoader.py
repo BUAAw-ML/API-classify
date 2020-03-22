@@ -168,11 +168,6 @@ class ProgramWebDataset(Dataset):
                     'dscp': dscp
                 })
 
-        for item in data:
-            if len(item['tag_ids']) == 1:
-                print(item['tag_ids'])
-        exit()
-
         print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
         return data, tag2id, id2tag, document, tag_based
@@ -317,6 +312,10 @@ class ProgramWebDataset(Dataset):
         tags = torch.zeros(size=(len(batch), self.get_tags_num()))
         for i in range(len(batch)):
             tags[i, batch[i]['tag_ids']] = 1.
+
+            if len(batch[i]['tag_ids']):
+                print(batch[i]['tag_ids'])
+                exit()
 
         dscp = [e['dscp'] for e in batch]
 
