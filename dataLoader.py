@@ -43,6 +43,8 @@ class ProgramWebDataset(Dataset):
         co_occur_mat = ProgramWebDataset.stat_cooccurence(tag_based,len(tag2id))
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
         #tfidf_dict = {}
+        print(co_occur_mat)
+        exit()
         tfidf_dict = ProgramWebDataset.get_tfidf_dict(document)
 
 
@@ -97,7 +99,6 @@ class ProgramWebDataset(Dataset):
                     # if t not in tag2token:
                     #     tag2token[t] = tokenizer.tokenize(t.strip())[0]
 
-        #['Tools','Data','Reference','Media','Real Time','Internet of Things']
         #ignored_tags = set()
         ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
         for tag in tag_occurance:
