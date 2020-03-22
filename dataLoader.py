@@ -131,7 +131,8 @@ class ProgramWebDataset(Dataset):
                 if ignored_tags is not None:
                     tag = [t for t in tag if t not in ignored_tags]
 
-
+                if len(set(tag)) < 2:
+                    continue
 
                 if len(tag) == 0:
                     continue
@@ -144,8 +145,7 @@ class ProgramWebDataset(Dataset):
 
                 tag_ids = [tag2id[t] for t in tag]
 
-                if len(tag_ids) < 2:
-                    continue
+
 
                 # for t in tag2token:
                 #     if tag2token[t] in dscp_tokens and t not in ignored_tags:
