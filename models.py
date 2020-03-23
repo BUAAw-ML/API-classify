@@ -52,7 +52,7 @@ class GCNBert(nn.Module):
 
         self.add_module('bert', bert)
         for m in self.bert.parameters():
-            m.requires_grad = False
+            m.requires_grad = True
 
         self.num_classes = num_classes
 
@@ -111,7 +111,7 @@ class GCNBert(nn.Module):
         tag_embedding2 = feats.tolist()
         tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
 
-        x = self.gc1(tag_embedding, self.adj)
+        x = self.gc1(tag_embedding2, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
         #
