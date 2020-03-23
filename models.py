@@ -63,9 +63,8 @@ class GCNBert(nn.Module):
         #self.dropout = nn.Dropout(p=0.5)
         self.gc1 = GraphConvolution(300, 4000)
         self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(4000, 8000)
-        self.relu2 = nn.LeakyReLU(0.2)
-        self.gc3 = GraphConvolution(8000, 768)
+        self.gc2 = GraphConvolution(4000, 768)
+
 
         _adj = gen_A(num_classes, t, co_occur_mat)
         _adj = torch.FloatTensor(_adj)
@@ -103,22 +102,21 @@ class GCNBert(nn.Module):
 
         #sentence_feat = token_feat[:,0,:]
 
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        with open(tag_embedding_file, 'rb') as fp:
-            feats = pkl.load(fp)#, encoding='utf-8')
-        tag_embedding2 = feats.tolist()
-        tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
+        # with open(tag_embedding_file, 'rb') as fp:
+        #     feats = pkl.load(fp)#, encoding='utf-8')
+        # tag_embedding2 = feats.tolist()
+        # tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
 
 
-        x = self.gc1(tag_embedding2, self.adj)
+        x = self.gc1(tag_embedding, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
-        x = self.relu2(x)
-        x = self.gc3(x, self.adj)
+
         #
         # # values_memory = self.fc_hallucinator(sentence_feat)
         # # values_memory = values_memory.softmax(dim=1)
@@ -141,7 +139,6 @@ class GCNBert(nn.Module):
                 {'params': self.bert.parameters(), 'lr': lr * lrp},
                 {'params': self.gc1.parameters(), 'lr': lr},
                 {'params': self.gc2.parameters(), 'lr': lr},
-                {'params': self.gc3.parameters(), 'lr': lr},
                 ]
     # def get_config_optim(self, lr, lrp):
     #     return [
