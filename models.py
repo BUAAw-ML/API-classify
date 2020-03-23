@@ -111,6 +111,8 @@ class GCNBert(nn.Module):
         tag_embedding2 = feats.tolist()
         tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
 
+        print(tag_embedding2.shape)
+        exit()
         x = self.gc1(tag_embedding2, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
