@@ -232,7 +232,7 @@ def gen_A(num_classes, t, co_occur_mat):
 
     _adj[_adj < t] = 0
 
-    #print(_adj)
+    print(_adj)
     # _adj[_adj >= 0.15] = 1
    # _adj *= (num < 1.0 / len(_nums))[:, np.newaxis]
 
