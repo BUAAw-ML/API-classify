@@ -165,7 +165,7 @@ class GCNBert(nn.Module):
         #x = sentence_feat * x
         # x = self.linear1(sentence_feat)
         # x = self.relu1(x)
-        x = self.linear0(x).squeeze(-1)
+        x = self.linear0(sentence_feat).squeeze(-1)
 
 
         #exit()
