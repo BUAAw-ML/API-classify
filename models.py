@@ -79,21 +79,21 @@ class GCNBert(nn.Module):
         nn.init.xavier_uniform_(self.attention.weight)
 
         #self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 4000)
-        self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(4000, 768)
+        # self.gc1 = GraphConvolution(768, 4000)
+        # self.relu1 = nn.LeakyReLU(0.2)
+        # self.gc2 = GraphConvolution(4000, 768)
 
 
-        _adj = gen_A(num_classes, t, co_occur_mat)
-        _adj = torch.FloatTensor(_adj)
-        self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
-        #
+        # _adj = gen_A(num_classes, t, co_occur_mat)
+        # _adj = torch.FloatTensor(_adj)
+        # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
+        # #
         self.linear0 = nn.Linear(768, 1)
 
         #self.fc_hallucinator = nn.Linear(768, 108)
         #self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768, 400)
+        # self.linear1 = nn.Linear(768, 400)
         # self.relu2 = nn.LeakyReLU()
         # self.linear2 = nn.Linear(4000, num_classes)
 
