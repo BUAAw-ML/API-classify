@@ -109,7 +109,7 @@ class GCNBert(nn.Module):
         # alpha = F.softmax(torch.matmul(self.tanh1(self.linear0(token_feat)), self.w), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
         # token_feat = token_feat * alpha  # [16, seq_len, 768]
 
-        torch.set_printoptions(threshold=np.inf)
+        #torch.set_printoptions(threshold=np.inf)
 
         # print(inputs_tfidf)
         # exit()
@@ -146,8 +146,8 @@ class GCNBert(nn.Module):
 
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        print(self.attention(token_feat).transpose(1, 2).shape)
-        attention = self.attention(token_feat).transpose(1, 2).masked_fill(int(1.0 - masks), -np.inf)  # N, labels_num, L
+        print(masks)
+        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks, -np.inf)  # N, labels_num, L
         attention = F.softmax(attention, -1)
         print(attention.shape)
         sentence_feat = attention @ token_feat   # N, labels_num, hidden_size
