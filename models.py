@@ -9,6 +9,21 @@ import pickle as pkl
 from CosNormClassifier import CosNorm_Classifier
 import numpy as np
 
+class MLAttention(nn.Module):
+    """
+
+    """
+    def __init__(self, labels_num, hidden_size):
+        super(MLAttention, self).__init__()
+        self.attention = nn.Linear(hidden_size, labels_num, bias=False)
+        nn.init.xavier_uniform_(self.attention.weight)
+
+    def forward(self, inputs, masks):
+        masks = torch.unsqueeze(masks, 1)  # N, 1, L
+        attention = self.attention(inputs).transpose(1, 2).masked_fill(1.0 - masks, -np.inf)  # N, labels_num, L
+        attention = F.softmax(attention, -1)
+        return attention @ inputs   # N, labels_num, hidden_size
+
 class GraphConvolution(nn.Module):
     """
     Simple GCN layer, similar to https://arxiv.org/abs/1609.02907
@@ -60,6 +75,9 @@ class GCNBert(nn.Module):
         # self.linear0 = nn.Linear(768, 768)
         # self.w = nn.Parameter(torch.Tensor(768))
 
+        self.attention = nn.Linear(768, num_classes, bias=False)
+        nn.init.xavier_uniform_(self.attention.weight)
+
         #self.dropout = nn.Dropout(p=0.5)
         self.gc1 = GraphConvolution(768, 4000)
         self.relu1 = nn.LeakyReLU(0.2)
@@ -85,7 +103,7 @@ class GCNBert(nn.Module):
 
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
-            attention_mask=attention_mask)[0]
+            attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
         #print(token_feat.shape)
         # alpha = F.softmax(torch.matmul(self.tanh1(self.linear0(token_feat)), self.w), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
@@ -97,8 +115,8 @@ class GCNBert(nn.Module):
         # exit()
         # * inputs_tfidf.unsqueeze(-1)
 
-        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
+        # sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
+        #     / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
         #sentence_feat = token_feat[:,0,:]
 
@@ -124,8 +142,24 @@ class GCNBert(nn.Module):
         # concept_selector = self.fc_selector(sentence_feat)
         # concept_selector = concept_selector.tanh()
         #
-        x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
+
+
+
+        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
+        print(masks.shape)
+        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1.0 - masks, -np.inf)  # N, labels_num, L
+        attention = F.softmax(attention, -1)
+        print(attention.shape)
+        sentence_feat = attention @ token_feat   # N, labels_num, hidden_size
+        print(sentence_feat.shape)
+
+        #x = x.transpose(0, 1)
+        #x = torch.matmul(sentence_feat, x)
+        x = x.unsqueeze(0)
+        print(x.shape)
+        x = sentence_feat * x
+
+        exit()
 
         #
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
