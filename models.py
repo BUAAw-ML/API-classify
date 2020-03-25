@@ -88,12 +88,12 @@ class GCNBert(nn.Module):
         _adj = torch.FloatTensor(_adj)
         self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         # #
-        self.linear0 = nn.Linear(400, 1)
+        self.linear0 = nn.Linear(700, 1)
 
         #self.fc_hallucinator = nn.Linear(768, 108)
         #self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768, 400)
+        # self.linear1 = nn.Linear(768, 400)
         # self.relu2 = nn.LeakyReLU()
         # self.linear2 = nn.Linear(4000, num_classes)
 
