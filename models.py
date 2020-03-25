@@ -181,7 +181,7 @@ class GCNBert(nn.Module):
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
         # x = self.linear2(x)
-        return x
+        return attention_out
 
     def get_config_optim(self, lr, lrp):
         return [
