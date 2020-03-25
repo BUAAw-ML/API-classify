@@ -78,15 +78,15 @@ class GCNBert(nn.Module):
         self.attention = nn.Linear(768, num_classes, bias=False)
         nn.init.xavier_uniform_(self.attention.weight)
 
-        #self.dropout = nn.Dropout(p=0.5)
-        # self.gc1 = GraphConvolution(768, 4000)
-        # self.relu1 = nn.LeakyReLU(0.2)
-        # self.gc2 = GraphConvolution(4000, 768)
+        # self.dropout = nn.Dropout(p=0.5)
+        self.gc1 = GraphConvolution(768, 4000)
+        self.relu1 = nn.LeakyReLU(0.2)
+        self.gc2 = GraphConvolution(4000, 768)
 
 
-        # _adj = gen_A(num_classes, t, co_occur_mat)
-        # _adj = torch.FloatTensor(_adj)
-        # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
+        _adj = gen_A(num_classes, t, co_occur_mat)
+        _adj = torch.FloatTensor(_adj)
+        self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         # #
         self.linear0 = nn.Linear(768, 1)
 
@@ -180,8 +180,8 @@ class GCNBert(nn.Module):
     def get_config_optim(self, lr, lrp):
         return [
                 {'params': self.bert.parameters(), 'lr': lr * lrp},
-                # {'params': self.gc1.parameters(), 'lr': lr},
-                # {'params': self.gc2.parameters(), 'lr': lr},
+                {'params': self.gc1.parameters(), 'lr': lr},
+                {'params': self.gc2.parameters(), 'lr': lr},
                 ]
     # def get_config_optim(self, lr, lrp):
     #     return [
