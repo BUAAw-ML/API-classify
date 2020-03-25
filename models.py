@@ -93,7 +93,7 @@ class GCNBert(nn.Module):
         #self.fc_hallucinator = nn.Linear(768, 108)
         #self.fc_selector = nn.Linear(768, num_classes)
 
-        # self.linear1 = nn.Linear(768, 4000)
+        self.linear1 = nn.Linear(768, 400)
         # self.relu2 = nn.LeakyReLU()
         # self.linear2 = nn.Linear(4000, num_classes)
 
@@ -115,15 +115,15 @@ class GCNBert(nn.Module):
         # exit()
         # * inputs_tfidf.unsqueeze(-1)
 
-        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
+        # sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
+        #     / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
         #sentence_feat = token_feat[:,0,:]
 
-        embed = self.bert.get_input_embeddings()
-        tag_embedding = embed(encoded_tag)
-        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(tag_mask, dim=1, keepdim=True)
+        # embed = self.bert.get_input_embeddings()
+        # tag_embedding = embed(encoded_tag)
+        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+        #     / torch.sum(tag_mask, dim=1, keepdim=True)
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
@@ -131,9 +131,9 @@ class GCNBert(nn.Module):
         # tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
 
 
-        x = self.gc1(tag_embedding, self.adj)
-        x = self.relu1(x)
-        x = self.gc2(x, self.adj)
+        # x = self.gc1(tag_embedding, self.adj)
+        # x = self.relu1(x)
+        # x = self.gc2(x, self.adj)
 
         #
         # # values_memory = self.fc_hallucinator(sentence_feat)
@@ -143,29 +143,30 @@ class GCNBert(nn.Module):
         # concept_selector = concept_selector.tanh()
         #
 
+        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
+        masks = masks.byte()
+        masks=masks.cpu()
 
-
-        # masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        # masks = masks.byte()
-        # masks=masks.cpu()
-        #
-        # attention = self.attention(token_feat).transpose(1, 2)
-        # #print(type(attention))
-        # attention = attention.cpu()
-        # #print(type(attention))
-        # attention = attention.masked_fill(torch.ByteTensor(1 - masks).byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        # attention = attention.cuda(1)
-        # attention = F.softmax(attention, -1)
-        # #print(attention.shape)
-        # sentence_feat = attention @ token_feat   # N, labels_num, hidden_size
+        attention = self.attention(token_feat).transpose(1, 2)
+        #print(type(attention))
+        attention = attention.cpu()
+        #print(type(attention))
+        attention = attention.masked_fill(torch.ByteTensor(1 - masks).byte(), torch.tensor(-np.inf))  # N, labels_num, L
+        attention = attention.cuda(1)
+        attention = F.softmax(attention, -1)
+        #print(attention.shape)
+        sentence_feat = attention @ token_feat   # N, labels_num, hidden_size
         #print(sentence_feat.shape)
 
-        x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
+        # x = x.transpose(0, 1)
+        # x = torch.matmul(sentence_feat, x)
         #x = x.unsqueeze(0)
         #print(x.shape)
         #x = sentence_feat * x
-        #x = self.linear0(sentence_feat).squeeze(-1)
+        x = self.linear1(sentence_feat)
+        x = self.relu1(x)
+        x = self.linear0(x).squeeze(-1)
+
 
         #exit()
 
