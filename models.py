@@ -120,10 +120,10 @@ class GCNBert(nn.Module):
 
         #sentence_feat = token_feat[:,0,:]
 
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
@@ -131,9 +131,9 @@ class GCNBert(nn.Module):
         # tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
 
 
-        # x = self.gc1(tag_embedding, self.adj)
-        # x = self.relu1(x)
-        # x = self.gc2(x, self.adj)
+        x = self.gc1(tag_embedding, self.adj)
+        x = self.relu1(x)
+        x = self.gc2(x, self.adj)
 
         #
         # # values_memory = self.fc_hallucinator(sentence_feat)
@@ -162,10 +162,10 @@ class GCNBert(nn.Module):
         # x = torch.matmul(sentence_feat, x)
         #x = x.unsqueeze(0)
         #print(x.shape)
-        #x = sentence_feat * x
+        x = sentence_feat * x
         x = self.linear1(sentence_feat)
-        x = self.relu1(x)
-        x = self.linear0(x).squeeze(-1)
+        # x = self.relu1(x)
+        # x = self.linear0(x).squeeze(-1)
 
 
         #exit()
