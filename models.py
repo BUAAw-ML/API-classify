@@ -118,12 +118,12 @@ class GCNBert(nn.Module):
         # sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
         #     / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
-        sentence_feat = token_feat[:,0,:]
-
-        embed = self.bert.get_input_embeddings()
-        tag_embedding = embed(encoded_tag)
-        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(tag_mask, dim=1, keepdim=True)
+        # sentence_feat = token_feat[:,0,:]
+        #
+        # embed = self.bert.get_input_embeddings()
+        # tag_embedding = embed(encoded_tag)
+        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+        #     / torch.sum(tag_mask, dim=1, keepdim=True)
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
@@ -131,9 +131,9 @@ class GCNBert(nn.Module):
         # tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
 
 
-        x = self.gc1(tag_embedding, self.adj)
-        x = self.relu1(x)
-        x = self.gc2(x, self.adj)
+        # x = self.gc1(tag_embedding, self.adj)
+        # x = self.relu1(x)
+        # x = self.gc2(x, self.adj)
 
         #
         # # values_memory = self.fc_hallucinator(sentence_feat)
@@ -144,10 +144,14 @@ class GCNBert(nn.Module):
         #
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
+
         masks = masks.byte()
         masks=masks.cpu()
 
-        attention = self.attention(token_feat).transpose(1, 2)
+
+        attention = self.attention(token_feat)
+        attention = torch.matmul(attention, self.adj)
+        attention = attention.transpose(1, 2)
         #print(type(attention))
         attention = attention.cpu()
         #print(type(attention))
@@ -158,8 +162,8 @@ class GCNBert(nn.Module):
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
         #print(sentence_feat.shape)
 
-        x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
+        # x = x.transpose(0, 1)
+        # x = torch.matmul(sentence_feat, x)
         #x = x.unsqueeze(0)
         #print(x.shape)
         #x = sentence_feat * x
@@ -167,7 +171,7 @@ class GCNBert(nn.Module):
         # x = self.relu1(x)
         attention_out = self.linear0(attention_out).squeeze(-1)
 
-        x = attention_out + x
+        # x = attention_out + x
 
 
         #exit()
