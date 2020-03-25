@@ -149,7 +149,7 @@ class GCNBert(nn.Module):
 
         attention = self.attention(token_feat).transpose(1, 2)
         print(type(attention))
-        attention.cpu()
+        attention = attention.cpu()
         print(type(attention))
         attention = attention.masked_fill(torch.ByteTensor(1.0 - masks), torch.tensor(-np.inf))  # N, labels_num, L
         attention = attention.cuda(1)
