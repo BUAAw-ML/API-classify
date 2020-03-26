@@ -156,7 +156,7 @@ class GCNBert(nn.Module):
         #x = sentence_feat * x
         # x = self.linear1(sentence_feat)
         # x = self.relu1(x)
-        sentence_feat = self.linear0(attention_out).squeeze(-1)
+        x = self.linear0(x).squeeze(-1)
 
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
