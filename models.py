@@ -38,7 +38,7 @@ class GraphConvolution(nn.Module):
             self.bias = Parameter(torch.Tensor(1, 1, out_features))
         else:
             self.register_parameter('bias', None)
-        self.reset_parameters()
+        # self.reset_parameters()
 
     def reset_parameters(self):
         stdv = 1. / math.sqrt(self.weight.size(1))
@@ -148,7 +148,7 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        #x = self.gc1(attention_out, self.adj)
+        x = self.gc1(attention_out, self.adj)
         # x = self.relu1(x)
         # x = self.gc2(x, self.adj)
 
@@ -157,8 +157,8 @@ class GCNBert(nn.Module):
         #x = sentence_feat * x
         # x = self.linear1(sentence_feat)
         # x = self.relu1(x)
-        #x = x.squeeze(-1)
-        x = self.linear0(attention_out).squeeze(-1)
+        x = x.squeeze(-1)
+        #x = self.linear0(attention_out).squeeze(-1)
 
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
