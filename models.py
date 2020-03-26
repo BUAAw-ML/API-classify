@@ -50,11 +50,14 @@ class GraphConvolution(nn.Module):
 
     def forward(self, input, adj):
         #support = torch.matmul(input, self.weight)
-        support = self.linear1(input)
+        # support = self.linear1(input)
+        #
+        # #output = support
+        # output = torch.matmul(support.transpose(1, 2), adj)
+        # output = output.transpose(1, 2)
 
-        #output = support
-        output = torch.matmul(support.transpose(1, 2), adj)
-        output = output.transpose(1, 2)
+        support = torch.matmul(input, self.weight)
+        output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
@@ -85,9 +88,9 @@ class GCNBert(nn.Module):
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 400)
+        self.gc1 = GraphConvolution(768, 1500)
         # self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(400, 1)
+        self.gc2 = GraphConvolution(1500, 768)
 
 
         _adj = gen_A(num_classes, t, co_occur_mat)
@@ -126,10 +129,10 @@ class GCNBert(nn.Module):
 
         # sentence_feat = token_feat[:,0,:]
         #
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
@@ -152,7 +155,7 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        x = self.gc1(attention_out, self.adj)
+        x = self.gc1(tag_embedding, self.adj)
         x = F.relu(x)
         x = self.gc2(x, self.adj)
 
@@ -161,8 +164,10 @@ class GCNBert(nn.Module):
         #x = sentence_feat * x
         # x = self.linear1(sentence_feat)
         # x = self.relu1(x)
-        x = x.squeeze(-1)
-        # x = self.linear0(attention_out).squeeze(-1)
+        # x = x.squeeze(-1)
+        x = x[np.newaxis, :]
+        attention_out = torch.multply(attention_out, x)
+        x = self.linear0(attention_out).squeeze(-1)
 
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
