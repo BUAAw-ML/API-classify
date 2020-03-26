@@ -104,7 +104,7 @@ class GCNBert(nn.Module):
 
         # self.linear1 = nn.Linear(768, 400)
         # self.relu2 = nn.LeakyReLU()
-        # self.linear2 = nn.Linear(4000, num_classes)
+        self.linear2 = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
 
@@ -165,10 +165,9 @@ class GCNBert(nn.Module):
         # x = self.linear1(sentence_feat)
         # x = self.relu1(x)
         # x = x.squeeze(-1)
-        attention_out = torch.sum(attention_out, dim=1)
-        print(attention_out.shape)
-        exit()
-        x = self.linear0(attention_out).squeeze(-1)
+        x = torch.sum(attention_out, dim=1)
+
+        # x = self.linear0(attention_out).squeeze(-1)
 
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
@@ -178,7 +177,7 @@ class GCNBert(nn.Module):
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
-        # x = self.linear2(x)
+        x = self.linear2(x)
         return x
 
     def get_config_optim(self, lr, lrp):
