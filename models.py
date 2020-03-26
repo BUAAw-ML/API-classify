@@ -129,10 +129,10 @@ class GCNBert(nn.Module):
 
         # sentence_feat = token_feat[:,0,:]
         #
-        embed = self.bert.get_input_embeddings()
-        tag_embedding = embed(encoded_tag)
-        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(tag_mask, dim=1, keepdim=True)
+        # embed = self.bert.get_input_embeddings()
+        # tag_embedding = embed(encoded_tag)
+        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+        #     / torch.sum(tag_mask, dim=1, keepdim=True)
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
@@ -155,9 +155,9 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        x = self.gc1(tag_embedding, self.adj)
-        x = F.relu(x)
-        x = self.gc2(x, self.adj)
+        # x = self.gc1(tag_embedding, self.adj)
+        # x = F.relu(x)
+        # x = self.gc2(x, self.adj)
 
         #x = x.unsqueeze(0)
         #print(x.shape)
@@ -165,8 +165,9 @@ class GCNBert(nn.Module):
         # x = self.linear1(sentence_feat)
         # x = self.relu1(x)
         # x = x.squeeze(-1)
-        x = x[np.newaxis, :]
-        attention_out = torch.mul(attention_out, x)
+        attention_out = attention_out.sum(axis=1)
+        print(attention_out.shape)
+        exit()
         x = self.linear0(attention_out).squeeze(-1)
 
         # x = x.transpose(0, 1)
