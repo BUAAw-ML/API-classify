@@ -144,9 +144,7 @@ class GCNBert(nn.Module):
         #
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        masks = masks.byte()
-        #masks = masks.cpu()
-        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks, torch.tensor(-np.inf))  # N, labels_num, L
+        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
@@ -158,18 +156,16 @@ class GCNBert(nn.Module):
         # x = self.linear1(sentence_feat)
         # x = self.relu1(x)
         attention_out = self.linear0(attention_out).squeeze(-1)
+        x = torch.matmul(attention_out, self.adj)
 
         # x = attention_out + x
 
 
-        #exit()
-
-        #
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
         # x = self.linear2(x)
-        return attention_out
+        return x
 
     def get_config_optim(self, lr, lrp):
         return [
