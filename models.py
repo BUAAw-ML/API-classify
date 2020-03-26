@@ -166,7 +166,7 @@ class GCNBert(nn.Module):
         # x = self.relu1(x)
         # x = x.squeeze(-1)
         x = x[np.newaxis, :]
-        attention_out = torch.multply(attention_out, x)
+        attention_out = torch.mul(attention_out, x)
         x = self.linear0(attention_out).squeeze(-1)
 
         # x = x.transpose(0, 1)
