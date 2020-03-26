@@ -151,8 +151,8 @@ class GCNBert(nn.Module):
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
         x = self.gc1(attention_out, self.adj)
-        x = self.relu1(x)
-        x = self.gc2(x, self.adj)
+        # x = self.relu1(x)
+        # x = self.gc2(x, self.adj)
 
         #x = x.unsqueeze(0)
         #print(x.shape)
