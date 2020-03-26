@@ -38,7 +38,7 @@ class GraphConvolution(nn.Module):
             self.bias = Parameter(torch.Tensor(1, 1, out_features))
         else:
             self.register_parameter('bias', None)
-        # self.reset_parameters()
+        self.reset_parameters()
 
     def reset_parameters(self):
         stdv = 1. / math.sqrt(self.weight.size(1))
@@ -81,9 +81,9 @@ class GCNBert(nn.Module):
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 1)
+        self.gc1 = GraphConvolution(768, 1500)
         self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(400, 1)
+        self.gc2 = GraphConvolution(1500, 1)
 
 
         _adj = gen_A(num_classes, t, co_occur_mat)
@@ -149,8 +149,8 @@ class GCNBert(nn.Module):
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
         x = self.gc1(attention_out, self.adj)
-        # x = self.relu1(x)
-        # x = self.gc2(x, self.adj)
+        x = self.relu1(x)
+        x = self.gc2(x, self.adj)
 
         #x = x.unsqueeze(0)
         #print(x.shape)
