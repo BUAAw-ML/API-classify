@@ -85,8 +85,8 @@ class GCNBert(nn.Module):
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 1)
-        self.relu1 = nn.LeakyReLU(0.2)
+        self.gc1 = GraphConvolution(768, 400)
+        # self.relu1 = nn.LeakyReLU(0.2)
         self.gc2 = GraphConvolution(400, 1)
 
 
@@ -152,17 +152,17 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        # x = self.gc1(attention_out, self.adj)
-        # x = self.relu1(x)
-        # x = self.gc2(x, self.adj)
+        x = self.gc1(attention_out, self.adj)
+        x = F.relu(x)
+        x = self.gc2(x, self.adj)
 
         #x = x.unsqueeze(0)
         #print(x.shape)
         #x = sentence_feat * x
         # x = self.linear1(sentence_feat)
         # x = self.relu1(x)
-        # x = x.squeeze(-1)
-        x = self.linear0(attention_out).squeeze(-1)
+        x = x.squeeze(-1)
+        # x = self.linear0(attention_out).squeeze(-1)
 
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
