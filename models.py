@@ -111,12 +111,12 @@ class GCNBert(nn.Module):
         self.weight1 = torch.nn.Linear(768, 1)
         self.weight2 = torch.nn.Linear(768, 1)
         self.lstm_hid_dim = 768
-        self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=4,
+        self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
                             batch_first=True, bidirectional=True)
 
     def init_hidden(self, batch_size):
-        return (torch.randn(8, batch_size, self.lstm_hid_dim).cuda(1),
-                torch.randn(8, batch_size, self.lstm_hid_dim).cuda(1))
+        return (torch.randn(4, batch_size, self.lstm_hid_dim).cuda(1),
+                torch.randn(4, batch_size, self.lstm_hid_dim).cuda(1))
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
 
