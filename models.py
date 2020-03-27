@@ -162,7 +162,7 @@ class GCNBert(nn.Module):
         # x = self.linear1(sentence_feat)
         # x = self.relu1(x)
         # x = x.squeeze(-1)
-        x = torch.sum(attention_out, dim=1) / self.n_classes
+        x = torch.sum(attention_out, dim=1) / self.num_classes
 
         # x = self.linear0(attention_out).squeeze(-1)
 
