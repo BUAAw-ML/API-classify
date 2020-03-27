@@ -76,7 +76,7 @@ class GCNBert(nn.Module):
 
         self.add_module('bert', bert)
         for m in self.bert.parameters():
-            m.requires_grad = False
+            m.requires_grad = True
 
         self.num_classes = num_classes
 
@@ -111,7 +111,7 @@ class GCNBert(nn.Module):
         self.weight1 = torch.nn.Linear(768, 1)
         self.weight2 = torch.nn.Linear(768, 1)
         self.lstm_hid_dim = 768
-        self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=1,
+        self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=4,
                             batch_first=True, bidirectional=True)
 
     def init_hidden(self, batch_size):
