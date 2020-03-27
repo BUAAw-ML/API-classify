@@ -115,8 +115,8 @@ class GCNBert(nn.Module):
                             batch_first=True, bidirectional=True)
 
     def init_hidden(self, batch_size):
-        return (torch.randn(2, batch_size, self.lstm_hid_dim).cuda(1),
-                torch.randn(2, batch_size, self.lstm_hid_dim).cuda(1))
+        return (torch.randn(8, batch_size, self.lstm_hid_dim).cuda(1),
+                torch.randn(8, batch_size, self.lstm_hid_dim).cuda(1))
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
 
