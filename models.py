@@ -180,7 +180,7 @@ class GCNBert(nn.Module):
         weight2 = 1 - weight1
 
         doc = weight1 * label_att + weight2 * attention_out
-        avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
+        avg_sentence_embeddings = torch.sum(doc, 1)# / self.num_classes
 
         pred = torch.sigmoid(self.output_layer(avg_sentence_embeddings))
 
