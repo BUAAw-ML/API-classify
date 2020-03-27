@@ -113,9 +113,9 @@ class GCNBert(nn.Module):
         self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=1,
                             batch_first=True, bidirectional=True)
 
-    def init_hidden(self):
-        return (torch.randn(2, 16, self.lstm_hid_dim).cuda(1),
-                torch.randn(2, 16, self.lstm_hid_dim).cuda(1))
+    def init_hidden(self, batch_size):
+        return (torch.randn(2, batch_size, self.lstm_hid_dim).cuda(1),
+                torch.randn(2, batch_size, self.lstm_hid_dim).cuda(1))
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
 
@@ -123,7 +123,7 @@ class GCNBert(nn.Module):
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
-        hidden_state = self.init_hidden()
+        hidden_state = self.init_hidden(token_feat.shape[0])
         token_feat, _ = self.lstm(token_feat, hidden_state)
 
         #print(token_feat.shape)
