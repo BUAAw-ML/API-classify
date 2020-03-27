@@ -102,7 +102,7 @@ class GCNBert(nn.Module):
         #self.fc_hallucinator = nn.Linear(768, 108)
         #self.fc_selector = nn.Linear(768, num_classes)
 
-        # self.linear1 = nn.Linear(768, 400)
+        self.linear1 = nn.Linear(300, 768)
         # self.relu2 = nn.LeakyReLU()
         self.output_layer = nn.Linear(768, num_classes)
 
@@ -127,21 +127,21 @@ class GCNBert(nn.Module):
         # exit()
         # * inputs_tfidf.unsqueeze(-1)
 
-        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
+        # sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
+        #     / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
         # sentence_feat = token_feat[:,0,:]
         #
-        embed = self.bert.get_input_embeddings()
-        tag_embedding = embed(encoded_tag)
-        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(tag_mask, dim=1, keepdim=True)
+        # embed = self.bert.get_input_embeddings()
+        # tag_embedding = embed(encoded_tag)
+        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+        #     / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        # with open(tag_embedding_file, 'rb') as fp:
-        #     feats = pkl.load(fp)#, encoding='utf-8')
-        # tag_embedding2 = feats.tolist()
-        # tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
-
+        with open(tag_embedding_file, 'rb') as fp:
+            feats = pkl.load(fp)#, encoding='utf-8')
+        tag_embedding = feats.tolist()
+        tag_embedding = torch.tensor(tag_embedding).cuda(1)
+        tag_embedding = self.linear1(tag_embedding)
         #
         # # values_memory = self.fc_hallucinator(sentence_feat)
         # # values_memory = values_memory.softmax(dim=1)
