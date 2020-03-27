@@ -109,13 +109,22 @@ class GCNBert(nn.Module):
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
         self.weight1 = torch.nn.Linear(768, 1)
         self.weight2 = torch.nn.Linear(768, 1)
+        self.lstm_hid_dim = 384
+        self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=1,
+                            batch_first=True, bidirectional=True)
 
+    def init_hidden(self):
+        return (torch.randn(2, 16, self.lstm_hid_dim).cuda(1),
+                torch.randn(2, 16, self.lstm_hid_dim).cuda(1))
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
 
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
+
+        hidden_state = self.init_hidden()
+        token_feat, _ = self.lstm(token_feat, hidden_state)
 
         #print(token_feat.shape)
         # alpha = F.softmax(torch.matmul(self.tanh1(self.linear0(token_feat)), self.w), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
@@ -132,16 +141,16 @@ class GCNBert(nn.Module):
 
         # sentence_feat = token_feat[:,0,:]
         #
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        with open(tag_embedding_file, 'rb') as fp:
-            feats = pkl.load(fp)#, encoding='utf-8')
-        tag_embedding = feats.tolist()
-        tag_embedding = torch.tensor(tag_embedding).cuda(1)
-        tag_embedding = self.linear1(tag_embedding)
+        # with open(tag_embedding_file, 'rb') as fp:
+        #     feats = pkl.load(fp)#, encoding='utf-8')
+        # tag_embedding = feats.tolist()
+        # tag_embedding = torch.tensor(tag_embedding).cuda(1)
+        # tag_embedding = self.linear1(tag_embedding)
         #
         # # values_memory = self.fc_hallucinator(sentence_feat)
         # # values_memory = values_memory.softmax(dim=1)
