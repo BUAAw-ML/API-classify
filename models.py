@@ -124,9 +124,9 @@ class GCNBert(nn.Module):
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
-        hidden_state = self.init_hidden(token_feat.shape[0])
-        token_feat, _ = self.lstm(token_feat, hidden_state)
-        token_feat = self.linear2(token_feat)
+        # hidden_state = self.init_hidden(token_feat.shape[0])
+        # token_feat, _ = self.lstm(token_feat, hidden_state)
+        # token_feat = self.linear2(token_feat)
 
         #print(token_feat.shape)
         # alpha = F.softmax(torch.matmul(self.tanh1(self.linear0(token_feat)), self.w), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
@@ -138,8 +138,8 @@ class GCNBert(nn.Module):
         # exit()
         # * inputs_tfidf.unsqueeze(-1)
 
-        # sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
+        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
         # sentence_feat = token_feat[:,0,:]
         #
@@ -166,12 +166,12 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        # x = self.gc1(tag_embedding, self.adj)
-        # x = self.relu1(x)
-        # x = self.gc2(x, self.adj)
+        x = self.gc1(tag_embedding, self.adj)
+        x = self.relu1(x)
+        x = self.gc2(x, self.adj)
         #
-        # x = x.transpose(0, 1)
-        # x = torch.matmul(sentence_feat, x)
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
 
         #x = x.unsqueeze(0)
         #print(x.shape)
@@ -185,18 +185,18 @@ class GCNBert(nn.Module):
         m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
         label_att = torch.bmm(m1, token_feat)
 
-        weight1 = torch.sigmoid(self.weight1(label_att))
+        weight1 = torch.sigmoid(x)
         weight2 = torch.sigmoid(self.weight2(attention_out))
         weight1 = weight1 / (weight1 + weight2)
         weight2 = 1 - weight1
 
-        doc = weight1 * label_att + weight2 * attention_out
+        pred = weight1 * x + weight2 * self.linear0(attention_out).squeeze(-1)
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
 
         # pred = torch.sigmoid(self.output_layer(avg_sentence_embeddings))
 
-        pred = self.linear0(doc).squeeze(-1)
+        # pred = self.linear0(doc).squeeze(-1)
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
