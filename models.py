@@ -104,12 +104,13 @@ class GCNBert(nn.Module):
 
         self.linear1 = nn.Linear(300, 768)
         # self.relu2 = nn.LeakyReLU()
+        self.linear2 = nn.Linear(768 * 2, 768)
         self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
         self.weight1 = torch.nn.Linear(768, 1)
         self.weight2 = torch.nn.Linear(768, 1)
-        self.lstm_hid_dim = 384
+        self.lstm_hid_dim = 768
         self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=1,
                             batch_first=True, bidirectional=True)
 
@@ -125,6 +126,7 @@ class GCNBert(nn.Module):
 
         hidden_state = self.init_hidden(token_feat.shape[0])
         token_feat, _ = self.lstm(token_feat, hidden_state)
+        token_feat = self.linear2(token_feat)
 
         #print(token_feat.shape)
         # alpha = F.softmax(torch.matmul(self.tanh1(self.linear0(token_feat)), self.w), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
