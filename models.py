@@ -104,9 +104,12 @@ class GCNBert(nn.Module):
 
         # self.linear1 = nn.Linear(768, 400)
         # self.relu2 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(768, num_classes)
+        self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
+        self.weight1 = torch.nn.Linear(768, 1)
+        self.weight2 = torch.nn.Linear(768, 1)
+
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
 
@@ -152,12 +155,12 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        x = self.gc1(tag_embedding, self.adj)
-        x = self.relu1(x)
-        x = self.gc2(x, self.adj)
-
-        x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
+        # x = self.gc1(tag_embedding, self.adj)
+        # x = self.relu1(x)
+        # x = self.gc2(x, self.adj)
+        #
+        # x = x.transpose(0, 1)
+        # x = torch.matmul(sentence_feat, x)
 
         #x = x.unsqueeze(0)
         #print(x.shape)
@@ -167,14 +170,27 @@ class GCNBert(nn.Module):
         # x = x.squeeze(-1)
         # x = torch.sum(attention_out, dim=1)
 
-        attention_out = self.linear0(attention_out).squeeze(-1)
+        m1 = torch.bmm(tag_embedding.unsqueeze(0), token_feat.transpose(1, 2))
+        label_att = torch.bmm(m1, token_feat)
+
+        weight1 = torch.sigmoid(self.weight1(label_att))
+        weight2 = torch.sigmoid(self.weight2(attention_out))
+        weight1 = weight1 / (weight1 + weight2)
+        weight2 = 1 - weight1
+
+        doc = weight1 * label_att + weight2 * attention_out
+        avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
+
+        pred = torch.sigmoid(self.output_layer(avg_sentence_embeddings))
+
+        # attention_out = self.linear0(attention_out).squeeze(-1)
 
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
         # x = self.linear2(x)
-        return x + attention_out
+        return pred
 
     def get_config_optim(self, lr, lrp):
         return [
