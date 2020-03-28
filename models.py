@@ -171,7 +171,8 @@ class GCNBert(nn.Module):
         x = self.gc2(x, self.adj)
         #
         x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x).unsqueeze(-1)
+        x = torch.matmul(token_feat, x)#.unsqueeze(-1)
+        label_att = torch.bmm(x.transpose(1, 2), token_feat)
 
         #x = x.unsqueeze(0)
         #print(x.shape)
@@ -185,27 +186,27 @@ class GCNBert(nn.Module):
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
         # label_att = torch.bmm(m1, token_feat)
 
-        weight1 = torch.sigmoid(x)
+        weight1 = torch.sigmoid(self.weight1(label_att))
 
         weight2 = torch.sigmoid(self.weight2(attention_out))
 
         weight1 = weight1 / (weight1 + weight2)
         weight2 = 1 - weight1
 
-        pred = weight1 * x + weight2 * self.linear0(attention_out)
+        doc = weight1 * label_att + weight2 * attention_out
 
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
 
         # pred = torch.sigmoid(self.output_layer(avg_sentence_embeddings))
 
-        # pred = self.linear0(doc).squeeze(-1)
+        pred = self.linear0(doc).squeeze(-1)
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
         # x = self.linear2(x)
-        return pred.squeeze(-1)
+        return pred
 
     def get_config_optim(self, lr, lrp):
         return [
