@@ -99,7 +99,7 @@ class GCNBert(nn.Module):
         # #
         self.linear0 = nn.Linear(768, 1)
 
-        self.fc_hallucinator = nn.Linear(768, 108)
+        self.fc_hallucinator = nn.Linear(768, self.num_classes)
         #self.fc_selector = nn.Linear(768, num_classes)
 
         self.linear1 = nn.Linear(300, 768)
