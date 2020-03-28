@@ -204,7 +204,7 @@ class GCNBert(nn.Module):
         # pred = torch.sigmoid(self.output_layer(avg_sentence_embeddings))
 
         pred = self.linear0(attention_out).squeeze(-1)
-        pred = torch.matmul(pred, self.adj.transpose(0, 1))
+        pred = torch.matmul(pred, self.adj)
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
