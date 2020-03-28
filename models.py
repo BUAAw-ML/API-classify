@@ -95,8 +95,10 @@ class GCNBert(nn.Module):
 
         _adj = gen_A(num_classes, t, co_occur_mat)
         _adj = torch.FloatTensor(_adj)
-        self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
-        # #
+        # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
+        self.adj = nn.Parameter(_adj, requires_grad=False)
+
+
         self.linear0 = nn.Linear(768, 1)
 
         self.fc_hallucinator = nn.Linear(768, self.num_classes)
@@ -202,6 +204,7 @@ class GCNBert(nn.Module):
         # pred = torch.sigmoid(self.output_layer(avg_sentence_embeddings))
 
         pred = self.linear0(attention_out).squeeze(-1)
+        pred = torch.matmul(self.adj.unsqueeze(0), pred)
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
