@@ -89,11 +89,8 @@ class GCNBert(nn.Module):
 
         # self.dropout = nn.Dropout(p=0.5)
         self.gc1 = GraphConvolution(768, 2000)
-        self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(2000, 2000)
-        self.relu2 = nn.LeakyReLU(0.2)
-        self.gc3 = GraphConvolution(2000, 768)
-
+        self.relu1 = nn.LeakyReLU()
+        self.gc2 = GraphConvolution(2000, 768)
 
         _adj = gen_A(num_classes, t, co_occur_mat)
         _adj = torch.FloatTensor(_adj)
@@ -174,8 +171,6 @@ class GCNBert(nn.Module):
         x = self.gc1(tag_embedding, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
-        x = self.relu2(x)
-        x = self.gc3(x, self.adj)
 
         #
         x = x.transpose(0, 1)
@@ -224,7 +219,6 @@ class GCNBert(nn.Module):
                 {'params': self.bert.parameters(), 'lr': lr * lrp},
                 {'params': self.gc1.parameters(), 'lr': lr},
                 {'params': self.gc2.parameters(), 'lr': lr},
-                {'params': self.gc3.parameters(), 'lr': lr},
                 ]
     # def get_config_optim(self, lr, lrp):
     #     return [
