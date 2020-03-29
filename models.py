@@ -89,7 +89,7 @@ class GCNBert(nn.Module):
 
         # self.dropout = nn.Dropout(p=0.5)
         self.gc1 = GraphConvolution(768, 2000)
-        self.relu1 = nn.LeakyReLU()
+        self.relu1 = nn.LeakyReLU(0.2)
         self.gc2 = GraphConvolution(2000, 768)
 
         _adj = gen_A(num_classes, t, co_occur_mat)
@@ -163,10 +163,10 @@ class GCNBert(nn.Module):
         # concept_selector = concept_selector.tanh()
         #
 
-        # masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        # attention = F.softmax(attention, -1)
-        # attention_out = attention @ token_feat   # N, labels_num, hidden_size
+        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
+        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
+        attention = F.softmax(attention, -1)
+        attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
         x = self.gc1(tag_embedding, self.adj)
         x = self.relu1(x)
@@ -174,7 +174,11 @@ class GCNBert(nn.Module):
 
         #
         x = x.transpose(0, 1)
-        pred = torch.matmul(sentence_feat, x)
+        x = torch.matmul(sentence_feat, x)
+
+        pred = attention_out * x
+        print(pred.shape)
+        exit()
         # x = torch.matmul(token_feat, x)#.unsqueeze(-1)
         # label_att = torch.bmm(x.transpose(1, 2), token_feat)
 
