@@ -88,9 +88,9 @@ class GCNBert(nn.Module):
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 1500)
+        self.gc1 = GraphConvolution(768, 8000)
         self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(1500, 768)
+        self.gc2 = GraphConvolution(8000, 768)
 
 
         _adj = gen_A(num_classes, t, co_occur_mat)
