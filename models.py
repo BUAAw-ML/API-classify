@@ -39,11 +39,12 @@ class GraphConvolution(nn.Module):
         # support = self.linear1(input)
         #
         # #output = support
-        # output = torch.matmul(support.transpose(1, 2), adj)
-        # output = output.transpose(1, 2)
-
         support = torch.matmul(input, self.weight)
-        output = torch.matmul(adj, support)
+        output = torch.matmul(support.transpose(1, 2), adj)
+        output = output.transpose(1, 2)
+
+        # support = torch.matmul(input, self.weight)
+        # output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
@@ -131,10 +132,10 @@ class GCNBert(nn.Module):
 
         # sentence_feat = token_feat[:,0,:]
         #
-        embed = self.bert.get_input_embeddings()
-        tag_embedding = embed(encoded_tag)
-        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(tag_mask, dim=1, keepdim=True)
+        # embed = self.bert.get_input_embeddings()
+        # tag_embedding = embed(encoded_tag)
+        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+        #     / torch.sum(tag_mask, dim=1, keepdim=True)
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
@@ -157,21 +158,22 @@ class GCNBert(nn.Module):
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
 
-        x = self.gc1(tag_embedding, self.adj)
+        x = self.gc1(attention_out, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
-        x = x.transpose(0, 1)
+        pred = torch.sum(x, -1)
+
+        # x = x.transpose(0, 1)
         # y = torch.matmul(sentence_feat, y)
 
         # pred = y + attention_out
 
-        x = torch.matmul(attention_out, x)
-
-        pred = x[0,:,:].diagonal().unsqueeze(0)
-        for i in range(1,x.shape[0]):
-            pred = torch.cat((pred, x[i,:,:].diagonal().unsqueeze(0)),0)
-
+        # x = torch.matmul(attention_out, x)
+        #
+        # pred = x[0,:,:].diagonal().unsqueeze(0)
+        # for i in range(1,x.shape[0]):
+        #     pred = torch.cat((pred, x[i,:,:].diagonal().unsqueeze(0)),0)
 
         # x = torch.matmul(token_feat, x)#.unsqueeze(-1)
         # label_att = torch.bmm(x.transpose(1, 2), token_
