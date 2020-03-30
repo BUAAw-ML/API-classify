@@ -167,9 +167,9 @@ class GCNBert(nn.Module):
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
 
+        pred = attention_out + x
 
-
-        pred = self.weight0(torch.cat((x.unsqueeze(-1), attention_out.unsqueeze(-1)),2)).squeeze(-1)
+        # pred = self.weight0(torch.cat((x.unsqueeze(-1), attention_out.unsqueeze(-1)),2)).squeeze(-1)
 
         # x = torch.matmul(attention_out, x)
         #
