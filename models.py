@@ -149,8 +149,8 @@ class GCNBert(nn.Module):
         # concept_selector = concept_selector.tanh()
         #
 
-        # masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        attention = self.attention(token_feat).transpose(1, 2)#.masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
+        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
+        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
@@ -174,8 +174,9 @@ class GCNBert(nn.Module):
         #x = sentence_feat * x
         # x = self.linear1(sentence_feat)
         # x = self.relu1(x)
-        # x = x.squeeze(-1)
-        # x = torch.sum(attention_out, dim=1)
+        #
+        x = torch.sum(attention_out, dim=1)
+        pred = x.squeeze(-1)
 
 
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
@@ -196,7 +197,7 @@ class GCNBert(nn.Module):
 
         # pred = torch.sigmoid(self.output_layer(avg_sentence_embeddings))
 
-        pred = self.linear0(attention_out).squeeze(-1)
+        # pred = self.linear0(attention_out).squeeze(-1)
         # pred = torch.matmul(pred, self.adj)
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
