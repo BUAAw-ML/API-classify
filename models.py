@@ -176,7 +176,10 @@ class GCNBert(nn.Module):
         x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
 
-        pred =  torch.matmul(attention_out, x)
+        x = torch.matmul(attention_out, x)
+        pred = x[0,:,:].diagonal()
+        for i in range(1,x.shape[0]):
+            pred = torch.cat(pred, x[i,:,:].diagonal(),0)
         print(pred.shape)
         exit()
         # x = torch.matmul(token_feat, x)#.unsqueeze(-1)
