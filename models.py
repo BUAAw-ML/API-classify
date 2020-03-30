@@ -186,9 +186,6 @@ class GCNBert(nn.Module):
         weight1 = torch.sigmoid(self.weight1(x.unsqueeze(0))).squeeze(-1)
 
         weight2 = torch.sigmoid(self.weight2(attention_out)).squeeze(-1)
-        print(weight1)
-        print(weight2)
-        exit()
 
         weight1 = weight1 / (weight1 + weight2)
         weight2 = 1 - weight1
