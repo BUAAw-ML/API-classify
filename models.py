@@ -70,7 +70,7 @@ class GCNBert(nn.Module):
         # self.linear0 = nn.Linear(768, 768)
         # self.w = nn.Parameter(torch.Tensor(768))
 
-        self.attention = nn.Linear(768, num_classes, bias=False)
+        self.attention = nn.Linear(768, 1, bias=False) #num_classes
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
@@ -149,22 +149,20 @@ class GCNBert(nn.Module):
         # concept_selector = concept_selector.tanh()
         #
 
-        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
+        # masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
+        attention = self.attention(token_feat).transpose(1, 2)#.masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
         # attention_out = torch.sum(attention_out, dim=2)
-        attention_out = torch.sum(attention_out, 1) / self.num_classes
+        # attention_out = torch.sum(attention_out, 1) / self.num_classes
 
         x = self.gc1(tag_embedding, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
-
-
         y = x.transpose(0, 1)
-        pred = torch.matmul(attention_out, y)
+        pred = torch.matmul(attention_out.squeeze(1), y)
 
         # x = torch.matmul(attention_out, x)
         # pred = x[0,:,:].diagonal().unsqueeze(0)
