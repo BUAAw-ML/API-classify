@@ -70,7 +70,7 @@ class GCNBert(nn.Module):
         # self.linear0 = nn.Linear(768, 768)
         # self.w = nn.Parameter(torch.Tensor(768))
 
-        self.attention = nn.Linear(768, 1, bias=False) #num_classes
+        self.attention = nn.Linear(768, num_classes, bias=False) #num_classes
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
