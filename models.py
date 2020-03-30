@@ -177,6 +177,7 @@ class GCNBert(nn.Module):
         #
         x = torch.sum(attention_out, dim=2)
         pred = x.squeeze(-1)
+        pred -= torch.mean(pred,dim =1,keepdim = True)
 
 
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
