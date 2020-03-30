@@ -101,20 +101,20 @@ class GCNBert(nn.Module):
 
         self.linear0 = nn.Linear(768, 1)
 
-        self.fc_hallucinator = nn.Linear(768, self.num_classes)
+        # self.fc_hallucinator = nn.Linear(768, self.num_classes)
         #self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(300, 768)
-        # self.relu2 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(768 * 2, 768)
-        self.output_layer = nn.Linear(768, num_classes)
+        # self.linear1 = nn.Linear(300, 768)
+        # # self.relu2 = nn.LeakyReLU()
+        # self.linear2 = nn.Linear(768 * 2, 768)
+        # self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
-        self.weight1 = torch.nn.Linear(768, 1)
-        self.weight2 = torch.nn.Linear(768, 1)
-        self.lstm_hid_dim = 768
-        self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
-                            batch_first=True, bidirectional=True)
+        # self.weight1 = torch.nn.Linear(768, 1)
+        # self.weight2 = torch.nn.Linear(768, 1)
+        # self.lstm_hid_dim = 768
+        # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
+        #                     batch_first=True, bidirectional=True)
 
     def init_hidden(self, batch_size):
         return (torch.randn(4, batch_size, self.lstm_hid_dim).cuda(1),
