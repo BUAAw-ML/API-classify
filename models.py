@@ -96,8 +96,8 @@ class GCNBert(nn.Module):
         # self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
-        # self.weight1 = torch.nn.Linear(768, 1)
-        # self.weight2 = torch.nn.Linear(768, 1)
+        self.weight1 = torch.nn.Linear(768, 1)
+        self.weight2 = torch.nn.Linear(768, 1)
         # self.lstm_hid_dim = 768
         # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
         #                     batch_first=True, bidirectional=True)
@@ -159,8 +159,8 @@ class GCNBert(nn.Module):
         x = self.gc2(x, self.adj)
 
 
-        x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
+        y = x.transpose(0, 1)
+        y = torch.matmul(sentence_feat, y)
 
         # x = torch.matmul(attention_out, x)
         # pred = x[0,:,:].diagonal().unsqueeze(0)
@@ -176,23 +176,26 @@ class GCNBert(nn.Module):
         # x = self.relu1(x)
         #
         attention_out = torch.sum(attention_out, dim=2)
-        attention_out = attention_out.squeeze(-1)
-
-        pred = x + attention_out
+        # attention_out = attention_out.squeeze(-1)
 
 
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
         # label_att = torch.bmm(m1, token_feat)
 
-        # weight1 = torch.sigmoid(self.weight1(label_att))
-        #
-        # weight2 = torch.sigmoid(self.weight2(attention_out))
-        #
-        # weight1 = weight1 / (weight1 + weight2)
-        # weight2 = 1 - weight1
+        weight1 = torch.sigmoid(self.weight1(x.unsqueeze(0))).squeeze(-1)
+
+        weight2 = torch.sigmoid(self.weight2(attention_out)).squeeze(-1)
+        print(weight1)
+        print(weight2)
+        exit()
+
+        weight1 = weight1 / (weight1 + weight2)
+        weight2 = 1 - weight1
 
         # doc = weight1 * label_att + weight2 * attention_out
         # doc = attention_out + values_memory.unsqueeze(-1) * label_att
+
+        pred = weight1 * y + weight2 * attention_out.squeeze(-1)
 
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
