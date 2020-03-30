@@ -161,15 +161,19 @@ class GCNBert(nn.Module):
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
-        y = x.transpose(0, 1)
+        x = x.transpose(0, 1)
         # y = torch.matmul(sentence_feat, y)
 
         # pred = y + attention_out
 
-        x = torch.matmul(attention_out, y)
+        x = torch.matmul(attention_out, x)
         pred = x[0,:,:].diagonal().unsqueeze(0)
         for i in range(1,x.shape[0]):
             pred = torch.cat((pred, x[i,:,:].diagonal().unsqueeze(0)),0)
+
+        print(pred)
+        exit()
+
         # x = torch.matmul(token_feat, x)#.unsqueeze(-1)
         # label_att = torch.bmm(x.transpose(1, 2), token_
         # feat)
