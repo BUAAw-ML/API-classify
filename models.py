@@ -38,13 +38,13 @@ class GraphConvolution(nn.Module):
         #support = torch.matmul(input, self.weight)
         # support = self.linear1(input)
         #
-        # #output = support
-        support = torch.matmul(input, self.weight)
-        output = torch.matmul(support.transpose(1, 2), adj)
-        output = output.transpose(1, 2)
-
+        # # #output = support
         # support = torch.matmul(input, self.weight)
-        # output = torch.matmul(adj, support)
+        # output = torch.matmul(support.transpose(1, 2), adj)
+        # output = output.transpose(1, 2)
+
+        support = torch.matmul(input, self.weight)
+        output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
@@ -102,6 +102,7 @@ class GCNBert(nn.Module):
         # self.lstm_hid_dim = 768
         # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
         #                     batch_first=True, bidirectional=True)
+        self.weight0 = torch.nn.Linear(2, 1)
 
     def init_hidden(self, batch_size):
         return (torch.randn(4, batch_size, self.lstm_hid_dim).cuda(1),
@@ -132,10 +133,10 @@ class GCNBert(nn.Module):
 
         # sentence_feat = token_feat[:,0,:]
         #
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
@@ -154,20 +155,20 @@ class GCNBert(nn.Module):
         attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
+        attention_out = torch.sum(attention_out, -1)
 
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
 
-        x = self.gc1(attention_out, self.adj)
+        x = self.gc1(tag_embedding, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
-        pred = torch.sum(x, -1)
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
 
-        # x = x.transpose(0, 1)
-        # y = torch.matmul(sentence_feat, y)
 
-        # pred = y + attention_out
+        pred = self.weight0(torch.cat((x, attention_out),1))
 
         # x = torch.matmul(attention_out, x)
         #
