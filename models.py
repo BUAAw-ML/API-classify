@@ -102,7 +102,7 @@ class GCNBert(nn.Module):
         # self.lstm_hid_dim = 768
         # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
         #                     batch_first=True, bidirectional=True)
-        self.weight0 = torch.nn.Linear(2, 1)
+        self.weight0 = torch.nn.Linear(num_classes * 2, 1)
 
     def init_hidden(self, batch_size):
         return (torch.randn(4, batch_size, self.lstm_hid_dim).cuda(1),
@@ -151,11 +151,11 @@ class GCNBert(nn.Module):
         # concept_selector = concept_selector.tanh()
         #
 
-        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        attention = F.softmax(attention, -1)
-        attention_out = attention @ token_feat   # N, labels_num, hidden_size
-        attention_out = torch.sum(attention_out, -1)
+        # masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
+        # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
+        # attention = F.softmax(attention, -1)
+        # attention_out = attention @ token_feat   # N, labels_num, hidden_size
+        # attention_out = torch.sum(attention_out, -1)
 
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
@@ -165,11 +165,11 @@ class GCNBert(nn.Module):
         x = self.gc2(x, self.adj)
 
         x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
+        pred = torch.matmul(sentence_feat, x)
 
-        pred = attention_out.softmax(dim=1) + x.softmax(dim=1)
 
-        # pred = self.weight0(torch.cat((x.unsqueeze(-1), attention_out.unsqueeze(-1)),2)).squeeze(-1)
+
+        # pred = self.weight0(torch.cat((x, attention_out),2)).squeeze(-1)
 
         # x = torch.matmul(attention_out, x)
         #
