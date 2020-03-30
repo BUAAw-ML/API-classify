@@ -9,20 +9,6 @@ import pickle as pkl
 from CosNormClassifier import CosNorm_Classifier
 import numpy as np
 
-class MLAttention(nn.Module):
-    """
-
-    """
-    def __init__(self, labels_num, hidden_size):
-        super(MLAttention, self).__init__()
-        self.attention = nn.Linear(hidden_size, labels_num, bias=False)
-        nn.init.xavier_uniform_(self.attention.weight)
-
-    def forward(self, inputs, masks):
-        masks = torch.unsqueeze(masks, 1)  # N, 1, L
-        attention = self.attention(inputs).transpose(1, 2).masked_fill(1.0 - masks, -np.inf)  # N, labels_num, L
-        attention = F.softmax(attention, -1)
-        return attention @ inputs   # N, labels_num, hidden_size
 
 class GraphConvolution(nn.Module):
     """
@@ -163,8 +149,8 @@ class GCNBert(nn.Module):
         # concept_selector = concept_selector.tanh()
         #
 
-        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
+        # masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
+        attention = self.attention(token_feat).transpose(1, 2)#.masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
