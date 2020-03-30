@@ -180,8 +180,6 @@ class GCNBert(nn.Module):
         pred = x[0,:,:].diagonal().unsqueeze(0)
         for i in range(1,x.shape[0]):
             pred = torch.cat((pred, x[i,:,:].diagonal().unsqueeze(0)),0)
-        print(pred.shape)
-        exit()
         # x = torch.matmul(token_feat, x)#.unsqueeze(-1)
         # label_att = torch.bmm(x.transpose(1, 2), token_feat)
 
