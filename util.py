@@ -224,7 +224,7 @@ def gen_A(num_classes, t, co_occur_mat):
 
 
     _nums = _nums[:, np.newaxis]
-    _adj = _adj / _nums
+    _adj = co_occur_mat / _nums
 
     t = 0.4
     # _adj = _adj / (_adj.sum(axis=1) + 1e-6)[:, np.newaxis]
