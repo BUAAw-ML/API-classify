@@ -166,10 +166,11 @@ class GCNBert(nn.Module):
 
         # pred = y + attention_out
 
-        x = torch.bmm(attention_out, x.unsqueeze(0))
-        pred = x[0,:,:].diagonal()
+        x = torch.matmul(attention_out, x)
+        print(x.shape)
+        pred = x[0,:,:].diagonal().unsqueeze(0)
         for i in range(1,x.shape[0]):
-            pred = torch.cat((pred, x[i,:,:].diagonal()),0)
+            pred = torch.cat((pred, x[i,:,:].diagonal().unsqueeze(0)),0)
 
         print(pred.shape)
         exit()
