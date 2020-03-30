@@ -159,6 +159,7 @@ class GCNBert(nn.Module):
         x = self.gc2(x, self.adj)
 
 
+
         y = x.transpose(0, 1)
         y = torch.matmul(sentence_feat, y)
 
@@ -182,7 +183,7 @@ class GCNBert(nn.Module):
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
         # label_att = torch.bmm(m1, token_feat)
 
-        weight1 = torch.sigmoid(self.weight1(x.unsqueeze(0))).squeeze(-1)
+        weight1 = torch.sigmoid(self.weight1(x.transpose(0, 1).unsqueeze(0))).squeeze(-1)
 
         weight2 = torch.sigmoid(self.weight2(attention_out)).squeeze(-1)
         print(weight1)
