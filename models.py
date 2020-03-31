@@ -64,7 +64,7 @@ class GCNBert(nn.Module):
         co_occur_mat = co_occur_mat.numpy()
         # _nums = co_occur_mat.diagonal()
         # _nums = _nums[:, np.newaxis]
-        self.aa = torch.tensor(co_occur_mat / co_occur_mat.max()).cuda(1)
+        self.aa = torch.tensor(co_occur_mat).cuda(1)
 
         self.add_module('bert', bert)
         for m in self.bert.parameters():
@@ -149,7 +149,7 @@ class GCNBert(nn.Module):
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
         # tag_embedding = self.linear1(tag_embedding)
         #
-        values_memory = torch.sigmoid(self.fc_hallucinator(self.aa))
+        values_memory = torch.sigmoid(self.fc_hallucinator(self.aa)).squeeze(-1).unsqueeze(0)
         # values_memory = values_memory.softmax(dim=1)
         #
         # concept_selector = self.fc_selector(sentence_feat)
