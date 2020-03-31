@@ -91,8 +91,8 @@ class GCNBert(nn.Module):
         self.adj = nn.Parameter(_adj, requires_grad=False)
 
         _nums = co_occur_mat.numpy().diagonal()
-        _nums = np.round(_nums / _nums.max(), 2)
-        _nums = 1 - _nums
+        _nums = _nums / _nums.max()
+        _nums = np.round(1 - _nums, 2)
         _nums = _nums[:, np.newaxis]
 
         weight_adj = origin_adj * (1 - np.identity(num_classes, np.int))
