@@ -90,15 +90,14 @@ class GCNBert(nn.Module):
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         self.adj = nn.Parameter(_adj, requires_grad=False)
 
-
-        _nums = origin_adj.diagonal()
+        _nums = co_occur_mat.numpy().diagonal()
+        _nums = np.round(_nums / _nums.max(), 2)
         _nums = _nums[:, np.newaxis]
 
         weight_adj = origin_adj * (1 - np.identity(num_classes, np.int))
 
         weight_adj = np.hstack([_nums, weight_adj])
-
-
+        print(weight_adj)
         self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
 
         self.linear0 = nn.Linear(768, 1)
