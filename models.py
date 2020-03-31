@@ -61,8 +61,6 @@ class GCNBert(nn.Module):
     def __init__(self, bert, num_classes, t=0, co_occur_mat=None):
         super(GCNBert, self).__init__()
 
-        self.aa = torch.FloatTensor(co_occur_mat.numpy()).cuda(1)
-
         self.add_module('bert', bert)
         for m in self.bert.parameters():
             m.requires_grad = True
@@ -96,11 +94,13 @@ class GCNBert(nn.Module):
         _nums = np.round(_nums / _nums.max(), 2)
         _nums = _nums[:, np.newaxis]
 
-        weight_adj = origin_adj * (1 - np.identity(num_classes, np.int))
+        # weight_adj = origin_adj * (1 - np.identity(num_classes, np.int))
+        #
+        # weight_adj = np.hstack([_nums, weight_adj])
+        # print(weight_adj)
+        # self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
 
-        weight_adj = np.hstack([_nums, weight_adj])
-        print(weight_adj)
-        self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
+        self.aa = torch.FloatTensor(origin_adj).cuda(1)
 
         self.linear0 = nn.Linear(768, 1)
 
