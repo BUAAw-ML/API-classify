@@ -211,7 +211,7 @@ class GCNBert(nn.Module):
         # # doc = weight1 * label_att + weight2 * attention_out
         # # doc = attention_out + values_memory.unsqueeze(-1) * label_att
         #
-        pred = attention_out + values_memory * x
+        pred = (1-values_memory) * attention_out + values_memory * x
 
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
