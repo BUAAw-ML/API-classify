@@ -90,12 +90,14 @@ class GCNBert(nn.Module):
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         self.adj = nn.Parameter(_adj, requires_grad=False)
 
-        _nums = origin_adj.diagonal()
-        _nums = _nums[:, np.newaxis]
 
         origin_adj *= (1 - np.identity(num_classes, np.int))
         print(origin_adj)
         print(origin_adj.shape)
+        _nums = origin_adj.diagonal()
+        _nums = _nums[:, np.newaxis]
+
+
         print(_nums)
         origin_adj = np.concatenate([_nums, origin_adj], axis=1)
         print(origin_adj)
@@ -103,8 +105,6 @@ class GCNBert(nn.Module):
         exit()
 
         self.aa = torch.FloatTensor(origin_adj).cuda(1)
-
-
 
         self.linear0 = nn.Linear(768, 1)
 
