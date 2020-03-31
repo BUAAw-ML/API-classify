@@ -91,17 +91,18 @@ class GCNBert(nn.Module):
         self.adj = nn.Parameter(_adj, requires_grad=False)
 
 
-        origin_adj *= (1 - np.identity(num_classes, np.int))
-        print(origin_adj)
-        print(origin_adj.shape)
+
         _nums = origin_adj.diagonal()
         _nums = _nums[:, np.newaxis]
 
+        weight_adj = origin_adj * (1 - np.identity(num_classes, np.int))
+        print(weight_adj)
+        print(weight_adj.shape)
 
         print(_nums)
-        origin_adj = np.concatenate([_nums, origin_adj], axis=1)
-        print(origin_adj)
-        print(origin_adj.shape)
+        weight_adj = np.hstack([_nums, weight_adj])
+        print(weight_adj)
+        print(weight_adj.shape)
         exit()
 
         self.aa = torch.FloatTensor(origin_adj).cuda(1)
