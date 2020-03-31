@@ -61,10 +61,6 @@ class GCNBert(nn.Module):
     def __init__(self, bert, num_classes, t=0, co_occur_mat=None):
         super(GCNBert, self).__init__()
 
-        # _nums = co_occur_mat.diagonal()
-        # _nums = _nums[:, np.newaxis]
-        self.aa = torch.FloatTensor(co_occur_mat.numpy()).cuda(1)
-
         self.add_module('bert', bert)
         for m in self.bert.parameters():
             m.requires_grad = True
@@ -83,22 +79,32 @@ class GCNBert(nn.Module):
         self.relu1 = nn.LeakyReLU(0.2)
         self.gc2 = GraphConvolution(2000, 768)
 
-        _adj = gen_A(num_classes, t, co_occur_mat)
+        _adj, origin_adj = gen_A(num_classes, t, co_occur_mat)
 
-        exist = (_adj > 0) * 1.0
-        factor = np.ones(_adj.shape[1])
-        self.res = torch.FloatTensor(np.dot(exist, factor)).cuda(1)
+        # exist = (_adj > 0) * 1.0
+        # factor = np.ones(_adj.shape[1])
+        # self.res = torch.FloatTensor(np.dot(exist, factor)).cuda(1)
 
         _adj = torch.FloatTensor(_adj)
         _adj = _adj.transpose(0, 1)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         self.adj = nn.Parameter(_adj, requires_grad=False)
 
+        _nums = origin_adj.diagonal()
+        _nums = _nums[:, np.newaxis]
+        origin_adj *= (1 - np.identity(num_classes, np.int))
+        print(origin_adj)
+        origin_adj = np.hstack([_nums, origin_adj])
+        print(origin_adj)
+        exit()
+
+        self.aa = torch.FloatTensor(origin_adj).cuda(1)
+
 
 
         self.linear0 = nn.Linear(768, 1)
 
-        self.fc_hallucinator = nn.Linear(self.num_classes, 1)
+        self.fc_hallucinator = nn.Linear(self.num_classes + 1, 1)
         # self.fc_selector = nn.Linear(768, num_classes)
 
         # self.linear1 = nn.Linear(300, 768)
@@ -154,7 +160,7 @@ class GCNBert(nn.Module):
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
         # tag_embedding = self.linear1(tag_embedding)
         #
-        # values_memory = torch.sigmoid(self.fc_hallucinator(self.aa)).squeeze(-1).unsqueeze(0)
+        values_memory = torch.sigmoid(self.fc_hallucinator(self.aa)).squeeze(-1).unsqueeze(0)
         # values_memory = values_memory.softmax(dim=1)
         #
         # concept_selector = self.fc_selector(sentence_feat)
