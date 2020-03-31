@@ -238,7 +238,7 @@ def gen_A(num_classes, t, co_occur_mat):
     _adj[_adj >= t] = 1
 
     _adj = _adj / (_adj.sum(0, keepdims=True))
-    _adj = _adj + 1 * np.diag(co_occur_mat.diagonal() / co_occur_mat.diagonal().max())
+    _adj = _adj + 3 * np.diag(co_occur_mat.diagonal() / co_occur_mat.diagonal().max())
     # np.identity(num_classes, np.int)
     print(_adj)
 
