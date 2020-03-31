@@ -156,7 +156,7 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        weight1 = torch.nn.relu(self.weight1(attention_out)).squeeze(-1)
+        weight1 = torch.nn.ReLU(self.weight1(attention_out)).squeeze(-1)
 
         attention_out = torch.sum(attention_out, -1)
 
@@ -167,7 +167,7 @@ class GCNBert(nn.Module):
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
-        weight2 = torch.nn.relu(self.weight2(x)).squeeze(-1).unsqueeze(0)
+        weight2 = torch.nn.ReLU(self.weight2(x)).squeeze(-1).unsqueeze(0)
 
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
