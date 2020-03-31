@@ -88,9 +88,6 @@ class GCNBert(nn.Module):
         exist = (_adj > 0) * 1.0
         factor = np.ones(_adj.shape[1])
         self.res = torch.FloatTensor(np.dot(exist, factor))
-        print(self.res)
-
-        exit()
 
         _adj = torch.FloatTensor(_adj)
         _adj = _adj.transpose(0, 1)
@@ -223,7 +220,7 @@ class GCNBert(nn.Module):
 
         self.res
 
-        pred = attention_out + self.adj.unsqueeze(0) * x
+        pred = attention_out + self.res.unsqueeze(0) * x
 
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
