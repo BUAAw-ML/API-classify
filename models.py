@@ -144,7 +144,7 @@ class GCNBert(nn.Module):
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
         # tag_embedding = self.linear1(tag_embedding)
         #
-        values_memory = torch.sigmoid(self.fc_hallucinator(sentence_feat))
+        values_memory = F.relu(self.fc_hallucinator(sentence_feat))
         # values_memory = values_memory.softmax(dim=1)
         #
         # concept_selector = self.fc_selector(sentence_feat)
