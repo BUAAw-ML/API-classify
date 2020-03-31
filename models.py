@@ -150,16 +150,15 @@ class GCNBert(nn.Module):
         # concept_selector = self.fc_selector(sentence_feat)
         # concept_selector = concept_selector.tanh()
         #
+        #
+        # masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
+        # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
+        # attention = F.softmax(attention, -1)
+        # attention_out = attention @ token_feat   # N, labels_num, hidden_size
+        #
+        #
 
-        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        attention = F.softmax(attention, -1)
-        attention_out = attention @ token_feat   # N, labels_num, hidden_size
-
-        weight1 = F.relu(self.weight1(attention_out))
-        weight1 = weight1.squeeze(-1)
-
-        attention_out = torch.sum(attention_out, -1)
+        # attention_out = torch.sum(attention_out, -1)
 
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
@@ -168,11 +167,10 @@ class GCNBert(nn.Module):
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
-        weight2 = F.relu(self.weight2(x))
-        weight2 = weight2.squeeze(-1).unsqueeze(0)
+
 
         x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
+        pred = torch.matmul(sentence_feat, x)
 
 
 
@@ -200,15 +198,16 @@ class GCNBert(nn.Module):
 
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
         # label_att = torch.bmm(m1, token_feat)
-
-        weight1 = weight1 / (weight1 + weight2)
-        weight2 = 1 - weight1
-
-
-        # doc = weight1 * label_att + weight2 * attention_out
-        # doc = attention_out + values_memory.unsqueeze(-1) * label_att
-
-        pred = weight1 * attention_out + weight2 * x
+        # weight1 = torch.sigmoid(self.weight1(attention_out)).squeeze(-1)
+        # weight2 = torch.sigmoid(self.weight2(x)).squeeze(-1).unsqueeze(0)
+        # weight1 = weight1 / (weight1 + weight2)
+        # weight2 = 1 - weight1
+        #
+        #
+        # # doc = weight1 * label_att + weight2 * attention_out
+        # # doc = attention_out + values_memory.unsqueeze(-1) * label_att
+        #
+        # pred = weight1 * attention_out + weight2 * x
 
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
