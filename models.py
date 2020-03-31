@@ -92,10 +92,13 @@ class GCNBert(nn.Module):
 
         _nums = origin_adj.diagonal()
         _nums = _nums[:, np.newaxis]
+        print(_nums)
         origin_adj *= (1 - np.identity(num_classes, np.int))
         print(origin_adj)
+        print(origin_adj.shape)
         origin_adj = np.hstack([_nums, origin_adj])
         print(origin_adj)
+        print(origin_adj.shape)
         exit()
 
         self.aa = torch.FloatTensor(origin_adj).cuda(1)
