@@ -87,7 +87,7 @@ class GCNBert(nn.Module):
 
         exist = (_adj > 0) * 1.0
         factor = np.ones(_adj.shape[1])
-        self.res = torch.FloatTensor(np.dot(exist, factor))
+        self.res = torch.FloatTensor(np.dot(exist, factor)).cuda(1)
 
         _adj = torch.FloatTensor(_adj)
         _adj = _adj.transpose(0, 1)
