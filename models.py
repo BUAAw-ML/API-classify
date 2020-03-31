@@ -61,6 +61,8 @@ class GCNBert(nn.Module):
     def __init__(self, bert, num_classes, t=0, co_occur_mat=None):
         super(GCNBert, self).__init__()
 
+        self.aa = torch.FloatTensor(co_occur_mat.numpy()).cuda(1)
+
         self.add_module('bert', bert)
         for m in self.bert.parameters():
             m.requires_grad = True
@@ -102,7 +104,7 @@ class GCNBert(nn.Module):
 
         self.linear0 = nn.Linear(768, 1)
 
-        self.fc_hallucinator = nn.Linear(self.num_classes + 1, 1)
+        self.fc_hallucinator = nn.Linear(self.num_classes, 1)
         # self.fc_selector = nn.Linear(768, num_classes)
 
         # self.linear1 = nn.Linear(300, 768)
@@ -158,7 +160,7 @@ class GCNBert(nn.Module):
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
         # tag_embedding = self.linear1(tag_embedding)
         #
-        values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
+        # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
         # values_memory = values_memory.softmax(dim=1)
         #
         # concept_selector = self.fc_selector(sentence_feat)
@@ -221,6 +223,7 @@ class GCNBert(nn.Module):
         # # doc = weight1 * label_att + weight2 * attention_out
         # # doc = attention_out + values_memory.unsqueeze(-1) * label_att
         #
+        values_memory = torch.sigmoid(self.fc_hallucinator(self.aa)).squeeze(-1).unsqueeze(0)
 
         pred = attention_out + values_memory * x
 
