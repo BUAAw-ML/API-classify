@@ -91,21 +91,15 @@ class GCNBert(nn.Module):
         self.adj = nn.Parameter(_adj, requires_grad=False)
 
 
-
         _nums = origin_adj.diagonal()
         _nums = _nums[:, np.newaxis]
 
         weight_adj = origin_adj * (1 - np.identity(num_classes, np.int))
-        print(weight_adj)
-        print(weight_adj.shape)
 
-        print(_nums)
         weight_adj = np.hstack([_nums, weight_adj])
-        print(weight_adj)
-        print(weight_adj.shape)
-        exit()
 
-        self.aa = torch.FloatTensor(origin_adj).cuda(1)
+
+        self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
 
         self.linear0 = nn.Linear(768, 1)
 
@@ -165,7 +159,7 @@ class GCNBert(nn.Module):
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
         # tag_embedding = self.linear1(tag_embedding)
         #
-        values_memory = torch.sigmoid(self.fc_hallucinator(self.aa)).squeeze(-1).unsqueeze(0)
+        values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
         # values_memory = values_memory.softmax(dim=1)
         #
         # concept_selector = self.fc_selector(sentence_feat)
@@ -229,7 +223,7 @@ class GCNBert(nn.Module):
         # # doc = attention_out + values_memory.unsqueeze(-1) * label_att
         #
 
-        pred = attention_out + torch.sigmoid(self.res - 1).unsqueeze(0) * x
+        pred = attention_out + values_memory * x
 
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
