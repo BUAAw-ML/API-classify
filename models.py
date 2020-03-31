@@ -88,14 +88,15 @@ class GCNBert(nn.Module):
         exist = (_adj > 0) * 1.0
         factor = np.ones(_adj.shape[1])
         self.res = torch.FloatTensor(np.dot(exist, factor))
+        print(self.res)
+
+        exit()
 
         _adj = torch.FloatTensor(_adj)
         _adj = _adj.transpose(0, 1)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         self.adj = nn.Parameter(_adj, requires_grad=False)
-        print(self.adj)
 
-        exit()
 
 
         self.linear0 = nn.Linear(768, 1)
