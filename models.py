@@ -92,19 +92,20 @@ class GCNBert(nn.Module):
 
         _nums = co_occur_mat.numpy().diagonal()
         _nums = np.round(_nums / _nums.max(), 2)
+        _nums = 1 - _nums
         _nums = _nums[:, np.newaxis]
 
-        # weight_adj = origin_adj * (1 - np.identity(num_classes, np.int))
-        #
-        # weight_adj = np.hstack([_nums, weight_adj])
-        # print(weight_adj)
-        # self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
+        weight_adj = origin_adj * (1 - np.identity(num_classes, np.int))
 
-        self.aa = torch.FloatTensor(origin_adj).cuda(1)
+        weight_adj = np.hstack([_nums, weight_adj])
+        print(weight_adj)
+        self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
+
+        # self.aa = torch.FloatTensor(origin_adj).cuda(1)
 
         self.linear0 = nn.Linear(768, 1)
 
-        self.fc_hallucinator = nn.Linear(self.num_classes, 1)
+        self.fc_hallucinator = nn.Linear(self.num_classes + 1, 1)
         # self.fc_selector = nn.Linear(768, num_classes)
 
         # self.linear1 = nn.Linear(300, 768)
@@ -223,7 +224,7 @@ class GCNBert(nn.Module):
         # # doc = weight1 * label_att + weight2 * attention_out
         # # doc = attention_out + values_memory.unsqueeze(-1) * label_att
         #
-        values_memory = torch.sigmoid(self.fc_hallucinator(self.aa)).squeeze(-1).unsqueeze(0)
+        values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
         pred = attention_out + values_memory * x
 
