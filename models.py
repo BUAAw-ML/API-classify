@@ -88,8 +88,8 @@ class GCNBert(nn.Module):
 
         self.linear0 = nn.Linear(768, 1)
 
-        # self.fc_hallucinator = nn.Linear(768, self.num_classes)
-        #self.fc_selector = nn.Linear(768, num_classes)
+        self.fc_hallucinator = nn.Linear(768, self.num_classes)
+        # self.fc_selector = nn.Linear(768, num_classes)
 
         # self.linear1 = nn.Linear(300, 768)
         # # self.relu2 = nn.LeakyReLU()
@@ -144,21 +144,21 @@ class GCNBert(nn.Module):
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
         # tag_embedding = self.linear1(tag_embedding)
         #
-        # values_memory = self.fc_hallucinator(sentence_feat)
+        values_memory = torch.sigmoid(self.fc_hallucinator(sentence_feat))
         # values_memory = values_memory.softmax(dim=1)
         #
         # concept_selector = self.fc_selector(sentence_feat)
         # concept_selector = concept_selector.tanh()
         #
         #
-        # masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        # attention = F.softmax(attention, -1)
-        # attention_out = attention @ token_feat   # N, labels_num, hidden_size
+        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
+        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
+        attention = F.softmax(attention, -1)
+        attention_out = attention @ token_feat   # N, labels_num, hidden_size
         #
         #
 
-        # attention_out = torch.sum(attention_out, -1)
+        attention_out = torch.sum(attention_out, -1)
 
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
@@ -170,7 +170,7 @@ class GCNBert(nn.Module):
 
 
         x = x.transpose(0, 1)
-        pred = torch.matmul(sentence_feat, x)
+        x = torch.matmul(sentence_feat, x)
 
 
 
@@ -207,7 +207,7 @@ class GCNBert(nn.Module):
         # # doc = weight1 * label_att + weight2 * attention_out
         # # doc = attention_out + values_memory.unsqueeze(-1) * label_att
         #
-        # pred = weight1 * attention_out + weight2 * x
+        pred = attention_out + values_memory * x
 
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
