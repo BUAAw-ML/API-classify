@@ -84,10 +84,18 @@ class GCNBert(nn.Module):
         self.gc2 = GraphConvolution(2000, 768)
 
         _adj = gen_A(num_classes, t, co_occur_mat)
+
+        exist = (_adj > 0) * 1.0
+        factor = np.ones(_adj.shape[1])
+        self.res = torch.FloatTensor(np.dot(exist, factor))
+
         _adj = torch.FloatTensor(_adj)
         _adj = _adj.transpose(0, 1)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         self.adj = nn.Parameter(_adj, requires_grad=False)
+        print(self.adj)
+
+        exit()
 
 
         self.linear0 = nn.Linear(768, 1)
@@ -148,7 +156,7 @@ class GCNBert(nn.Module):
         # tag_embedding = torch.tensor(tag_embedding).cuda(1)
         # tag_embedding = self.linear1(tag_embedding)
         #
-        values_memory = torch.sigmoid(self.fc_hallucinator(self.aa)).squeeze(-1).unsqueeze(0)
+        # values_memory = torch.sigmoid(self.fc_hallucinator(self.aa)).squeeze(-1).unsqueeze(0)
         # values_memory = values_memory.softmax(dim=1)
         #
         # concept_selector = self.fc_selector(sentence_feat)
@@ -211,7 +219,10 @@ class GCNBert(nn.Module):
         # # doc = weight1 * label_att + weight2 * attention_out
         # # doc = attention_out + values_memory.unsqueeze(-1) * label_att
         #
-        pred = (1-values_memory) * attention_out + values_memory * x
+
+        self.res
+
+        pred = attention_out + self.adj.unsqueeze(0) * x
 
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
