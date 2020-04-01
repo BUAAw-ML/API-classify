@@ -122,6 +122,7 @@ class GCNBert(nn.Module):
         # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
         #                     batch_first=True, bidirectional=True)
         self.weight0 = torch.nn.Linear(num_classes * 2, 1)
+        self.weight3 = Parameter(torch.Tensor(num_classes, 2))
 
     def init_hidden(self, batch_size):
         return (torch.randn(4, batch_size, self.lstm_hid_dim).cuda(1),
@@ -227,7 +228,12 @@ class GCNBert(nn.Module):
         #
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
         #
-        pred = weight1 * x + attention_out
+
+
+        pred = torch.hstack([x, attention_out]) * self.weight3
+        pred = torch.sum(pred,-1)
+
+        # pred = weight1 * x + attention_out
 
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
