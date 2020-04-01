@@ -230,7 +230,7 @@ class GCNBert(nn.Module):
         #
 
 
-        pred = torch.hstack([x, attention_out]) * self.weight3
+        pred = torch.cat((x, attention_out),1) * self.weight3
         pred = torch.sum(pred,-1)
 
         # pred = weight1 * x + attention_out
