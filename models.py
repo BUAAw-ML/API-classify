@@ -122,7 +122,13 @@ class GCNBert(nn.Module):
         # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
         #                     batch_first=True, bidirectional=True)
         self.weight0 = torch.nn.Linear(num_classes * 2, 1)
+
         self.weight3 = Parameter(torch.Tensor(1, num_classes))
+        stdv = 1. / math.sqrt(self.weight3.size(1))
+        self.weight3.data.uniform_(-stdv, stdv)
+
+        stdv = 1. / math.sqrt(self.weight4.size(1))
+        self.weight4.data.uniform_(-stdv, stdv)
         self.weight4 = Parameter(torch.Tensor(1, num_classes))
 
     def init_hidden(self, batch_size):
