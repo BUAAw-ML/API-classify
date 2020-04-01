@@ -101,7 +101,7 @@ class GCNBert(nn.Module):
         print(weight_adj)
         self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
 
-        # self.aa = torch.FloatTensor(origin_adj).cuda(1)
+        self.aa = torch.FloatTensor(co_occur_mat.numpy).cuda(1)
 
         self.linear0 = nn.Linear(768, 1)
 
@@ -114,7 +114,7 @@ class GCNBert(nn.Module):
         # self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
-        self.weight1 = torch.nn.Linear(num_classes + 1, 1)
+        self.weight1 = torch.nn.Linear(num_classes, 1)
         self.weight2 = torch.nn.Linear(768, 1)
         # self.lstm_hid_dim = 768
         # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
@@ -214,7 +214,7 @@ class GCNBert(nn.Module):
 
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
         # label_att = torch.bmm(m1, token_feat)
-        weight1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
+        weight1 = torch.sigmoid(self.weight1(self.aa)).squeeze(-1).unsqueeze(0)
 
         # weight1 = weight1 / (weight1 + weight2)
         # weight2 = 1 - weight1
