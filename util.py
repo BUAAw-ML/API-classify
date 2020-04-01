@@ -224,7 +224,7 @@ def gen_A(num_classes, t, co_occur_mat):
     _nums = co_occur_mat.diagonal()
 
     _nums = _nums[:, np.newaxis]
-    _adj = np.round(co_occur_mat / _nums, 1)
+    _adj = co_occur_mat / _nums
 
     t = 0.3
     # _adj = _adj / (_adj.sum(axis=1) + 1e-6)[:, np.newaxis]
@@ -240,6 +240,7 @@ def gen_A(num_classes, t, co_occur_mat):
 
     _adj = _adj / (_adj.sum(0, keepdims=True))
     _adj = _adj + 1 * np.identity(num_classes, np.int)
+    _adj = np.round(_adj, 1)
     #
     #np.diag(co_occur_mat.diagonal() / co_occur_mat.diagonal().max())
     print(_adj)
