@@ -216,6 +216,8 @@ def gen_A(num_classes, t, co_occur_mat):
     # np.set_printoptions(threshold=np.inf,suppress=True)
     co_occur_mat = co_occur_mat.numpy()
 
+    origin_adj = co_occur_mat
+
     # _adj[_adj < 30] = 0
     #_adj = _adj + 1 * np.identity(num_classes, np.int)
 
@@ -224,7 +226,7 @@ def gen_A(num_classes, t, co_occur_mat):
     _nums = _nums[:, np.newaxis]
     _adj = co_occur_mat / _nums
 
-    origin_adj = _adj
+
 
     t = 0.2
     # _adj = _adj / (_adj.sum(axis=1) + 1e-6)[:, np.newaxis]
