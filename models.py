@@ -100,8 +100,8 @@ class GCNBert(nn.Module):
         weight_adj = origin_adj * (1 - np.identity(num_classes, np.int))
 
         weight_adj = np.hstack([_nums, weight_adj])
-        print(weight_adj)
-        self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
+        # print(weight_adj)
+        self.weight_adj = torch.FloatTensor(origin_adj).cuda(1)
 
 
 
@@ -216,7 +216,7 @@ class GCNBert(nn.Module):
 
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
         # label_att = torch.bmm(m1, token_feat)
-        weight1 = torch.sigmoid(self.weight1(self.aa)).squeeze(-1).unsqueeze(0)
+        weight1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
         # weight1 = weight1 / (weight1 + weight2)
         # weight2 = 1 - weight1
