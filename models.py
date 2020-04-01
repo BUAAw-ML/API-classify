@@ -124,12 +124,8 @@ class GCNBert(nn.Module):
         self.weight0 = torch.nn.Linear(num_classes * 2, 1)
 
         self.weight3 = Parameter(torch.Tensor(1, num_classes))
-        stdv = 1. / math.sqrt(self.weight3.size(1))
-        self.weight3.data.uniform_(-stdv, stdv)
+        self.weight3.data.uniform_(0, 1)
 
-        stdv = 1. / math.sqrt(self.weight4.size(1))
-        self.weight4.data.uniform_(-stdv, stdv)
-        self.weight4 = Parameter(torch.Tensor(1, num_classes))
 
     def init_hidden(self, batch_size):
         return (torch.randn(4, batch_size, self.lstm_hid_dim).cuda(1),
@@ -236,7 +232,7 @@ class GCNBert(nn.Module):
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
         #
 
-        pred = self.weight3 * x + self.weight4 * attention_out
+        pred = self.weight3 * x + (1 - self.weight3) * attention_out
         # pred = weight1 * x + attention_out
 
 
@@ -258,6 +254,7 @@ class GCNBert(nn.Module):
                 {'params': self.bert.parameters(), 'lr': lr * lrp},
                 {'params': self.gc1.parameters(), 'lr': lr},
                 {'params': self.gc2.parameters(), 'lr': lr},
+                {'params': self.weight3.parameters(), 'lr': lr},
                 ]
     # def get_config_optim(self, lr, lrp):
     #     return [
