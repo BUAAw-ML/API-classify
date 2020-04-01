@@ -216,8 +216,8 @@ class GCNBert(nn.Module):
         # label_att = torch.bmm(m1, token_feat)
         weight1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
-        weight1 = weight1 / (weight1 + weight2)
-        weight2 = 1 - weight1
+        # weight1 = weight1 / (weight1 + weight2)
+        # weight2 = 1 - weight1
 
         #
         # # doc = weight1 * label_att + weight2 * attention_out
@@ -225,7 +225,7 @@ class GCNBert(nn.Module):
         #
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
         #
-        pred = weight1 * x + weight2 * attention_out
+        pred = weight1 * x + attention_out
 
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
