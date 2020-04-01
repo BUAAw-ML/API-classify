@@ -93,6 +93,7 @@ class GCNBert(nn.Module):
         self.adj = nn.Parameter(_adj, requires_grad=False)
 
         _nums = co_occur_mat.numpy().diagonal()
+        self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(1)
         # _nums = _nums / _nums.max()
         # _nums = np.round(1 - _nums, 2)
         _nums = _nums[:, np.newaxis]
@@ -232,7 +233,7 @@ class GCNBert(nn.Module):
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
         #
 
-        pred = torch.sigmoid(self.weight3) * x + attention_out
+        pred = self.class_weight * x + attention_out
         # pred = weight1 * x + attention_out
 
 
