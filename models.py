@@ -124,7 +124,7 @@ class GCNBert(nn.Module):
         self.weight0 = torch.nn.Linear(num_classes * 2, 1)
 
         self.weight3 = Parameter(torch.Tensor(1, num_classes))
-        self.weight3.data.uniform_(0, 1)
+        self.weight3.data.uniform_(-10, 10)
 
 
     def init_hidden(self, batch_size):
@@ -232,7 +232,7 @@ class GCNBert(nn.Module):
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
         #
 
-        pred = self.weight3 * x + attention_out
+        pred = torch.sigmoid(self.weight3) * x + attention_out
         # pred = weight1 * x + attention_out
 
 
