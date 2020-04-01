@@ -94,6 +94,7 @@ class GCNBert(nn.Module):
 
         _nums = co_occur_mat.numpy().diagonal()
         self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(1)
+        print(self.class_weight)
         # _nums = _nums / _nums.max()
         # _nums = np.round(1 - _nums, 2)
         _nums = _nums[:, np.newaxis]
