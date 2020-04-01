@@ -61,7 +61,7 @@ class GCNBert(nn.Module):
     def __init__(self, bert, num_classes, t=0, co_occur_mat=None):
         super(GCNBert, self).__init__()
 
-        self.aa = torch.FloatTensor(co_occur_mat.numpy).cuda(1)
+        self.aa = torch.FloatTensor(co_occur_mat.numpy()).cuda(1)
 
         self.add_module('bert', bert)
         for m in self.bert.parameters():
