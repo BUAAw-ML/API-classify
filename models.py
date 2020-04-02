@@ -88,22 +88,22 @@ class GCNBert(nn.Module):
         # self.res = torch.FloatTensor(np.dot(exist, factor)).cuda(1)
 
         _adj = torch.FloatTensor(_adj)
-        # _adj = _adj.transpose(0, 1)
+        _adj = _adj.transpose(0, 1)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         self.adj = nn.Parameter(_adj, requires_grad=False)
 
         _nums = co_occur_mat.numpy().diagonal()
-        self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(1)
-        print(self.class_weight)
+        # self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(1)
+        # print(self.class_weight)
         # _nums = _nums / _nums.max()
         # _nums = np.round(1 - _nums, 2)
         _nums = _nums[:, np.newaxis]
 
         weight_adj = origin_adj * (1 - np.identity(num_classes, np.int))
 
-        weight_adj = np.hstack([_nums, weight_adj])
+        # weight_adj = np.hstack([_nums, weight_adj])
         # print(weight_adj)
-        self.weight_adj = torch.FloatTensor(origin_adj).cuda(1)
+        self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
 
 
 
@@ -123,7 +123,7 @@ class GCNBert(nn.Module):
         # self.lstm_hid_dim = 768
         # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
         #                     batch_first=True, bidirectional=True)
-        self.weight0 = torch.nn.Linear(num_classes * 2, 1)
+        self.weight0 = torch.nn.Linear(num_classes, 1)
 
         self.weight3 = Parameter(torch.Tensor(1, num_classes))
         self.weight3.data.uniform_(-10, 10)
@@ -158,10 +158,10 @@ class GCNBert(nn.Module):
 
         # sentence_feat = token_feat[:,0,:]
         #
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)
-        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(tag_mask, dim=1, keepdim=True)
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)
+        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(tag_mask, dim=1, keepdim=True)
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
@@ -189,12 +189,12 @@ class GCNBert(nn.Module):
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
 
-        # x = self.gc1(tag_embedding, self.adj)
-        # x = self.relu1(x)
-        # x = self.gc2(x, self.adj)
-        #
-        # x = x.transpose(0, 1)
-        # x = torch.matmul(sentence_feat, x)
+        x = self.gc1(tag_embedding, self.adj)
+        x = self.relu1(x)
+        x = self.gc2(x, self.adj)
+
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
 
 
 
@@ -222,7 +222,7 @@ class GCNBert(nn.Module):
 
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
         # label_att = torch.bmm(m1, token_feat)
-        # weight1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
+        w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
         # weight1 = weight1 / (weight1 + weight2)
         # weight2 = 1 - weight1
@@ -235,7 +235,7 @@ class GCNBert(nn.Module):
         #
 
         # pred = self.class_weight * x + attention_out
-        # pred = weight1 * x + attention_out
+        pred = w1 * x + attention_out
 
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
@@ -243,7 +243,7 @@ class GCNBert(nn.Module):
         # pred = torch.sigmoid(self.output_layer(avg_sentence_embeddings))
 
         # pred = self.linear0(attention_out).squeeze(-1)
-        pred = torch.matmul(attention_out, self.adj)
+        # pred = torch.matmul(attention_out, self.adj)
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
