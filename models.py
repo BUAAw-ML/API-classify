@@ -222,10 +222,7 @@ class GCNBert(nn.Module):
 
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
         # label_att = torch.bmm(m1, token_feat)
-        # w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
-        w1 = self.weight1(self.weight_adj).squeeze(-1).unsqueeze(0)
-        w1 = torch.softmax(w1,-1)
-
+        w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
         # weight1 = weight1 / (weight1 + weight2)
         # weight2 = 1 - weight1
