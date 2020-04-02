@@ -215,7 +215,7 @@ def gen_A(num_classes, t, co_occur_mat):
     import pickle
     # np.set_printoptions(threshold=np.inf,suppress=True)
     co_occur_mat = co_occur_mat.numpy()
-    origin_adj = co_occur_mat
+    # origin_adj = co_occur_mat
     # _adj[_adj < 30] = 0
     #_adj = _adj + 1 * np.identity(num_classes, np.int)
 
@@ -234,6 +234,11 @@ def gen_A(num_classes, t, co_occur_mat):
 
     _adj[_adj < t] = 0
     _adj[_adj >= t] = 1
+
+    origin_adj = (_adj==1) * co_occur_mat * (1 - np.identity(num_classes, np.int))
+    print(origin_adj)
+    exit()
+
 
     _adj = _adj / (_adj.sum(0, keepdims=True))
     _adj = _adj + 1 * np.identity(num_classes, np.int)
