@@ -191,7 +191,7 @@ class GCNBert(nn.Module):
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
-        w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
+        w1 = torch.sigmoid(self.weight1(x)).squeeze(-1).unsqueeze(0)
 
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
