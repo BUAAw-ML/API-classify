@@ -95,15 +95,12 @@ class GCNBert(nn.Module):
         _nums = co_occur_mat.numpy().diagonal()
         # self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(1)
         # print(self.class_weight)
-        # _nums = _nums / _nums.max()
-        # _nums = np.round(1 - _nums, 2)
-        _nums = _nums[:, np.newaxis]
 
-        weight_adj = origin_adj * (1 - np.identity(num_classes, np.int))
+        _nums = _nums[:, np.newaxis]
 
         # weight_adj = np.hstack([_nums, weight_adj])
         # print(weight_adj)
-        self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
+        self.weight_adj = torch.FloatTensor(origin_adj).cuda(1)
 
         self.linear0 = nn.Linear(768, 1)
 
@@ -231,7 +228,7 @@ class GCNBert(nn.Module):
         #
         w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
         # pred = self.class_weight * x + attention_out
-        pred = w1 * x + (1-w1) * attention_out
+        pred = w1 * x + attention_out
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
 
