@@ -105,8 +105,6 @@ class GCNBert(nn.Module):
         # print(weight_adj)
         self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
 
-
-
         self.linear0 = nn.Linear(768, 1)
 
         # self.fc_hallucinator = nn.Linear(768, num_classes)
@@ -195,8 +193,6 @@ class GCNBert(nn.Module):
 
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
-
-
 
         # pred = self.weight0(torch.cat((x, attention_out),2)).squeeze(-1)
 
