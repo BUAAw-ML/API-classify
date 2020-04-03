@@ -113,8 +113,8 @@ class GCNBert(nn.Module):
         self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
-        self.weight1 = torch.nn.Linear(num_classes, 1)
-        # self.weight2 = torch.nn.Linear(768, 1)
+        self.weight1 = torch.nn.Linear(768, 1)
+        self.weight2 = torch.nn.Linear(768, 1)
         # self.lstm_hid_dim = 768
         # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
         #                     batch_first=True, bidirectional=True)
