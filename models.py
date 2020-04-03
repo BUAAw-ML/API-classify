@@ -96,7 +96,7 @@ class GCNBert(nn.Module):
         # self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(1)
         # print(self.class_weight)
 
-        # _nums = _nums[:, np.newaxis]
+        _nums = _nums[:, np.newaxis]
 
         weight_adj = np.hstack([_nums, origin_adj])
         # print(weight_adj)
