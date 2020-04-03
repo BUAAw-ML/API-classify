@@ -93,14 +93,14 @@ class GCNBert(nn.Module):
         self.adj = nn.Parameter(_adj, requires_grad=False)
 
         _nums = co_occur_mat.numpy().diagonal()
-        self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(1)
+        # self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(1)
         # print(self.class_weight)
 
-        _nums = _nums[:, np.newaxis]
+        # _nums = _nums[:, np.newaxis]
 
-        # weight_adj = np.hstack([_nums, weight_adj])
+        weight_adj = np.hstack([_nums, origin_adj])
         # print(weight_adj)
-        self.weight_adj = torch.FloatTensor(origin_adj).cuda(1)
+        self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
 
         self.linear0 = nn.Linear(768, 1)
 
@@ -118,7 +118,7 @@ class GCNBert(nn.Module):
         # self.lstm_hid_dim = 768
         # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
         #                     batch_first=True, bidirectional=True)
-        self.weight0 = torch.nn.Linear(num_classes, 1)
+        self.weight0 = torch.nn.Linear(num_classes+1, 1)
 
         self.weight3 = Parameter(torch.Tensor(1, num_classes))
         self.weight3.data.uniform_(-10, 10)
