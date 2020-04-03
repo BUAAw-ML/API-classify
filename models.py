@@ -108,7 +108,7 @@ class GCNBert(nn.Module):
         # self.fc_selector = nn.Linear(768, num_classes)
 
         self.linear1 = nn.Linear(768 * 2, 500)
-        # # self.relu2 = nn.LeakyReLU()
+        # self.relu2 = nn.LeakyReLU()
         self.linear2 = nn.Linear(500, 1)
         self.output_layer = nn.Linear(768, num_classes)
 
