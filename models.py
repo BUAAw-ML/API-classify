@@ -233,6 +233,8 @@ class GCNBert(nn.Module):
         # w1 = torch.sigmoid(self.weight3).unsqueeze(-1)
 
         # pred = (1-w1) * attention_out + w1 * x
+        print(x.shape)
+        print(attention_out.shape)
         pred = torch.cat((x,attention_out), -1).squeeze(-1)
 
         pred = torch.max(pred, -1)[0]
