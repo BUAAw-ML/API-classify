@@ -100,7 +100,7 @@ class GCNBert(nn.Module):
 
         weight_adj = np.hstack([_nums, origin_adj])
         # print(weight_adj)
-        self.weight_adj = torch.FloatTensor(weight_adj).cuda(1)
+        self.weight_adj = torch.FloatTensor(origin_adj).cuda(1)
 
         # self.linear0 = nn.Linear(768, 1)
 
@@ -118,7 +118,7 @@ class GCNBert(nn.Module):
         # self.lstm_hid_dim = 768
         # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
         #                     batch_first=True, bidirectional=True)
-        self.weight0 = torch.nn.Linear(num_classes+1, 1)
+        self.weight0 = torch.nn.Linear(num_classes, 1)
 
         self.weight3 = Parameter(torch.Tensor(1, num_classes))
         self.weight3.data.uniform_(-10, 10)
@@ -215,19 +215,19 @@ class GCNBert(nn.Module):
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
         # label_att = torch.bmm(m1, token_feat)
 
-        weight1 = torch.sigmoid(self.weight1(x))
-        weight2 = torch.sigmoid(self.weight2(attention_out))
-        weight1 = weight1 / (weight1 + weight2)
-        weight2 = 1 - weight1
+        # weight1 = torch.sigmoid(self.weight1(x))
+        # weight2 = torch.sigmoid(self.weight2(attention_out))
+        # weight1 = weight1 / (weight1 + weight2)
+        # weight2 = 1 - weight1
 
         # # doc = weight1 * label_att + weight2 * attention_out
         # # doc = attention_out + values_memory.unsqueeze(-1) * label_att
         #
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
-        # w1 = torch.sigmoid(self.weight0(self.weight_adj)).unsqueeze(0)
+        w1 = torch.sigmoid(self.weight0(self.weight_adj)).unsqueeze(0)
         # w1 = torch.sigmoid(self.weight3).unsqueeze(-1)
-        pred = weight2 * attention_out + weight1 * x
+        pred = attention_out + w1 * x
         pred = torch.sum(pred, -1)
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
         # pred = torch.sigmoid(self.output_layer(avg_sentence_embeddings))
