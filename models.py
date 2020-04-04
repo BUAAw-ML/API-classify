@@ -238,7 +238,7 @@ class GCNBert(nn.Module):
 
         pred = x + attention_out
 
-        pred = torch.max(pred, -1)[0]
+        pred = torch.sum(pred, -1)
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
         # pred = torch.sigmoid(self.output_layer(avg_sentence_embeddings))
