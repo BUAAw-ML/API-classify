@@ -186,7 +186,7 @@ class GCNBert(nn.Module):
         x = self.gc2(x, self.adj)
 
         x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
+        x = torch.matmul(sentence_feat, x).unsqueeze(-1)
         # x = torch.mul(sentence_feat.unsqueeze(1), x)
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
@@ -233,8 +233,7 @@ class GCNBert(nn.Module):
         # w1 = torch.sigmoid(self.weight3).unsqueeze(-1)
 
         # pred = (1-w1) * attention_out + w1 * x
-        print(x.shape)
-        print(attention_out.shape)
+
         pred = torch.cat((x,attention_out), -1).squeeze(-1)
 
         pred = torch.max(pred, -1)[0]
