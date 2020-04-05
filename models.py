@@ -189,7 +189,7 @@ class GCNBert(nn.Module):
         # x = torch.matmul(sentence_feat, x)
 
         # x = torch.mul(sentence_feat.unsqueeze(1), x)
-        x = torch.matmul(sentence_feat, x).unsqueeze(-1)
+        x = torch.matmul(sentence_feat, x)
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
