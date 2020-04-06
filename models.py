@@ -107,7 +107,7 @@ class GCNBert(nn.Module):
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768 * 2, 1)
+        self.linear1 = nn.Linear(768 * 2, num_classes)
         self.relu2 = nn.LeakyReLU()
         self.linear2 = nn.Linear(500, 1)
         self.output_layer = nn.Linear(768, 1)
@@ -237,7 +237,8 @@ class GCNBert(nn.Module):
 
         # pred = (1-w1) * attention_out + w1 * x
         pred = torch.cat((attention_out,x),-1)
-        pred = self.linear1(pred).squeeze(-1)
+        pred = torch.sum(pred,1)
+        pred = self.linear1(pred)
         # pred = attention_out# w1 *  x +
 
         # pred = torch.sum(pred, -1)
