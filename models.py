@@ -77,9 +77,9 @@ class GCNBert(nn.Module):
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 2000)
-        self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(2000, 768)
+        self.gc1 = GraphConvolution(768, 768)
+        # self.relu1 = nn.LeakyReLU(0.2)
+        # self.gc2 = GraphConvolution(2000, 768)
 
         _adj, origin_adj = gen_A(num_classes, t, co_occur_mat)
 
@@ -182,17 +182,17 @@ class GCNBert(nn.Module):
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
 
         x = self.gc1(tag_embedding, self.adj)
-        x = self.relu1(x)
-        x = self.gc2(x, self.adj)
+        # x = self.relu1(x)
+        # x = self.gc2(x, self.adj)
 
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
 
-        x = torch.mul(sentence_feat.unsqueeze(1), x)
+        # x = torch.mul(sentence_feat.unsqueeze(1), x)
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
+        attention = (torch.matmul(token_feat, x.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
         # attention_out = torch.sum(attention_out,-1)
@@ -237,7 +237,7 @@ class GCNBert(nn.Module):
 
         # pred = (1-w1) * attention_out + w1 * x
 
-        pred = x + attention_out# w1 *
+        pred = attention_out# w1 *  x +
 
         pred = torch.sum(pred, -1)
 
