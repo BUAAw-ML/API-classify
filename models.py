@@ -113,7 +113,7 @@ class GCNBert(nn.Module):
         self.output_layer = nn.Linear(768, 1)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
-        self.weight1 = torch.nn.Linear(768, 1)
+        self.weight1 = torch.nn.Linear(num_classes, 1)
         self.weight2 = torch.nn.Linear(768, 1)
         # self.lstm_hid_dim = 768
         # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
@@ -233,11 +233,11 @@ class GCNBert(nn.Module):
         #
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
-        # w1 = torch.sigmoid(self.weight3).unsqueeze(-1)
+        w1 = torch.sigmoid(self.weight1(self.weight_adj)).unsqueeze(-1)
 
         # pred = (1-w1) * attention_out + w1 * x
 
-        pred = x + attention_out
+        pred = w1 * x + attention_out
 
         # pred = torch.sum(pred, -1)
 
