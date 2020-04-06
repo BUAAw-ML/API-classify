@@ -78,8 +78,8 @@ class GCNBert(nn.Module):
 
         # self.dropout = nn.Dropout(p=0.5)
         self.gc1 = GraphConvolution(768, 768)
-        # self.relu1 = nn.LeakyReLU(0.2)
-        # self.gc2 = GraphConvolution(2000, 768)
+        self.relu1 = nn.LeakyReLU(0.2)
+        self.gc2 = GraphConvolution(2000, 768)
 
         _adj, origin_adj = gen_A(num_classes, t, co_occur_mat)
 
