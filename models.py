@@ -88,7 +88,7 @@ class GCNBert(nn.Module):
         # self.res = torch.FloatTensor(np.dot(exist, factor)).cuda(1)
 
         _adj = torch.FloatTensor(_adj)
-        # _adj = _adj.transpose(0, 1)
+        _adj = _adj.transpose(0, 1)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         self.adj = nn.Parameter(_adj, requires_grad=False)
 
@@ -107,7 +107,7 @@ class GCNBert(nn.Module):
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768, num_classes)
+        self.linear1 = nn.Linear(768 * 2, 768)
         self.relu2 = nn.LeakyReLU()
         self.linear2 = nn.Linear(500, 1)
         self.output_layer = nn.Linear(768, 1)
@@ -236,18 +236,19 @@ class GCNBert(nn.Module):
         # w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1)
 
         # pred = (1-w1) * attention_out + w1 * x
-        # pred = torch.cat((attention_out,x),-1)
+        pred = torch.cat((attention_out, x), -1)
+        pred = self.linear1(pred)
 
         # pred = attention_out + x
 
-        pred = torch.sum(attention_out, -1)
+        pred = torch.sum(pred, -1)
 
 
         # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
         # pred = torch.sigmoid(self.output_layer(avg_sentence_embeddings))
 
         # pred = self.linear0(attention_out).squeeze(-1)
-        pred = torch.matmul(pred, self.adj)
+        # pred = torch.matmul(pred, self.adj)
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
