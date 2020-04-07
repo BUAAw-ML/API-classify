@@ -242,7 +242,7 @@ class GCNBert(nn.Module):
         pred = attention_out# * x.unsqueeze(0)
 
         pred = self.linear1(pred)
-        # self.relu2 = nn.LeakyReLU()
+        pred = self.relu2(pred)
         pred = self.linear2(pred).squeeze(-1)
 
         # pred = torch.sum(pred, -1)
