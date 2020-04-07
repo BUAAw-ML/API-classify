@@ -110,7 +110,7 @@ class GCNBert(nn.Module):
         self.linear1 = nn.Linear(768 * 2, 768)
         self.relu2 = nn.LeakyReLU()
         self.linear2 = nn.Linear(768, 1)
-        self.output_layer = nn.Linear(768, 1)
+        self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
         self.weight1 = torch.nn.Linear(num_classes, 1)
@@ -239,13 +239,13 @@ class GCNBert(nn.Module):
         # pred = torch.cat((attention_out, x), -1)
 
 
-        pred = attention_out * x.unsqueeze(0)
+        pred = attention_out# * x.unsqueeze(0)
 
-        pred = torch.sum(pred, -1)
+        # pred = torch.sum(pred, -1)
 
 
-        # avg_sentence_embeddings = torch.sum(doc, 1) / self.num_classes
-        # pred = torch.sigmoid(self.output_layer(avg_sentence_embeddings))
+        avg_sentence_embeddings = torch.sum(pred, 1) #/ self.num_classes
+        pred = self.output_layer(avg_sentence_embeddings)
 
         # pred = self.linear0(attention_out).squeeze(-1)
         # pred = torch.matmul(pred, self.adj)
