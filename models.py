@@ -184,6 +184,7 @@ class GCNBert(nn.Module):
         x = self.gc1(tag_embedding, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
+        x = F.softmax(x, -1)
 
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
