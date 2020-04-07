@@ -109,7 +109,7 @@ class GCNBert(nn.Module):
 
         self.linear1 = nn.Linear(768 * 2, 768)
         self.relu2 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(500, 1)
+        self.linear2 = nn.Linear(768, 1)
         self.output_layer = nn.Linear(768, 1)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
@@ -238,6 +238,7 @@ class GCNBert(nn.Module):
         # pred = (1-w1) * attention_out + w1 * x
         pred = torch.cat((attention_out, x), -1)
         pred = self.linear1(pred)
+        pred = self.linear2(pred)
 
         # pred = attention_out + x
 
