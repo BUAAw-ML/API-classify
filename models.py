@@ -184,10 +184,10 @@ class GCNBert(nn.Module):
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
-        x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
+        # x = x.transpose(0, 1)
+        # x = torch.matmul(sentence_feat, x)
 
-        # x = torch.mul(sentence_feat.unsqueeze(1), x)
+        x = torch.mul(sentence_feat.unsqueeze(1), x)
 
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
@@ -240,7 +240,7 @@ class GCNBert(nn.Module):
 
         # pred = torch.sigmoid(attention_out) #+ 0.1 * torch.sigmoid(x)
 
-        pred = attention_out
+        pred = attention_out + x
         pred = torch.sum(pred, -1)
 
 
