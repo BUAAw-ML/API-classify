@@ -246,7 +246,7 @@ class GCNBert(nn.Module):
 
         pred = torch.relu(attention_out) + torch.relu(x)
 
-        pred = torch.sum(pred, -1)
+        # pred = torch.sum(pred, -1)
 
         # avg_sentence_embeddings = torch.sum(pred, 1) #/ self.num_classes
         # pred = torch.matmul(avg_sentence_embeddings, x)
