@@ -162,7 +162,8 @@ class GCNBert(nn.Module):
             feats = pkl.load(fp)#, encoding='utf-8')
         tag_embedding = feats.tolist()
         tag_embedding = torch.tensor(tag_embedding).cuda(0)
-        tag_embedding = self.linear1(tag_embedding)
+
+        # tag_embedding = self.linear1(tag_embedding)
         #
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
         # values_memory = values_memory.softmax(dim=1)
