@@ -102,7 +102,7 @@ class GCNBert(nn.Module):
         # print(weight_adj)
         self.weight_adj = torch.FloatTensor(origin_adj).cuda(1)
 
-        # self.linear0 = nn.Linear(768, 1)
+        self.linear0 = nn.Linear(768, 1)
 
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
@@ -245,22 +245,22 @@ class GCNBert(nn.Module):
         #
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
-        w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
+        # w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
         # pred = (1-w1) * attention_out + w1 * x
         # pred = torch.cat((attention_out, x), -1)
 
-        pred = attention_out + attention_out2#w1 * x
+        # pred = attention_out #+ attention_out2#w1 * x
 
 
-        pred = torch.sum(pred, -1)
+        # pred = torch.sum(pred, -1)
 
         # avg_sentence_embeddings = torch.sum(pred, 1) #/ self.num_classes
         # pred = torch.matmul(avg_sentence_embeddings, x)
 
         # pred = self.output_layer(avg_sentence_embeddings)
 
-        # pred = self.linear0(attention_out).squeeze(-1)
+        pred = self.linear0(attention_out).squeeze(-1)
         # pred = torch.matmul(pred, self.adj)
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
