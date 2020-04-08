@@ -260,7 +260,7 @@ class GCNBert(nn.Module):
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
         # x = self.linear2(x)
-        return pred
+        return torch.sigmoid(pred)
 
     def get_config_optim(self, lr, lrp):
         return [
