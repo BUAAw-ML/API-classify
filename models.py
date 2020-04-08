@@ -244,7 +244,7 @@ class GCNBert(nn.Module):
         # pred = (1-w1) * attention_out + w1 * x
         # pred = torch.cat((attention_out, x), -1)
 
-        pred = torch.relu(attention_out) + torch.relu(x)
+        pred = attention_out + x
 
         # pred = torch.sum(pred, -1)
 
