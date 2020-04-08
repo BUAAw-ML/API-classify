@@ -26,7 +26,7 @@ parser.add_argument('-b', '--batch-size', default=16, type=int,
                     metavar='N', help='mini-batch size (default: 256)')
 parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
                     metavar='LR', help='initial learning rate')
-parser.add_argument('--lrp', '--learning-rate-pretrained', default=0.1, type=float,
+parser.add_argument('--lrp', '--learning-rate-pretrained', default=1, type=float,
                     metavar='LR', help='learning rate for pre-trained layers')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum')
@@ -55,8 +55,8 @@ def multiLabel_text_classify():
     model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.4, co_occur_mat=train_dataset.co_occur_mat)
 
     # define loss function (criterion)
-    criterion = nn.BCELoss()
-    # criterion = nn.MultiLabelSoftMarginLoss()
+    # criterion = nn.BCELoss()
+    criterion = nn.MultiLabelSoftMarginLoss()
 
     # define optimizer
     optimizer = torch.optim.SGD(model.get_config_optim(args.lr, args.lrp),
