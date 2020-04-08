@@ -193,6 +193,7 @@ class GCNBert(nn.Module):
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
         attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
+
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
         # # attention_out = torch.sum(attention_out,-1)
@@ -255,32 +256,6 @@ class GCNBert(nn.Module):
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
         # x = self.linear2(x)
-        return pred
-
-    def predict(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
-
-        token_feat = self.bert(ids,
-            token_type_ids=token_type_ids,
-            attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
-
-        #
-        embed = self.bert.get_input_embeddings()
-        tag_embedding = embed(encoded_tag)
-        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(tag_mask, dim=1, keepdim=True)
-
-
-        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
-        attention = F.softmax(attention, -1)
-        attention_out = attention @ token_feat   # N, labels_num, hidden_size
-
-        pred = attention_out
-        pred = torch.sum(pred, -1)
-
-        pred = torch.matmul(pred, self.adj.transpose(0, 1))
-
         return pred
 
     def get_config_optim(self, lr, lrp):
