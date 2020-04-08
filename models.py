@@ -188,7 +188,7 @@ class GCNBert(nn.Module):
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
 
-        # x = torch.mul(sentence_feat.unsqueeze(1), x)
+        x = torch.mul(sentence_feat.unsqueeze(1), x)
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
@@ -238,7 +238,7 @@ class GCNBert(nn.Module):
         # pred = (1-w1) * attention_out + w1 * x
         # pred = torch.cat((attention_out, x), -1)
 
-        pred = attention_out * x
+        pred = attention_out + x
 
         pred = torch.sum(pred, -1)
 
@@ -270,9 +270,7 @@ class GCNBert(nn.Module):
     #             ]
 
 
-
 def gcn_bert(num_classes, t, co_occur_mat=None):
     bert = BertModel.from_pretrained('bert-base-uncased')
-
     return GCNBert(bert, num_classes, t=t, co_occur_mat=co_occur_mat)
 
