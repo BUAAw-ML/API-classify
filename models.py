@@ -77,7 +77,7 @@ class GCNBert(nn.Module):
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(300, 2000)
+        self.gc1 = GraphConvolution(768, 2000)
         self.relu1 = nn.LeakyReLU(0.2)
         self.gc2 = GraphConvolution(2000, 768)
 
@@ -107,7 +107,7 @@ class GCNBert(nn.Module):
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768, 400)
+        self.linear1 = nn.Linear(300, 768)
         self.relu2 = nn.LeakyReLU()
         self.linear2 = nn.Linear(400, 1)
         self.output_layer = nn.Linear(768, num_classes)
@@ -163,7 +163,7 @@ class GCNBert(nn.Module):
         tag_embedding2 = feats.tolist()
         tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
 
-        # tag_embedding = self.linear1(tag_embedding)
+        tag_embedding2 = self.linear1(tag_embedding2)
         #
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
         # values_memory = values_memory.softmax(dim=1)
