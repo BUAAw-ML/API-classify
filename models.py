@@ -44,7 +44,7 @@ class GraphConvolution(nn.Module):
         # output = output.transpose(1, 2)
 
         support = torch.matmul(input, self.weight)
-        output = torch.matmul(adj, support)
+        output = torch.matmul(adj, input)
 
         if self.bias is not None:
             return output + self.bias
