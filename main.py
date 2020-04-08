@@ -50,13 +50,13 @@ def multiLabel_text_classify():
 
     use_gpu = torch.cuda.is_available()
     train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file = \
-        load_dataset('data/ProgrammerWeb/Programweb-domainFilter.csv', 'data/ProgrammerWeb/domainnet.csv') #Programweb-domainFilter
+        load_dataset('data/ProgrammerWeb/programweb-data.csv', 'data/ProgrammerWeb/domainnet.csv') #Programweb-domainFilter
 
     model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.4, co_occur_mat=train_dataset.co_occur_mat)
 
     # define loss function (criterion)
-    # criterion = nn.BCELoss()
-    criterion = nn.MultiLabelSoftMarginLoss()
+    criterion = nn.BCELoss()
+    # criterion = nn.MultiLabelSoftMarginLoss()
 
     # define optimizer
     optimizer = torch.optim.SGD(model.get_config_optim(args.lr, args.lrp),
