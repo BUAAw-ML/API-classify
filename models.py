@@ -244,7 +244,7 @@ class GCNBert(nn.Module):
         # pred = (1-w1) * attention_out + w1 * x
         # pred = torch.cat((attention_out, x), -1)
 
-        pred = attention_out + x
+        pred = 0.5 * torch.sigmoid(attention_out) + 0.5 * torch.sigmoid(x)
 
         # pred = torch.sum(pred, -1)
 
@@ -260,7 +260,7 @@ class GCNBert(nn.Module):
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
         # x = self.linear2(x)
-        return torch.sigmoid(pred)
+        return pred
 
     def get_config_optim(self, lr, lrp):
         return [
