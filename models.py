@@ -250,17 +250,17 @@ class GCNBert(nn.Module):
         # pred = (1-w1) * attention_out + w1 * x
         # pred = torch.cat((attention_out, x), -1)
 
-        # pred = attention_out #+ attention_out2#w1 * x
+        pred = attention_out2#w1 * x
 
 
-        # pred = torch.sum(pred, -1)
+        pred = torch.sum(pred, -1)
 
         # avg_sentence_embeddings = torch.sum(pred, 1) #/ self.num_classes
         # pred = torch.matmul(avg_sentence_embeddings, x)
 
         # pred = self.output_layer(avg_sentence_embeddings)
 
-        pred = self.linear0(attention_out).squeeze(-1)
+        # pred = self.linear0(attention_out).squeeze(-1)
         # pred = torch.matmul(pred, self.adj)
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
