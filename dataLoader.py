@@ -85,7 +85,7 @@ class ProgramWebDataset(Dataset):
                 _, _, _, tag = row
                 #tag = row[2]
 
-                tag = tag.strip().split('###') # '###'
+                tag = tag.strip().split(',') # '###'
                 tag = [t for t in tag if t != '']
 
                 for t in tag:
@@ -125,7 +125,7 @@ class ProgramWebDataset(Dataset):
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
-                tag = tag.strip().split('###')
+                tag = tag.strip().split(',')
                 tag = [t for t in tag if t != '']
 
                 if ignored_tags is not None:
