@@ -240,7 +240,7 @@ def gen_A(num_classes, t, co_occur_mat):
     # origin_adj = origin_adj * (1 - np.identity(num_classes, np.int))
 
     _adj = _adj / (_adj.sum(0, keepdims=True))
-    # _adj = _adj + 1 * np.identity(num_classes, np.int)
+    _adj = _adj + 1 * np.identity(num_classes, np.int)
 
     # _adj = np.round(_adj, 1)
     #
