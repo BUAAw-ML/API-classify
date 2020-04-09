@@ -190,7 +190,9 @@ class GCNBert(nn.Module):
         # x = torch.mul(sentence_feat.unsqueeze(1), x)
 
         x = torch.matmul(sentence_feat, tag_embedding.transpose(0, 1))
-
+        x = F.softmax(x, -1)
+        x = x @ tag_embedding
+        x = torch.sum(x, -1)
 
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
