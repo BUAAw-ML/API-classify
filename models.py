@@ -8,7 +8,7 @@ from torch.autograd import Variable
 import pickle as pkl
 from CosNormClassifier import CosNorm_Classifier
 import numpy as np
-
+from capsule_module import *
 
 class GraphConvolution(nn.Module):
     """
@@ -58,7 +58,7 @@ class GraphConvolution(nn.Module):
 
 
 class GCNBert(nn.Module):
-    def __init__(self, bert, num_classes, t=0, co_occur_mat=None):
+    def __init__(self, args, bert, num_classes, t=0, co_occur_mat=None):
         super(GCNBert, self).__init__()
 
         self.aa = torch.FloatTensor(co_occur_mat.numpy()).cuda(1)
@@ -123,6 +123,8 @@ class GCNBert(nn.Module):
         self.weight3 = Parameter(torch.Tensor(1, num_classes))
         self.weight3.data.uniform_(-10, 10)
 
+        self.cap = CapsuleModule(args)
+
 
     def init_hidden(self, batch_size):
         return (torch.randn(4, batch_size, self.lstm_hid_dim).cuda(1),
@@ -163,7 +165,7 @@ class GCNBert(nn.Module):
         with open(tag_embedding_file, 'rb') as fp:
             feats = pkl.load(fp)#, encoding='utf-8')
         tag_embedding2 = feats.tolist()
-        tag_embedding2 = torch.tensor(tag_embedding2).cuda(0)
+        tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
         #
         # tag_embedding2 = self.linear1(tag_embedding2)
         #
@@ -246,10 +248,10 @@ class GCNBert(nn.Module):
 
 
         # pred = 0.5 * torch.sigmoid(attention_out) + 0.5 * torch.sigmoid(x)
-        pred = torch.cat((attention_out, attention_out2), -1)
-        pred = self.linear1(pred)
-        pred = self.relu2(pred)
-        pred = self.linear2(pred).squeeze(-1)
+        # pred = torch.cat((attention_out, attention_out2), -1)
+        # pred = self.linear1(pred)
+        # pred = self.relu2(pred)
+        # pred = self.linear2(pred).squeeze(-1)
         # pred = attention_out
         # pred = torch.sum(pred, -1)
         # pred = torch.sigmoid(pred)
@@ -271,6 +273,10 @@ class GCNBert(nn.Module):
         # x = self.linear2(x)
         # pred = x
         # print(pred.shape)
+        data = attention_out
+        _, activations = self.cap(data)
+        pred = activations
+
         return pred
 
     def get_config_optim(self, lr, lrp):
@@ -293,7 +299,7 @@ class GCNBert(nn.Module):
     #             ]
 
 
-def gcn_bert(num_classes, t, co_occur_mat=None):
+def gcn_bert(args, num_classes, t, co_occur_mat=None):
     bert = BertModel.from_pretrained('bert-base-uncased')
-    return GCNBert(bert, num_classes, t=t, co_occur_mat=co_occur_mat)
+    return GCNBert(args, bert, num_classes, t=t, co_occur_mat=co_occur_mat)
 
