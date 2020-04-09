@@ -234,7 +234,9 @@ class GCNBert(nn.Module):
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
         w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
-
+        print(attention_out.shape)
+        print(w1.shape)
+        print(x.shape)
         pred = attention_out + w1 * x
 
 
