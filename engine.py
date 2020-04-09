@@ -327,7 +327,7 @@ class Engine(object):
         for param_group in optimizer.param_groups:
             # param_group['lr'] = param_group['lr'] * decay
             if param_group['lr'] == 0.01 and sum(self.state['epoch'] == np.array(self.state['epoch_step'])) > 0:
-                param_group['lr'] = 0.001
+                param_group['lr'] = 0.0001
             # if param_group['lr'] == 0.01 and sum(self.state['epoch'] == np.array(self.state['epoch_step'])) > 0:
             #     param_group['lr'] = 0.1
 
