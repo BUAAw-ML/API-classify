@@ -16,7 +16,7 @@ parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                     help='number of data loading workers (default: 4)')
 parser.add_argument('--epochs', default=20, type=int, metavar='N',
                     help='number of total epochs to run')
-parser.add_argument('--epoch_step', default=[6], type=int, nargs='+',
+parser.add_argument('--epoch_step', default=[8], type=int, nargs='+',
                     help='number of epochs to change learning rate')
 parser.add_argument('--device_ids', default=[0], type=int, nargs='+',
                     help='')
@@ -43,19 +43,6 @@ parser.add_argument('--save_model_path', default='./checkpoint', type=str,
 parser.add_argument('--log_dir', default='./logs', type=str,
                     help='path to save log (default: none)')
 
-parser.add_argument('--dim_capsule', default=16, type=int,
-                    metavar='N', help='')  # 胶囊网络以 向量 取代 标量 , 设定向量的维数(长度)
-parser.add_argument('--in_channels', default=1, type=int,
-                    metavar='N', help='') # 输入数据通道数
-parser.add_argument('--num_primary_capsule', default=768 * 32, type=int,
-                    metavar='N', help='') # 初始胶囊层输出的所有胶囊数 , 与输入数据形状相关, 应为 x*32(即PrimaryCaps的out_channels)
-parser.add_argument('--num_compressed_capsule', default=128, type=int,
-                    metavar='N', help='')  # 缩减后的胶囊数量
-parser.add_argument('--num_classes', default=108, type=int,
-                    metavar='N', help='')  # 最终的分类数量
-parser.add_argument('--is_AKDE', default=True, type=bool,
-                    metavar='N', help='')  # 选择动态路由策略
-
 
 def multiLabel_text_classify():
     global args, best_prec1, use_gpu
@@ -65,11 +52,11 @@ def multiLabel_text_classify():
     train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file = \
         load_dataset('data/ProgrammerWeb/programweb-data.csv', 'data/ProgrammerWeb/domainnet.csv') #Programweb-domainFilter
 
-    model = gcn_bert(args, num_classes=len(train_dataset.tag2id), t=0.4, co_occur_mat=train_dataset.co_occur_mat)
+    model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.4, co_occur_mat=train_dataset.co_occur_mat)
 
     # define loss function (criterion)
-    criterion = nn.BCELoss()
-    # criterion = nn.MultiLabelSoftMarginLoss()
+    # criterion = nn.BCELoss()
+    criterion = nn.MultiLabelSoftMarginLoss()
 
     # define optimizer
     optimizer = torch.optim.SGD(model.get_config_optim(args.lr, args.lrp),
