@@ -160,10 +160,10 @@ class GCNBert(nn.Module):
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        with open(tag_embedding_file, 'rb') as fp:
-            feats = pkl.load(fp)#, encoding='utf-8')
-        tag_embedding2 = feats.tolist()
-        tag_embedding2 = torch.tensor(tag_embedding2).cuda(0)
+        # with open(tag_embedding_file, 'rb') as fp:
+        #     feats = pkl.load(fp)#, encoding='utf-8')
+        # tag_embedding2 = feats.tolist()
+        # tag_embedding2 = torch.tensor(tag_embedding2).cuda(0)
         #
         # tag_embedding2 = self.linear1(tag_embedding2)
         #
@@ -180,14 +180,14 @@ class GCNBert(nn.Module):
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
 
-        x = self.gc1(tag_embedding2, self.adj)
+        x = self.gc1(tag_embedding, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
-        # x = x.transpose(0, 1)
-        # x = torch.matmul(sentence_feat, x)
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
 
-        x = torch.mul(sentence_feat.unsqueeze(1), x)
+        # x = torch.mul(sentence_feat.unsqueeze(1), x)
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
@@ -196,7 +196,7 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        # attention_out = torch.sum(attention_out,-1)
+        attention_out = torch.sum(attention_out,-1)
 
         # pred = attention_out * x.unsqueeze(0)
 
@@ -233,16 +233,16 @@ class GCNBert(nn.Module):
         #
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
-        # w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
+        w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
-        # pred = attention_out + x
+        pred = attention_out + w1 * x
 
 
         # pred = 0.5 * torch.sigmoid(attention_out) + 0.5 * torch.sigmoid(x)
-        pred = torch.cat((attention_out, x), -1)
-        pred = self.linear1(pred)
-        pred = self.relu2(pred)
-        pred = self.linear2(pred).squeeze(-1)
+        # pred = torch.cat((attention_out, x), -1)
+        # pred = self.linear1(pred)
+        # pred = self.relu2(pred)
+        # pred = self.linear2(pred).squeeze(-1)
         # pred = attention_out
         # pred = torch.sum(pred, -1)
         # pred = torch.sigmoid(pred)
