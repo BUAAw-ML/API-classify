@@ -196,7 +196,7 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        attention_out = attention_out + sentence_feat
+        attention_out = attention_out + sentence_feat.unsqueeze(1)
 
         pred = torch.sum(attention_out, -1)
 
