@@ -274,7 +274,7 @@ class GCNBert(nn.Module):
         # x = self.linear2(x)
         # pred = x
         # print(pred.shape)
-        data = sentence_feat
+        data = sentence_feat.unsqueeze(1)
         _, activations = self.cap(data)
         pred = activations
 
