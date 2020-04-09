@@ -252,9 +252,11 @@ class GCNBert(nn.Module):
         # pred = torch.matmul(pred, self.adj.transpose(0, 1))
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
+        print(sentence_feat.shape)
         x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
         x = self.relu2(x)
         pred = self.linear2(x)
+        print(x.shape)
         return pred
 
     def get_config_optim(self, lr, lrp):
