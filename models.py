@@ -107,7 +107,7 @@ class GCNBert(nn.Module):
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768, 2000)
+        self.linear1 = nn.Linear(768, num_classes)
         self.relu2 = nn.LeakyReLU()
         self.linear2 = nn.Linear(2000, num_classes)
         self.output_layer = nn.Linear(768, num_classes)
@@ -253,10 +253,10 @@ class GCNBert(nn.Module):
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # print(sentence_feat.shape)
-        # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
+        x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
         # x = self.linear2(x)
-        # pred = x
+        pred = x
         # print(pred.shape)
         return pred
 
