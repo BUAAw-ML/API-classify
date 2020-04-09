@@ -253,10 +253,10 @@ class GCNBert(nn.Module):
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
         # print(sentence_feat.shape)
-        # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
-        # x = self.relu2(x)
-        # x = self.linear2(x)
-        # pred = x
+        x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
+        x = self.relu2(x)
+        x = self.linear2(x)
+        pred = x
         # print(pred.shape)
         return pred
 
@@ -265,6 +265,8 @@ class GCNBert(nn.Module):
                 {'params': self.bert.parameters(), 'lr': lrp},
                 {'params': self.gc1.parameters(), 'lr': lr},
                 {'params': self.gc2.parameters(), 'lr': lr},
+                {'params': self.linear1.parameters(), 'lr': lr},
+                {'params': self.linear2.parameters(), 'lr': lr},
                 ]
     # def get_config_optim(self, lr, lrp):
     #     return [
