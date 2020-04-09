@@ -107,9 +107,9 @@ class GCNBert(nn.Module):
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(400, 200)
+        self.linear1 = nn.Linear(768 * 2, 700)
         self.relu2 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(200, 1)
+        self.linear2 = nn.Linear(700, 1)
         self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
@@ -235,14 +235,16 @@ class GCNBert(nn.Module):
 
         # w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
-        pred = attention_out + x
-        # pred = torch.cat((attention_out, x), -1)
+        # pred = attention_out + x
+
 
         # pred = 0.5 * torch.sigmoid(attention_out) + 0.5 * torch.sigmoid(x)
-        # pred = torch.cat((attention_out, x), -1)
-        # pred = self.linear0(pred).squeeze(-1)
+        pred = torch.cat((attention_out, x), -1)
+        pred = self.linear1(pred)
+        pred = self.relu2(pred)
+        pred = self.linear2(pred).squeeze(-1)
         # pred = attention_out
-        pred = torch.sum(pred, -1)
+        # pred = torch.sum(pred, -1)
         # pred = torch.sigmoid(pred)
 
         # avg_sentence_embeddings = torch.sum(pred, 1) / self.num_classes
