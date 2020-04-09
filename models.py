@@ -150,7 +150,7 @@ class GCNBert(nn.Module):
 
         sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
             / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
-        sentence_feat = sentence_feat.unsqueeze(1)
+        # sentence_feat = sentence_feat.unsqueeze(1)
 
 
         # sentence_feat = token_feat[:,0,:]
@@ -252,11 +252,11 @@ class GCNBert(nn.Module):
         # pred = torch.matmul(pred, self.adj.transpose(0, 1))
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
-        print(sentence_feat.shape)
+        # print(sentence_feat.shape)
         x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
         x = self.relu2(x)
         pred = self.linear2(x)
-        print(pred.shape)
+        # print(pred.shape)
         return pred
 
     def get_config_optim(self, lr, lrp):
