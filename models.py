@@ -113,7 +113,7 @@ class GCNBert(nn.Module):
         self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
-        self.weight1 = torch.nn.Linear(num_classes, 1)
+        self.weight1 = torch.nn.Linear(768, 1)
         self.weight2 = torch.nn.Linear(768, 1)
         # self.lstm_hid_dim = 768
         # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
@@ -223,10 +223,10 @@ class GCNBert(nn.Module):
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
         # label_att = torch.bmm(m1, token_feat)
 
-        # weight1 = torch.sigmoid(self.weight1(x))
-        # weight2 = torch.sigmoid(self.weight2(attention_out))
-        # weight1 = weight1 / (weight1 + weight2)
-        # weight2 = 1 - weight1
+        weight1 = torch.sigmoid(self.weight1(x))
+        weight2 = torch.sigmoid(self.weight2(attention_out))
+        weight1 = weight1 / (weight1 + weight2)
+        weight2 = 1 - weight1
 
         # doc = weight1 * label_att + weight2 * attention_out
         # # doc = attention_out + values_memory.unsqueeze(-1) * label_att
@@ -238,7 +238,7 @@ class GCNBert(nn.Module):
         # pred = (1-w1) * attention_out + w1 * x
         # pred = torch.cat((attention_out, x), -1)
 
-        pred = attention_out * x#) + 0.1 * torch.sigmoid(x)
+        pred = weight2 * attention_out + weight1 * x#) + 0.1 * torch.sigmoid(x)
         # pred = attention_out
         pred = torch.sum(pred, -1)
 
@@ -267,6 +267,8 @@ class GCNBert(nn.Module):
                 {'params': self.gc2.parameters(), 'lr': lr},
                 {'params': self.linear1.parameters(), 'lr': lr},
                 {'params': self.linear2.parameters(), 'lr': lr},
+                {'params': self.weight1.parameters(), 'lr': lr},
+                {'params': self.weight2.parameters(), 'lr': lr},
                 ]
     # def get_config_optim(self, lr, lrp):
     #     return [
