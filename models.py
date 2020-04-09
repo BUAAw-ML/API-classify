@@ -107,9 +107,9 @@ class GCNBert(nn.Module):
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768, 768)
+        self.linear1 = nn.Linear(768, 2000)
         self.relu2 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(400, 1)
+        self.linear2 = nn.Linear(2000, num_classes)
         self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
@@ -252,9 +252,9 @@ class GCNBert(nn.Module):
         # pred = torch.matmul(pred, self.adj.transpose(0, 1))
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
-        # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
-        # x = self.relu2(x)
-        # x = self.linear2(x)
+        x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
+        x = self.relu2(x)
+        pred = self.linear2(x)
         return pred
 
     def get_config_optim(self, lr, lrp):
