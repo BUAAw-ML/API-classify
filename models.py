@@ -184,10 +184,10 @@ class GCNBert(nn.Module):
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
 
-        x = x.transpose(0, 1)
+        # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
 
-        # x = torch.mul(sentence_feat.unsqueeze(1), x)
+        x = torch.mul(sentence_feat.unsqueeze(1), x)
 
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
@@ -239,7 +239,7 @@ class GCNBert(nn.Module):
         # pred = torch.cat((attention_out, x), -1)
 
         # pred = 0.5 * torch.sigmoid(attention_out) + 0.5 * torch.sigmoid(x)
-        # pred = attention_out + x
+        pred = self.relu2(attention_out) + self.relu2(x)
         # pred = attention_out
         # pred = torch.sum(pred, -1)
         # pred = torch.sigmoid(pred)
@@ -247,9 +247,9 @@ class GCNBert(nn.Module):
         # avg_sentence_embeddings = torch.sum(pred, 1) / self.num_classes
         # pred = torch.matmul(avg_sentence_embeddings, x)
 
-        pred = self.linear0(attention_out.transpose(1, 2))
-        pred = pred.transpose(1, 2).squeeze(1)
-        pred = torch.matmul(pred, x)
+        # pred = self.linear0(attention_out.transpose(1, 2))
+        # pred = pred.transpose(1, 2).squeeze(1)
+        # pred = torch.matmul(pred, x)
         # pred = self.output_layer(pred)
 
         # pred = torch.matmul(pred, self.adj.transpose(0, 1))
@@ -266,8 +266,8 @@ class GCNBert(nn.Module):
     def get_config_optim(self, lr, lrp):
         return [
                 {'params': self.bert.parameters(), 'lr': lrp},
-                {'params': self.gc1.parameters(), 'lr': 0.05},
-                {'params': self.gc2.parameters(), 'lr': 0.05},
+                {'params': self.gc1.parameters(), 'lr': lr},
+                {'params': self.gc2.parameters(), 'lr': lr},
                 {'params': self.linear0.parameters(), 'lr': lr},
                 {'params': self.linear1.parameters(), 'lr': lr},
                 {'params': self.linear2.parameters(), 'lr': lr},
