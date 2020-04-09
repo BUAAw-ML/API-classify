@@ -107,7 +107,7 @@ class GCNBert(nn.Module):
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768 * 2, 700)
+        self.linear1 = nn.Linear(768, 1)
         self.relu2 = nn.LeakyReLU()
         self.linear2 = nn.Linear(700, 1)
         self.output_layer = nn.Linear(768, num_classes)
@@ -196,7 +196,7 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        attention_out = torch.sum(attention_out,-1)
+        # attention_out = torch.sum(attention_out,-1)
 
         # pred = attention_out * x.unsqueeze(0)
 
@@ -233,9 +233,9 @@ class GCNBert(nn.Module):
         #
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
-        w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
+        # w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
-        pred = attention_out + w1 * x
+        # pred = attention_out + w1 * x
 
 
         # pred = 0.5 * torch.sigmoid(attention_out) + 0.5 * torch.sigmoid(x)
@@ -257,8 +257,8 @@ class GCNBert(nn.Module):
 
         # pred = torch.matmul(pred, self.adj.transpose(0, 1))
 
-        # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
-        # print(sentence_feat.shape)
+        pred = self.linear1(attention_out).squeeze(-1)
+
         # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
         # x = self.relu2(x)
         # x = self.linear2(x)
