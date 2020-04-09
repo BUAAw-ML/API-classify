@@ -107,7 +107,7 @@ class GCNBert(nn.Module):
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768, 768)
+        self.linear1 = nn.Linear(768, num_classes)
         self.relu2 = nn.LeakyReLU()
         self.linear2 = nn.Linear(2000, num_classes)
         self.output_layer = nn.Linear(768, num_classes)
