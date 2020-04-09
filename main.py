@@ -45,7 +45,7 @@ parser.add_argument('--log_dir', default='./logs', type=str,
 
 parser.add_argument('--dim_capsule', default=16, type=int,
                     metavar='N', help='')  # 胶囊网络以 向量 取代 标量 , 设定向量的维数(长度)
-parser.add_argument('--in_channels', default=768, type=int,
+parser.add_argument('--in_channels', default=1, type=int,
                     metavar='N', help='') # 输入数据通道数
 parser.add_argument('--num_primary_capsule', default=768 * 32, type=int,
                     metavar='N', help='') # 初始胶囊层输出的所有胶囊数 , 与输入数据形状相关, 应为 x*32(即PrimaryCaps的out_channels)
@@ -68,8 +68,8 @@ def multiLabel_text_classify():
     model = gcn_bert(args, num_classes=len(train_dataset.tag2id), t=0.4, co_occur_mat=train_dataset.co_occur_mat)
 
     # define loss function (criterion)
-    # criterion = nn.BCELoss()
-    criterion = nn.MultiLabelSoftMarginLoss()
+    criterion = nn.BCELoss()
+    # criterion = nn.MultiLabelSoftMarginLoss()
 
     # define optimizer
     optimizer = torch.optim.SGD(model.get_config_optim(args.lr, args.lrp),
