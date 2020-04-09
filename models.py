@@ -196,7 +196,7 @@ class GCNBert(nn.Module):
 
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
-        attention_out = torch.sum(attention_out,-1)
+        # attention_out = torch.sum(attention_out,-1)
 
         # pred = attention_out * x.unsqueeze(0)
 
@@ -238,7 +238,7 @@ class GCNBert(nn.Module):
         # pred = (1-w1) * attention_out + w1 * x
         # pred = torch.cat((attention_out, x), -1)
 
-        pred = 0.5 * torch.sigmoid(attention_out) + 0.5 * torch.sigmoid(x)
+        # pred = 0.5 * torch.sigmoid(attention_out) + 0.5 * torch.sigmoid(x)
         # pred = attention_out
         # pred = torch.sum(pred, -1)
 
@@ -248,7 +248,8 @@ class GCNBert(nn.Module):
 
         # pred = self.output_layer(avg_sentence_embeddings)
 
-        # pred = self.linear0(attention_out).squeeze(-1)
+        pred = self.linear0(attention_out).squeeze(-1)
+        pred = torch.sigmoid(pred)
         # pred = torch.matmul(pred, self.adj.transpose(0, 1))
 
         # #x = self.cosnorm_classifier(sentence_feat + concept_selector * x)
@@ -265,6 +266,7 @@ class GCNBert(nn.Module):
                 {'params': self.bert.parameters(), 'lr': lrp},
                 {'params': self.gc1.parameters(), 'lr': lr},
                 {'params': self.gc2.parameters(), 'lr': lr},
+                {'params': self.linear0.parameters(), 'lr': lr},
                 {'params': self.linear1.parameters(), 'lr': lr},
                 {'params': self.linear2.parameters(), 'lr': lr},
                 {'params': self.weight1.parameters(), 'lr': lr},
