@@ -40,7 +40,6 @@ class GraphConvolution(nn.Module):
         #
         # # #output = support
         support = torch.matmul(input, self.weight)
-        print(support.shape)
         output = torch.matmul(support.transpose(1, 2), adj)
         output = output.transpose(1, 2)
 
@@ -202,7 +201,6 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        print(attention_out.shape)
         x = self.gc1(attention_out, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
