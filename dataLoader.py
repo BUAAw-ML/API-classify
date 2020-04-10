@@ -396,7 +396,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
     print("train_data_size: {}".format(len(train_dataset.data)))
     print("val_data_size: {}".format(len(val_dataset.data)))
 
-    #tag_embedding_file = ''
-    tag_embedding_file = dataset.obtain_tag_embedding()
+    tag_embedding_file = ''
+    # tag_embedding_file = dataset.obtain_tag_embedding()
 
     return train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file
