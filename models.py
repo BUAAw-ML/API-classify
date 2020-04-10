@@ -40,6 +40,7 @@ class GraphConvolution(nn.Module):
         #
         # # #output = support
         support = torch.matmul(input, self.weight)
+        print(support.shape)
         output = torch.matmul(support.transpose(1, 2), adj)
         output = output.transpose(1, 2)
 
