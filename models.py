@@ -39,12 +39,12 @@ class GraphConvolution(nn.Module):
         # support = self.linear1(input)
         #
         # # #output = support
-        # support = torch.matmul(input, self.weight)
-        # output = torch.matmul(support.transpose(1, 2), adj)
-        # output = output.transpose(1, 2)
-
         support = torch.matmul(input, self.weight)
-        output = torch.matmul(adj, support)
+        output = torch.matmul(support.transpose(1, 2), adj)
+        output = output.transpose(1, 2)
+
+        # support = torch.matmul(input, self.weight)
+        # output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
@@ -201,6 +201,12 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
+        x = self.gc1(attention_out, self.adj)
+        x = self.relu1(x)
+        x = self.gc2(x, self.adj)
+
+        pred = torch.sum(x, -1)
+
         # attention_out = torch.sum(attention_out, -1)
 
         # pred = attention_out * x.unsqueeze(0)
@@ -245,9 +251,6 @@ class GCNBert(nn.Module):
 
         # pred = 0.5 * torch.sigmoid(attention_out) + 0.5 * torch.sigmoid(x)
         # pred = torch.cat((attention_out, x), -1)
-        pred = self.linear1(attention_out)
-        pred = self.relu2(pred)
-        pred = self.linear2(pred).squeeze(-1)
         # pred = attention_out
         # pred = torch.sum(pred, -1)
         # pred = torch.sigmoid(pred)
