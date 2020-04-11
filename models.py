@@ -115,9 +115,9 @@ class GCNBert(nn.Module):
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
         self.weight1 = torch.nn.Linear(108, 1)
         self.weight2 = torch.nn.Linear(768, 1)
-        # self.lstm_hid_dim = 768
-        # self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
-        #                     batch_first=True, bidirectional=True)
+        self.lstm_hid_dim = 768
+        self.lstm = torch.nn.LSTM(768, hidden_size=self.lstm_hid_dim, num_layers=2,
+                            batch_first=True, bidirectional=True)
         self.weight0 = torch.nn.Linear(768, 1)
 
         self.weight3 = Parameter(torch.Tensor(1, num_classes))
@@ -134,9 +134,9 @@ class GCNBert(nn.Module):
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
-        # hidden_state = self.init_hidden(token_feat.shape[0])
-        # token_feat, _ = self.lstm(token_feat, hidden_state)
-        # token_feat = self.linear2(token_feat)
+        hidden_state = self.init_hidden(token_feat.shape[0])
+        token_feat, _ = self.lstm(token_feat, hidden_state)
+        token_feat = self.linear2(token_feat)
 
         #print(token_feat.shape)
         # alpha = F.softmax(torch.matmul(self.tanh1(self.linear0(token_feat)), self.w), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
@@ -180,9 +180,9 @@ class GCNBert(nn.Module):
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
 
-        x = self.gc1(tag_embedding, self.adj)
-        x = self.relu1(x)
-        x = self.gc2(x, self.adj)
+        # x = self.gc1(tag_embedding, self.adj)
+        # x = self.relu1(x)
+        # x = self.gc2(x, self.adj)
         #
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
@@ -196,18 +196,21 @@ class GCNBert(nn.Module):
         # x = x.unsqueeze(-1)
 
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        confidence = (self.attention(token_feat)).transpose(1, 2)
+        # confidence = (torch.matmul(token_feat, x.transpose(0, 1))).transpose(1, 2)
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
         attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
         attention = F.softmax(attention, -1)
 
-        attention_out = attention * confidence
+        hidden_state = self.init_hidden(attention.shape[0])
+        ls, _ = self.lstm(attention, hidden_state)
+
+        # attention_out = attention * confidence
 
         # attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        pred = torch.sum(attention_out, -1)
+        pred = torch.sum(ls, -1)
 
         # pred = attention_out * x.unsqueeze(0)
 
