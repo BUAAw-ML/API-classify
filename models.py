@@ -212,6 +212,7 @@ class GCNBert(nn.Module):
         # attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
         pred = torch.sum(attention_out, -1)
+        pred = torch.sigmoid(pred)
 
         # attention_out = torch.sum(attention_out, -1)
 
