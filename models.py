@@ -134,9 +134,9 @@ class GCNBert(nn.Module):
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
-        hidden_state = self.init_hidden(token_feat.shape[0])
-        token_feat, _ = self.lstm(token_feat, hidden_state)
-        token_feat = self.linear2(token_feat)
+        # hidden_state = self.init_hidden(token_feat.shape[0])
+        # token_feat, _ = self.lstm(token_feat, hidden_state)
+        # token_feat = self.linear2(token_feat)
 
         #print(token_feat.shape)
         # alpha = F.softmax(torch.matmul(self.tanh1(self.linear0(token_feat)), self.w), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
