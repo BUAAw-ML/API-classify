@@ -77,7 +77,7 @@ class GCNBert(nn.Module):
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 2000)
+        self.gc1 = GraphConvolution(300, 2000)
         self.relu1 = nn.LeakyReLU(0.2)
         self.gc2 = GraphConvolution(2000, 768)
 
@@ -160,10 +160,10 @@ class GCNBert(nn.Module):
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        # with open(tag_embedding_file, 'rb') as fp:
-        #     feats = pkl.load(fp)#, encoding='utf-8')
-        # tag_embedding2 = feats.tolist()
-        # tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
+        with open(tag_embedding_file, 'rb') as fp:
+            feats = pkl.load(fp)#, encoding='utf-8')
+        tag_embedding2 = feats.tolist()
+        tag_embedding2 = torch.tensor(tag_embedding2).cuda(1)
         #
         # tag_embedding2 = self.linear1(tag_embedding2)
         #
@@ -180,7 +180,7 @@ class GCNBert(nn.Module):
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
 
-        x = self.gc1(tag_embedding, self.adj)
+        x = self.gc1(tag_embedding2, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
         #
