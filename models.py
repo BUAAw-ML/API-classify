@@ -207,6 +207,7 @@ class GCNBert(nn.Module):
         hidden_state = self.init_hidden(attention.shape[0])
         ls, _ = self.lstm(attention, hidden_state)
         ls = ls.transpose(1, 2)
+        print(ls.shape)
 
         # attention_out = attention * confidence
 
