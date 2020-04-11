@@ -358,7 +358,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
     if os.path.isfile(os.path.join('cache', cache_file_head + '.train')) \
             and os.path.isfile(os.path.join('cache', cache_file_head + '.eval')) \
             and os.path.isfile(os.path.join('cache', cache_file_head + '.encoded_tag')) \
-            and os.path.isfile(os.path.join('cache', cache_file_head + '.tag_mask')) and False:
+            and os.path.isfile(os.path.join('cache', cache_file_head + '.tag_mask')):
 
         print("load dataset from cache")
 
@@ -396,7 +396,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
     print("train_data_size: {}".format(len(train_dataset.data)))
     print("val_data_size: {}".format(len(val_dataset.data)))
 
-    # tag_embedding_file = ''
-    tag_embedding_file = dataset.obtain_tag_embedding()
+    tag_embedding_file = ''
+    # tag_embedding_file = dataset.obtain_tag_embedding()
 
     return train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file
