@@ -90,7 +90,7 @@ class GCNBert(nn.Module):
         _adj = torch.FloatTensor(_adj)
         _adj = _adj.transpose(0, 1)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
-        self.adj = nn.Parameter(_adj, requires_grad=True)
+        self.adj = nn.Parameter(_adj, requires_grad=False)
 
         _nums = co_occur_mat.numpy().diagonal()
         self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(1).unsqueeze(-1)
@@ -197,6 +197,7 @@ class GCNBert(nn.Module):
 
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
         attention2 = (torch.matmul(token_feat, x.transpose(0, 1))).transpose(1, 2)
+        attention2 = F.relu(attention2)
         # attention2 = F.softmax(attention2, -1)
         # attention2 = (self.linear1(token_feat)).transpose(1, 2)
         # attention_out2 = attention2 @ token_feat   # N, labels_num, hidden_size
