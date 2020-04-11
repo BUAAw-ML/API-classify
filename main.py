@@ -55,8 +55,8 @@ def multiLabel_text_classify():
     model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.4, co_occur_mat=train_dataset.co_occur_mat)
 
     # define loss function (criterion)
-    criterion = nn.BCELoss()
-    # criterion = nn.MultiLabelSoftMarginLoss()
+    # criterion = nn.BCELoss()
+    criterion = nn.MultiLabelSoftMarginLoss()
 
     # define optimizer
     optimizer = torch.optim.SGD(model.get_config_optim(args.lr, args.lrp),
