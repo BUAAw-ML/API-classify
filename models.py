@@ -187,14 +187,14 @@ class GCNBert(nn.Module):
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
         #
-        # # x = torch.mul(sentence_feat.unsqueeze(1), x)
+        # x = torch.mul(sentence_feat.unsqueeze(1), x)
         #
         # x = torch.matmul(sentence_feat, tag_embedding.transpose(0, 1))
         # x = F.softmax(x, -1)
         # x = x @ tag_embedding
         # x = torch.sum(x, -1)
         # x = x.unsqueeze(-1)
-
+        print(x.shape)
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
         attention2 = (torch.matmul(token_feat, x.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
