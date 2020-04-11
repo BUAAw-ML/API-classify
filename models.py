@@ -107,9 +107,9 @@ class GCNBert(nn.Module):
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768, num_classes)
+        self.linear1 = nn.Linear(768, 2000)
         self.relu2 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(2000, 768)
+        self.linear2 = nn.Linear(2000, num_classes)
         self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
@@ -196,11 +196,15 @@ class GCNBert(nn.Module):
         # x = x.unsqueeze(-1)
 
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        confidence = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2)
+
+        x = self.linear1(token_feat)
+        x = self.relu2(x)
+        x = self.linear2(x)
+        confidence = x.transpose(1, 2)
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        # attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
+        # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
+        attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
         attention = F.softmax(attention, -1)
 
 
