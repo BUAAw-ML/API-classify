@@ -196,11 +196,11 @@ class GCNBert(nn.Module):
         # x = x.unsqueeze(-1)
 
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        confidence = (torch.matmul(token_feat, x.transpose(0, 1))).transpose(1, 2)
+        confidence = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2)
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        # attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
+        # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
+        attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
         attention = F.softmax(attention, -1)
 
         attention_out = attention * confidence
@@ -208,13 +208,6 @@ class GCNBert(nn.Module):
         # attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
         pred = torch.sum(attention_out, -1)
-
-        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        attention2 = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
-        attention2 = F.softmax(attention2, -1)
-        attention_out2 = attention2 @ token_feat  # N, labels_num, hidden_size
-        attention_out2 = torch.sum(attention_out2, -1)
-        pred += attention_out2
 
         # pred = attention_out * x.unsqueeze(0)
 
