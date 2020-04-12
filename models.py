@@ -156,8 +156,8 @@ class GCNBert(nn.Module):
         # sentence_feat = token_feat[:,0,:]
         #
         embed = self.bert.get_input_embeddings()
+        print(encoded_tag)
         tag_embedding = embed(encoded_tag)
-        print(tag_embedding)
         print(tag_embedding.shape)
         exit()
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
