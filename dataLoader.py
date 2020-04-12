@@ -262,6 +262,7 @@ class ProgramWebDataset(Dataset):
         for i in range(self.get_tags_num()):
             tag = self.id2tag[i]
             tokens = tokenizer.tokenize(tag)
+            print(tokens)
             token_ids = tokenizer.convert_tokens_to_ids(tokens)
             tag_ids.append(token_ids)
             tag_token_num.append(len(tokens))
@@ -271,6 +272,8 @@ class ProgramWebDataset(Dataset):
         for i in range(self.get_tags_num()):
             mask[i, :len(tag_ids[i])] = 1.
             padded_tag_ids[i, :len(tag_ids[i])] = torch.tensor(tag_ids[i])
+
+        exit()
         return padded_tag_ids, mask
 
     def obtain_tag_embedding(self, wv='glove', model_path='data'):
