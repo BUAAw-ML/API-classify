@@ -126,6 +126,7 @@ class GCNBert(nn.Module):
         # self.memory = Parameter(torch.Tensor(num_classes, 768), requires_grad=False).cuda(0)
 
         self.memory = torch.zeros(108, 768).cuda(0)
+        self.relu = F.ReLU()
 
 
     def init_hidden(self, batch_size):
@@ -205,7 +206,7 @@ class GCNBert(nn.Module):
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
 
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        attention = (torch.matmul(token_feat, F.ReLU(tag_embedding).transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
+        attention = (torch.matmul(token_feat, self.relu(tag_embedding).transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
         attention = F.softmax(attention, -1)
 
         # attention_out = attention * confidence
