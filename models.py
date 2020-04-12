@@ -269,7 +269,7 @@ class GCNBert(nn.Module):
         # pred = x
         # print(pred.shape)
 
-        return pred, attention_out
+        return pred, attention_out.clone()
 
     def get_config_optim(self, lr, lrp):
         return [

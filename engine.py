@@ -448,7 +448,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
 
         self.state['loss'] = criterion(self.state['output'], target_var)
 
-        self.memory = torch.mean(attention_out.copy(), 0)
+        self.memory = torch.mean(attention_out, 0)
 
         # # Add all calculated features to center tensor
         # for i in range(len(target_var)):
