@@ -443,10 +443,12 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
 
         # compute output
 
-        self.state['output'], self.memory = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
+        self.state['output'], memory = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
                                  self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'], self.memory)
 
         self.state['loss'] = criterion(self.state['output'], target_var)
+
+        self.memory = memory.clone()
 
         # # Add all calculated features to center tensor
         # for i in range(len(target_var)):

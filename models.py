@@ -212,7 +212,7 @@ class GCNBert(nn.Module):
 
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        memory = ((memory + torch.mean(attention_out, 0)) / 2).clone()
+        memory = (memory + torch.mean(attention_out, 0)) / 2
 
         pred = torch.sum(attention_out, -1)
 
