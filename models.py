@@ -124,14 +124,14 @@ class GCNBert(nn.Module):
         self.weight3.data.uniform_(-10, 10)
 
         # self.memory = Parameter(torch.Tensor(num_classes, 768), requires_grad=False).cuda(0)
-        self.memory = torch.zeros(num_classes,768).cuda(0)
+
 
 
     def init_hidden(self, batch_size):
         return (torch.randn(4, batch_size, self.lstm_hid_dim).cuda(1),
                 torch.randn(4, batch_size, self.lstm_hid_dim).cuda(1))
 
-    def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result):
+    def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file, tfidf_result, memory):
 
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
@@ -203,7 +203,7 @@ class GCNBert(nn.Module):
         # tag_embedding = torch.matmul(self.adj, tag_embedding)
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
 
-        tag_key = (tag_embedding + self.memory) /2
+        tag_key = (tag_embedding + memory) /2
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
         attention = (torch.matmul(token_feat, tag_key.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
         attention = F.softmax(attention, -1)
@@ -212,7 +212,7 @@ class GCNBert(nn.Module):
 
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        self.memory = (self.memory + torch.mean(attention_out, 0)) / 2
+        memory = (memory + torch.mean(attention_out, 0)) / 2
 
         pred = torch.sum(attention_out, -1)
 
@@ -270,7 +270,7 @@ class GCNBert(nn.Module):
         # pred = x
         # print(pred.shape)
 
-        return pred
+        return pred, memory
 
     def get_config_optim(self, lr, lrp):
         return [
