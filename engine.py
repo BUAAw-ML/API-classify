@@ -431,6 +431,7 @@ class MultiLabelMAPEngine(Engine):
                     batch_time=batch_time, data_time_current=self.state['data_time_batch'],
                     data_time=data_time, loss_current=self.state['loss_batch'], loss=loss))
 
+import copy
 
 class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
     def on_forward(self, training, model, criterion, data_loader, optimizer=None, display=True):
@@ -448,7 +449,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
 
         self.state['loss'] = criterion(self.state['output'], target_var)
 
-        self.memory = memory.clone()
+        self.memory = copy.deepcopy(memory)
 
         # # Add all calculated features to center tensor
         # for i in range(len(target_var)):
