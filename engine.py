@@ -443,12 +443,12 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
 
         # compute output
 
-        self.state['output'], attention_out  = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
+        self.state['output'], attention_out = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
                                  self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'], self.memory)
 
         self.state['loss'] = criterion(self.state['output'], target_var)
 
-        self.memory = torch.mean(attention_out, 0).clone()
+        self.memory = torch.mean(attention_out.clone(), 0)
 
         # # Add all calculated features to center tensor
         # for i in range(len(target_var)):
