@@ -212,7 +212,7 @@ class GCNBert(nn.Module):
 
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        memory = torch.mean(attention_out, 0).clone()
+        aa = torch.mean(attention_out, 0).clone()
 
         pred = torch.sum(attention_out, -1)
 
@@ -270,7 +270,7 @@ class GCNBert(nn.Module):
         # pred = x
         # print(pred.shape)
 
-        return pred, memory
+        return pred, aa
 
     def get_config_optim(self, lr, lrp):
         return [
