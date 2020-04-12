@@ -448,7 +448,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
 
         self.state['loss'] = criterion(self.state['output'], target_var)
 
-        self.memory = torch.mean(attention_out.clone(), 0)
+        self.memory = torch.mean(attention_out.copy(), 0)
 
         # # Add all calculated features to center tensor
         # for i in range(len(target_var)):
@@ -463,7 +463,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
 
         if training:
             optimizer.zero_grad()
-            self.state['loss'].backward(retain_graph=True)
+            self.state['loss'].backward()
             nn.utils.clip_grad_norm_(model.parameters(), max_norm=10.0)
             optimizer.step()
         else:
