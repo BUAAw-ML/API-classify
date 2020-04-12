@@ -289,7 +289,7 @@ class GCNBert(nn.Module):
                 {'params': self.linear2.parameters(), 'lr': lr},
                 {'params': self.weight1.parameters(), 'lr': lr},
                 {'params': self.weight2.parameters(), 'lr': lr},
-                {'params': self.weight3.parameters(), 'lr': lr},
+                {'params': self.weight3, 'lr': lr},
                 {'params': self.attention.parameters(), 'lr': lr},
                 {'params': self.output_layer.parameters(), 'lr': lr},
                 ]
