@@ -431,7 +431,6 @@ class MultiLabelMAPEngine(Engine):
                     batch_time=batch_time, data_time_current=self.state['data_time_batch'],
                     data_time=data_time, loss_current=self.state['loss_batch'], loss=loss))
 
-import copy
 
 class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
     def on_forward(self, training, model, criterion, data_loader, optimizer=None, display=True):
@@ -444,12 +443,11 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
 
         # compute output
 
-        self.state['output'], memory = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
+        self.state['output'], self.memory  = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
                                  self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'], self.memory)
 
         self.state['loss'] = criterion(self.state['output'], target_var)
 
-        self.memory = copy.deepcopy(memory)
 
         # # Add all calculated features to center tensor
         # for i in range(len(target_var)):
