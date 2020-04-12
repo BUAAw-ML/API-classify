@@ -157,7 +157,7 @@ class GCNBert(nn.Module):
         #
         embed = self.bert.get_input_embeddings()
         tag_embedding = embed(encoded_tag)
-        tag_embedding = tag_embedding[0]
+        tag_embedding = tag_embedding[:,0,:]
         # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
         #     / torch.sum(tag_mask, dim=1, keepdim=True)
 
