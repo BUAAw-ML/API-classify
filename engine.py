@@ -342,7 +342,7 @@ class MultiLabelMAPEngine(Engine):
             self.state['difficult_examples'] = False
         self.state['ap_meter'] = AveragePrecisionMeter(self.state['difficult_examples'])
 
-        self.memory = torch.zeros(108, 768).cuda(0)
+
 
     def on_start_epoch(self, training, model, criterion, data_loader, optimizer=None, display=True):
         Engine.on_start_epoch(self, training, model, criterion, data_loader, optimizer)
@@ -444,11 +444,9 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
         # compute output
 
         self.state['output'], attention_out = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
-                                 self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'], self.memory)
+                                 self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'])
 
         self.state['loss'] = criterion(self.state['output'], target_var)
-
-        self.memory = attention_out[0,:,:]#torch.mean(attention_out, 0)
 
         # # Add all calculated features to center tensor
         # for i in range(len(target_var)):
