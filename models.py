@@ -123,7 +123,8 @@ class GCNBert(nn.Module):
         self.weight3 = Parameter(torch.Tensor(1, num_classes))
         self.weight3.data.uniform_(-10, 10)
 
-        self.memory = torch.zeros(num_classes,768).cuda(0)
+        self.memory = Parameter(torch.Tensor(num_classes, 768), requires_grad=False).cuda(0)
+        # self.memory = torch.zeros(num_classes,768).cuda(0)
 
 
     def init_hidden(self, batch_size):
