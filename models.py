@@ -126,7 +126,7 @@ class GCNBert(nn.Module):
         # self.memory = Parameter(torch.Tensor(num_classes, 768), requires_grad=False).cuda(0)
 
         self.memory = torch.zeros(108, 768).cuda(0)
-        self.relu = F.ReLU()
+        self.relu = nn.ReLU()
 
 
     def init_hidden(self, batch_size):
