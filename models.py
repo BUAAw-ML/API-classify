@@ -156,12 +156,10 @@ class GCNBert(nn.Module):
         # sentence_feat = token_feat[:,0,:]
         #
         embed = self.bert.get_input_embeddings()
-
         tag_embedding = embed(encoded_tag)
-        print(tag_embedding.shape)
-        exit()
-        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(tag_mask, dim=1, keepdim=True)
+        tag_embedding = tag_embedding[0]
+        # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
+        #     / torch.sum(tag_mask, dim=1, keepdim=True)
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')

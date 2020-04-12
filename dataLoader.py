@@ -262,7 +262,6 @@ class ProgramWebDataset(Dataset):
         for i in range(self.get_tags_num()):
             tag = self.id2tag[i]
             tokens = tokenizer.tokenize(tag)
-            print(tokens)
             token_ids = tokenizer.convert_tokens_to_ids(tokens)
             tag_ids.append(token_ids)
             tag_token_num.append(len(tokens))
@@ -272,8 +271,6 @@ class ProgramWebDataset(Dataset):
         for i in range(self.get_tags_num()):
             mask[i, :len(tag_ids[i])] = 1.
             padded_tag_ids[i, :len(tag_ids[i])] = torch.tensor(tag_ids[i])
-
-        exit()
         return padded_tag_ids, mask
 
     def obtain_tag_embedding(self, wv='glove', model_path='data'):
@@ -361,7 +358,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
     if os.path.isfile(os.path.join('cache', cache_file_head + '.train')) \
             and os.path.isfile(os.path.join('cache', cache_file_head + '.eval')) \
             and os.path.isfile(os.path.join('cache', cache_file_head + '.encoded_tag')) \
-            and os.path.isfile(os.path.join('cache', cache_file_head + '.tag_mask')) and False:
+            and os.path.isfile(os.path.join('cache', cache_file_head + '.tag_mask')):
 
         print("load dataset from cache")
 
