@@ -301,7 +301,7 @@ class ProgramWebDataset(Dataset):
         result = {}
         # construct input
 
-        inputs = [e['title_ids'] + e['dscp_ids'] for e in batch]  #e['title_ids'] +
+        inputs = [e['dscp_ids'] for e in batch]  #e['title_ids'] +
 
         lengths = np.array([len(e) for e in inputs])
         max_len = np.max(lengths)
@@ -319,6 +319,18 @@ class ProgramWebDataset(Dataset):
 
         #inputs_tokens = [e['title_tokens'] + e['dscp_tokens'] for e in batch]  #
         inputs_tfidf = torch.zeros(size=(len(batch), max_len+2))
+
+        #######################
+        title_inputs = [e['title_ids'] for e in batch]
+        lengths = np.array([len(e) for e in title_inputs])
+        max_len = np.max(lengths)
+        title_inputs = [tokenizer.prepare_for_model(e, max_length=max_len + 2, pad_to_max_length=True) for e in title_inputs]
+
+        title_ids = torch.LongTensor([e['input_ids'] for e in title_inputs])
+        title_token_type_ids = torch.LongTensor([e['token_type_ids'] for e in title_inputs])
+        title_attention_mask = torch.FloatTensor([e['attention_mask'] for e in title_inputs])
+
+        #######################
         #
         # for i, token_list in enumerate(inputs_tokens):
         #     for j, item in enumerate(token_list):
@@ -334,7 +346,7 @@ class ProgramWebDataset(Dataset):
         # ids *= inputs_tfidf.long()
         # ids[ids==0]=103
 
-        return (ids, token_type_ids, attention_mask, inputs_tfidf), tags, dscp
+        return (ids, token_type_ids, attention_mask, inputs_tfidf, title_ids, title_token_type_ids, title_attention_mask), tags, dscp
 
 
 # def CrossValidationSplitter(dataset, seed):
