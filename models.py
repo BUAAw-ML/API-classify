@@ -222,7 +222,7 @@ class GCNBert(nn.Module):
 
         # x = torch.mul(sentence_feat.unsqueeze(1), tag_embedding)
 
-        pred = torch.sum(attention_out, -1)
+        # pred = torch.sum(attention_out, -1)
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
@@ -276,10 +276,10 @@ class GCNBert(nn.Module):
 
         # pred = self.linear1(attention_out).squeeze(-1)
 
-        # x = self.linear1(attention_out)  #sentence_feat + concept_selector *
-        # x = self.relu2(x)
-        # x = self.linear2(x).squeeze(-1)
-        # pred = x
+        x = self.linear1(attention_out)  #sentence_feat + concept_selector *
+        x = self.relu2(x)
+        x = self.linear2(x).squeeze(-1)
+        pred = x
         # print(pred.shape)
 
         return pred
