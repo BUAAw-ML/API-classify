@@ -96,8 +96,8 @@ class ProgramWebDataset(Dataset):
                     # if t not in tag2token:
                     #     tag2token[t] = tokenizer.tokenize(t.strip())[0]
 
-        # ignored_tags = set()
-        ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
+        ignored_tags = set()
+        # ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
         for tag in tag_occurance:
             if tag_occurance[tag] < 0:
                 ignored_tags.add(tag)
@@ -370,7 +370,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
     if os.path.isfile(os.path.join('cache', cache_file_head + '.train')) \
             and os.path.isfile(os.path.join('cache', cache_file_head + '.eval')) \
             and os.path.isfile(os.path.join('cache', cache_file_head + '.encoded_tag')) \
-            and os.path.isfile(os.path.join('cache', cache_file_head + '.tag_mask')):
+            and os.path.isfile(os.path.join('cache', cache_file_head + '.tag_mask')) and False:
 
         print("load dataset from cache")
 

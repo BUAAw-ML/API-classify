@@ -107,9 +107,9 @@ class GCNBert(nn.Module):
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768 * 2, 300 * 2)
+        self.linear1 = nn.Linear(768, 300)
         self.relu2 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(300 * 2, 1)
+        self.linear2 = nn.Linear(300, 1)
         self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
@@ -166,12 +166,10 @@ class GCNBert(nn.Module):
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        title_token_feat = self.bert(title_ids,
-            token_type_ids=title_token_type_ids,
-            attention_mask=title_attention_mask)[0]
-        title_feat = title_token_feat[:, 0, :]
-
-        x = torch.matmul(title_feat, tag_embedding.transpose(0, 1))
+        # title_token_feat = self.bert(title_ids,
+        #     token_type_ids=title_token_type_ids,
+        #     attention_mask=title_attention_mask)[0]
+        # title_feat = title_token_feat[:, 0, :]
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
@@ -232,7 +230,7 @@ class GCNBert(nn.Module):
 
         # x = torch.cat((x, attention_out), 2)
 
-        pred = torch.sum(attention_out, -1) + x
+        # pred = torch.sum(attention_out, -1) + x
 
         #x = x.unsqueeze(0)
         #print(x.shape)
@@ -278,10 +276,10 @@ class GCNBert(nn.Module):
 
         # pred = self.linear1(attention_out).squeeze(-1)
 
-        # x = self.linear1(x)  #sentence_feat + concept_selector *
-        # x = self.relu2(x)
-        # x = self.linear2(x).squeeze(-1)
-        # pred = x
+        x = self.linear1(attention_out)  #sentence_feat + concept_selector *
+        x = self.relu2(x)
+        x = self.linear2(x).squeeze(-1)
+        pred = x
         # print(pred.shape)
 
         return pred
