@@ -140,6 +140,9 @@ class GCNBert(nn.Module):
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
+        print(token_feat.shape)
+        
+
         # hidden_state = self.init_hidden(token_feat.shape[0])
         # token_feat, _ = self.lstm(token_feat, hidden_state)
         # token_feat = self.linear2(token_feat)
@@ -148,7 +151,7 @@ class GCNBert(nn.Module):
         # alpha = F.softmax(self.weight0(token_feat).squeeze(-1), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
         # token_feat = token_feat * alpha  # [16, seq_len, 768]
 
-        # torch.set_printoptions(threshold=np.inf)
+        torch.set_printoptions(threshold=np.inf)
 
         # print(inputs_tfidf)
         # exit()
@@ -200,9 +203,12 @@ class GCNBert(nn.Module):
         #
         # x = torch.mul(sentence_feat.unsqueeze(1), x)
 
-        # tag_embedding = torch.matmul(self.adj, tag_embedding)
-
-        masks = torch.unsqueeze(attention_mask * inputs_tfidf, 1)  # N, 1, L
+        # tag_embedding = t orch.matmul(self.adj, tag_embedding)
+        print(attention_mask)
+        attention_mask[:,0] = 0
+        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
+        print(attention_mask)
+        exit()
 
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
         attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
