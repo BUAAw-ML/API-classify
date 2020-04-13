@@ -336,7 +336,7 @@ class ProgramWebDataset(Dataset):
         for i, token_list in enumerate(inputs_tokens):
             for j, item in enumerate(token_list):
                 if item in self.tfidf_dict:
-                    inputs_tfidf[i, j+1] = self.tfidf_dict[item]
+                    inputs_tfidf[i, j+1] = 1#self.tfidf_dict[item]
 
         # print(inputs_tokens[0])
         # print(inputs_tfidf[0])
