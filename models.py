@@ -39,12 +39,12 @@ class GraphConvolution(nn.Module):
         # support = self.linear1(input)
         #
         # # #output = support
-        # support = torch.matmul(input, self.weight)
-        # output = torch.matmul(support.transpose(1, 2), adj)
-        # output = output.transpose(1, 2)
-
         support = torch.matmul(input, self.weight)
-        output = torch.matmul(adj, support)
+        output = torch.matmul(support.transpose(1, 2), adj)
+        output = output.transpose(1, 2)
+
+        # support = torch.matmul(input, self.weight)
+        # output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
@@ -216,7 +216,7 @@ class GCNBert(nn.Module):
 
         # x = torch.mul(sentence_feat.unsqueeze(1), tag_embedding)
 
-        attention_out = torch.sum(attention_out, -1)
+        # attention_out = torch.sum(attention_out, -1)
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
@@ -249,13 +249,17 @@ class GCNBert(nn.Module):
 
         # w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
-        pred = attention_out + x
+        # pred = attention_out #+ x
+
+        x = self.gc1(attention_out, self.adj)
+        x = self.relu1(x)
+        x = self.gc2(x, self.adj)
 
 
         # pred = 0.5 * torch.sigmoid(attention_out) + 0.5 * torch.sigmoid(x)
         # pred = torch.cat((attention_out, x), -1)
         # pred = attention_out
-        # pred = torch.sum(pred, -1)
+        pred = torch.sum(x, -1)
         # pred = torch.sigmoid(pred)
 
         # avg_sentence_embeddings = torch.sum(pred, 1) / self.num_classes
