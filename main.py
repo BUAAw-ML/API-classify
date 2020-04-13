@@ -16,7 +16,7 @@ parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                     help='number of data loading workers (default: 4)')
 parser.add_argument('--epochs', default=20, type=int, metavar='N',
                     help='number of total epochs to run')
-parser.add_argument('--epoch_step', default=[12], type=int, nargs='+',
+parser.add_argument('--epoch_step', default=[15], type=int, nargs='+',
                     help='number of epochs to change learning rate')
 parser.add_argument('--device_ids', default=[1], type=int, nargs='+',
                     help='')
@@ -47,6 +47,8 @@ parser.add_argument('--log_dir', default='./logs', type=str,
 def multiLabel_text_classify():
     global args, best_prec1, use_gpu
     args = parser.parse_args()
+
+    print("device_id: {}".format(args.device_ids))
 
     use_gpu = torch.cuda.is_available()
     train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file = \
