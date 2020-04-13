@@ -145,8 +145,8 @@ class GCNBert(nn.Module):
         # token_feat = self.linear2(token_feat)
 
         #print(token_feat.shape)
-        alpha = F.softmax(self.weight0(token_feat).squeeze(-1), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
-        token_feat = token_feat * alpha  # [16, seq_len, 768]
+        # alpha = F.softmax(self.weight0(token_feat).squeeze(-1), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
+        # token_feat = token_feat * alpha  # [16, seq_len, 768]
 
         # torch.set_printoptions(threshold=np.inf)
 
