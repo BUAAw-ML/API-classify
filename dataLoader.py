@@ -187,14 +187,14 @@ class ProgramWebDataset(Dataset):
         for item in tfidf_model.vocabulary_:
             tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
 
-        # tfidf_model = TfidfVectorizer(sublinear_tf=True,
-        #                                 strip_accents='unicode',
-        #                                 analyzer='char',
-        #                                 stop_words='english',
-        #                                 ngram_range=(2, 6),
-        #                                 max_features=50000).fit(document)
-        # for item in tfidf_model.vocabulary_:
-        #     tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
+        tfidf_model = TfidfVectorizer(sublinear_tf=True,
+                                        strip_accents='unicode',
+                                        analyzer='char',
+                                        stop_words='english',
+                                        ngram_range=(2, 6),
+                                        max_features=50000).fit(document)
+        for item in tfidf_model.vocabulary_:
+            tfidf_dict[item] = tfidf_model.idf_[tfidf_model.vocabulary_[item]]
 
         return tfidf_dict
 
