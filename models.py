@@ -39,8 +39,8 @@ class GraphConvolution(nn.Module):
         # support = self.linear1(input)
         #
         # # #output = support
-        support = torch.matmul(input, self.weight)
-        output = torch.matmul(support.transpose(1, 2), adj)
+        # support = torch.matmul(input, self.weight)
+        output = torch.matmul(input.transpose(1, 2), adj)
         output = output.transpose(1, 2)
 
         # support = torch.matmul(input, self.weight)
@@ -88,7 +88,7 @@ class GCNBert(nn.Module):
         # self.res = torch.FloatTensor(np.dot(exist, factor)).cuda(1)
 
         _adj = torch.FloatTensor(_adj)
-        _adj = _adj.transpose(0, 1)
+        # _adj = _adj.transpose(0, 1)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         self.adj = nn.Parameter(_adj, requires_grad=False)
 
