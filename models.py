@@ -39,12 +39,12 @@ class GraphConvolution(nn.Module):
         # support = self.linear1(input)
         #
         # # #output = support
-        support = torch.matmul(input, self.weight)
-        output = torch.matmul(support.transpose(1, 2), adj)
-        output = output.transpose(1, 2)
-
         # support = torch.matmul(input, self.weight)
-        # output = torch.matmul(adj, support)
+        # output = torch.matmul(support.transpose(1, 2), adj)
+        # output = output.transpose(1, 2)
+
+        support = torch.matmul(input, self.weight)
+        output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
