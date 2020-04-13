@@ -249,7 +249,7 @@ class GCNBert(nn.Module):
 
         # w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
-        pred = attention_out #+ x
+        pred = attention_out + x
 
         # pred = 0.5 * torch.sigmoid(attention_out) + 0.5 * torch.sigmoid(x)
         # pred = torch.cat((attention_out, x), -1)
