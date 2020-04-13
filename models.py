@@ -206,7 +206,7 @@ class GCNBert(nn.Module):
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
 
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
-        attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
+        attention = (torch.matmul(token_feat * inputs_tfidf.unsqueeze(-1), tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
 
         attention = F.softmax(attention, -1)
 
@@ -214,13 +214,8 @@ class GCNBert(nn.Module):
 
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        # x = torch.mul(sentence_feat.unsqueeze(1), tag_embedding)
 
-        x = self.gc1(attention_out, self.adj)
-        x = self.relu1(x)
-        x = self.gc2(x, self.adj)
-
-        attention_out = torch.sum(x, -1)
+        attention_out = torch.sum(attention_out, -1)
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
