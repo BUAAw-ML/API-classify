@@ -120,7 +120,7 @@ class GCNBert(nn.Module):
         #                     batch_first=True, bidirectional=True)
         self.weight0 = torch.nn.Linear(768, 1)
 
-        self.weight3 = Parameter(torch.Tensor(num_classes, 768))
+        self.weight3 = Parameter(torch.Tensor(768, 1))
         self.weight3.data.uniform_(-5, 5)
 
         # self.memory = Parameter(torch.Tensor(num_classes, 768), requires_grad=False).cuda(0)
@@ -145,8 +145,8 @@ class GCNBert(nn.Module):
         # token_feat = self.linear2(token_feat)
 
         #print(token_feat.shape)
-        # alpha = F.softmax(torch.matmul(self.tanh1(self.linear0(token_feat)), self.w), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
-        # token_feat = token_feat * alpha  # [16, seq_len, 768]
+        alpha = F.softmax(self.weight0(token_feat).squeeze(-1), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
+        token_feat = token_feat * alpha  # [16, seq_len, 768]
 
         # torch.set_printoptions(threshold=np.inf)
 
@@ -165,23 +165,6 @@ class GCNBert(nn.Module):
         tag_embedding = embed(encoded_tag)
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
-
-        title_token_feat = self.bert(title_ids,
-            token_type_ids=title_token_type_ids,
-            attention_mask=title_attention_mask)[0]
-        title_feat = title_token_feat[:, 0, :]
-
-        masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-
-        attention = (torch.bmm(token_feat, title_feat.unsqueeze(1).transpose(1, 2))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
-
-        attention = F.softmax(attention, -1)
-
-        # attention_out = attention * confidence
-
-        attention_out2 = torch.bmm(attention, token_feat)
-
-        x = torch.mul(attention_out2, tag_embedding)
 
 
         # with open(tag_embedding_file, 'rb') as fp:
@@ -241,9 +224,9 @@ class GCNBert(nn.Module):
 
         # pred = attention_out * x.unsqueeze(0)
 
-        x = torch.cat((x, attention_out), 2)
+        # x = torch.cat((x, attention_out), 2)
 
-        pred = torch.sum(x, -1)
+        pred = torch.sum(attention_out, -1)
 
         #x = x.unsqueeze(0)
         #print(x.shape)
