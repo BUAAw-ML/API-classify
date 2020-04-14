@@ -202,7 +202,7 @@ class GCNBert(nn.Module):
         # x = torch.mul(sentence_feat.unsqueeze(1), x)
 
         # tag_embedding = t orch.matmul(self.adj, tag_embedding)
-        attention_mask[:, 0] = 0
+        # attention_mask[:, 0] = 0
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
 
 
