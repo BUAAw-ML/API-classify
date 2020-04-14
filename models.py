@@ -199,7 +199,7 @@ class GCNBert(nn.Module):
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
         #
-        x = torch.mul(sentence_feat.unsqueeze(1), tag_embedding)
+        x = torch.mul(sentence_feat.unsqueeze(1), x)
         x = torch.sum(x, -1)
 
         # tag_embedding = t orch.matmul(self.adj, tag_embedding)
