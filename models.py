@@ -216,11 +216,8 @@ class GCNBert(nn.Module):
 
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        print(attention_out.shape)
-        attention_out = torch.sum(attention_out, dim=2)\
-                         / torch.sum(attention_mask, dim=1, keepdim=True)
-
-        # attention_out = torch.sum(attention_out, -1)
+        attention_out = torch.sum(attention_out, -1)
+        attention_out /= torch.sum(attention_mask, dim=1, keepdim=True)
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
@@ -228,8 +225,6 @@ class GCNBert(nn.Module):
 
         # x = torch.cat((x, attention_out), 2)
 
-        print(attention_out.shape)
-        print(x.shape)
         pred = attention_out + x
 
         #x = x.unsqueeze(0)
