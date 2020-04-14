@@ -40,11 +40,11 @@ class GraphConvolution(nn.Module):
         #
         # # #output = support
         # support = torch.matmul(input, self.weight)
-        output = torch.matmul(input.transpose(1, 2), adj)
-        output = output.transpose(1, 2)
+        # output = torch.matmul(support.transpose(1, 2), adj)
+        # output = output.transpose(1, 2)
 
-        # support = torch.matmul(input, self.weight)
-        # output = torch.matmul(adj, support)
+        support = torch.matmul(input, self.weight)
+        output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
@@ -88,7 +88,7 @@ class GCNBert(nn.Module):
         # self.res = torch.FloatTensor(np.dot(exist, factor)).cuda(1)
 
         _adj = torch.FloatTensor(_adj)
-        # _adj = _adj.transpose(0, 1)
+        _adj = _adj.transpose(0, 1)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
         self.adj = nn.Parameter(_adj, requires_grad=False)
 
@@ -160,7 +160,7 @@ class GCNBert(nn.Module):
         # sentence_feat = sentence_feat.unsqueeze(1)
 
 
-        # sentence_feat = token_feat[:,0,:]
+        sentence_feat = token_feat[:,0,:]
         #
         embed = self.bert.get_input_embeddings()
         tag_embedding = embed(encoded_tag)
@@ -192,17 +192,18 @@ class GCNBert(nn.Module):
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
         #
-        # x = self.gc1(tag_embedding, self.adj)
-        # x = self.relu1(x)
-        # x = self.gc2(x, self.adj)
+        x = self.gc1(tag_embedding, self.adj)
+        x = self.relu1(x)
+        x = self.gc2(x, self.adj)
         # #
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
         #
-        # x = torch.mul(sentence_feat.unsqueeze(1), x)
+        x = torch.mul(sentence_feat.unsqueeze(1), x)
+        x = torch.sum(x, -1)
 
         # tag_embedding = t orch.matmul(self.adj, tag_embedding)
-        # attention_mask[:, 0] = 0
+        attention_mask[:, 0] = 0
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
 
 
@@ -223,7 +224,7 @@ class GCNBert(nn.Module):
 
         # x = torch.cat((x, attention_out), 2)
 
-        # pred = torch.sum(attention_out, -1) + x
+        pred = torch.sum(attention_out, -1) + x
 
         #x = x.unsqueeze(0)
         #print(x.shape)
@@ -248,7 +249,7 @@ class GCNBert(nn.Module):
 
         # w1 = torch.sigmoid(self.weight1(self.weight_adj)).squeeze(-1).unsqueeze(0)
 
-        pred = attention_out #+ x
+        # pred = attention_out #+ x
 
         # pred = 0.5 * torch.sigmoid(attention_out) + 0.5 * torch.sigmoid(x)
         # pred = torch.cat((attention_out, x), -1)
@@ -268,9 +269,9 @@ class GCNBert(nn.Module):
 
         # pred = self.linear1(attention_out).squeeze(-1)
 
-        x = self.linear1(attention_out)  #sentence_feat + concept_selector *
-        x = self.relu2(x)
-        pred = self.linear2(x).squeeze(-1)
+        # x = self.linear1(attention_out)  #sentence_feat + concept_selector *
+        # x = self.relu2(x)
+        # pred = self.linear2(x).squeeze(-1)
         # pred = x
         # print(pred.shape)
 
