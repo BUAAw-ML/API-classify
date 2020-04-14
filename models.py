@@ -205,7 +205,7 @@ class GCNBert(nn.Module):
         # tag_embedding = t orch.matmul(self.adj, tag_embedding)
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L
-        masks[:,:, 0] = 0
+        # masks[:,:, 0] = 0
 
         # attention = self.attention(token_feat).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))  # N, labels_num, L
         attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
