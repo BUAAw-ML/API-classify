@@ -39,12 +39,12 @@ class GraphConvolution(nn.Module):
         # support = self.linear1(input)
         #
         # # #output = support
-        # support = torch.matmul(input, self.weight)
-        # output = torch.matmul(support.transpose(1, 2), adj)
-        # output = output.transpose(1, 2)
-
         support = torch.matmul(input, self.weight)
-        output = torch.matmul(adj, support)
+        output = torch.matmul(support.transpose(1, 2), adj)
+        output = output.transpose(1, 2)
+
+        # support = torch.matmul(input, self.weight)
+        # output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
@@ -88,9 +88,9 @@ class GCNBert(nn.Module):
         # self.res = torch.FloatTensor(np.dot(exist, factor)).cuda(1)
 
         _adj = torch.FloatTensor(_adj)
-        _adj = _adj.transpose(0, 1)
+        # _adj = _adj.transpose(0, 1)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
-        self.adj = nn.Parameter(_adj, requires_grad=False)
+        self.adj = nn.Parameter(_adj, requires_grad=True)
 
         _nums = co_occur_mat.numpy().diagonal()
         self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(1).unsqueeze(-1)
@@ -216,6 +216,10 @@ class GCNBert(nn.Module):
 
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
+        x = self.gc1(attention_out, self.adj)
+        x = self.relu1(x)
+        attention_out = self.gc2(x, self.adj)
+
         attention_out = torch.sum(attention_out, -1)
 
         # self.memory = torch.mean(attention_out, 0).clone()
@@ -225,6 +229,7 @@ class GCNBert(nn.Module):
         # x = torch.cat((x, attention_out), 2)
 
         pred = attention_out  # + x
+
 
 
         #x = x.unsqueeze(0)
@@ -278,29 +283,6 @@ class GCNBert(nn.Module):
 
         return pred
 
-    def predict(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file,
-                tfidf_result, title_ids, title_token_type_ids, title_attention_mask):
-
-        token_feat = self.bert(ids,
-            token_type_ids=token_type_ids,
-            attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
-
-        embed = self.bert.get_input_embeddings()
-        tag_embedding = embed(encoded_tag)
-        tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(tag_mask, dim=1, keepdim=True)
-
-        masks = torch.unsqueeze(attention_mask, 1)#.clone()  # N, 1, L
-        attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
-
-        attention = F.softmax(attention, -1)
-
-        attention_out = attention @ token_feat   # N, labels_num, hidden_size
-        attention_out = torch.sum(attention_out, -1)
-
-        pred = attention_out
-        pred = torch.matmul(pred, self.adj.transpose(0, 1))
-        return pred
 
     def get_config_optim(self, lr, lrp):
         return [
