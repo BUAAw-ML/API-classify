@@ -216,9 +216,9 @@ class GCNBert(nn.Module):
 
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        # x = self.gc1(attention_out, self.adj)
-        # x = self.relu1(x)
-        # attention_out = self.gc2(x, self.adj)
+        x = self.gc1(attention_out, self.adj)
+        x = self.relu1(x)
+        attention_out = self.gc2(x, self.adj)
 
         attention_out = torch.sum(attention_out, -1)
 
