@@ -445,9 +445,14 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
         title_attention_mask = title_attention_mask.cuda(self.state['device_ids'][0])
 
         # compute output
-
-        self.state['output'] = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
+        if training:
+            self.state['output'] = model(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
                                  self.state['tag_mask'], self.state['tag_embedding_file'], self.state['tfidf_result'], title_ids, title_token_type_ids, title_attention_mask)
+        else:
+            self.state['output'] = model.predict(ids, token_type_ids, attention_mask, inputs_tfidf, self.state['encoded_tag'],
+                                         self.state['tag_mask'], self.state['tag_embedding_file'],
+                                         self.state['tfidf_result'], title_ids, title_token_type_ids,
+                                         title_attention_mask)
 
         self.state['loss'] = criterion(self.state['output'], target_var)
 
