@@ -216,8 +216,6 @@ class GCNBert(nn.Module):
 
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        attention_out = attention_out * tag_embedding
-
         attention_out = torch.sum(attention_out, -1)
 
         # self.memory = torch.mean(attention_out, 0).clone()
@@ -298,7 +296,6 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
 
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
-        attention_out = attention_out * tag_embedding
         attention_out = torch.sum(attention_out, -1)
 
         pred = attention_out
