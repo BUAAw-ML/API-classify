@@ -461,7 +461,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
             self.state['train_iters'] += 1
         else:
             self.state['eval_iters'] += 1
-            print(torch.sum(model.adj.data()>0))
+            print(torch.count(model.adj >0))
 
         if training:
             optimizer.zero_grad()
