@@ -455,6 +455,7 @@ class GCNMultiLabelMAPEngine(MultiLabelMAPEngine):
         #     label = target_var[i]
         #     self.centroids[label > 0] += sentence_feat[i]
         #     self.classcount[label > 0] += 1
+        torch.set_printoptions(threshold=np.inf)
 
         if training:
             self.state['train_iters'] += 1
