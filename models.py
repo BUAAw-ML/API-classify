@@ -300,7 +300,6 @@ class GCNBert(nn.Module):
 
         pred = attention_out
         pred = torch.matmul(pred, self.adj.transpose(0, 1))
-        exit()
         return pred
 
     def get_config_optim(self, lr, lrp):
