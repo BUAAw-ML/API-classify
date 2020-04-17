@@ -39,12 +39,12 @@ class GraphConvolution(nn.Module):
         # support = self.linear1(input)
         #
         # # #output = support
-        support = torch.matmul(input, self.weight)
-        output = torch.matmul(support.transpose(1, 2), adj)
-        output = output.transpose(1, 2)
-
         # support = torch.matmul(input, self.weight)
-        # output = torch.matmul(adj, support)
+        # output = torch.matmul(support.transpose(1, 2), adj)
+        # output = output.transpose(1, 2)
+
+        support = torch.matmul(input, self.weight)
+        output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
@@ -88,9 +88,9 @@ class GCNBert(nn.Module):
         # self.res = torch.FloatTensor(np.dot(exist, factor)).cuda(1)
 
         _adj = torch.FloatTensor(_adj)
-        # _adj = _adj.transpose(0, 1)
+        _adj = _adj.transpose(0, 1)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
-        self.adj = nn.Parameter(_adj, requires_grad=True)
+        self.adj = nn.Parameter(_adj, requires_grad=False)
 
         _nums = co_occur_mat.numpy().diagonal()
         self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(1).unsqueeze(-1)
@@ -192,13 +192,13 @@ class GCNBert(nn.Module):
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
         #
-        # x = self.gc1(tag_embedding, self.adj)
-        # x = self.relu1(x)
-        # x = self.gc2(x, self.adj)
+        x = self.gc1(tag_embedding, self.adj)
+        x = self.relu1(x)
+        x = self.gc2(x, self.adj)
         # # #
-        # # x = x.transpose(0, 1)
-        # # x = torch.matmul(sentence_feat, x)
-        # #
+        x = x.transpose(0, 1)
+        # x = torch.matmul(sentence_feat, x)
+        #
         # x = torch.mul(sentence_feat.unsqueeze(1), x)
         # x = torch.sum(x, -1)
 
@@ -228,8 +228,8 @@ class GCNBert(nn.Module):
 
         # x = torch.cat((x, attention_out), 2)
 
-        pred = self.output_layer(attention_out)  # + x
-
+        # pred = self.output_layer(attention_out)  # + x
+        pred = torch.matmul(attention_out, x)
 
 
         #x = x.unsqueeze(0)
