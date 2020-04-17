@@ -64,11 +64,14 @@ class GCNBert(nn.Module):
         self.aa = torch.FloatTensor(co_occur_mat.numpy()).cuda(1)
 
         self.add_module('bert', bert)
-        # for m in self.bert.parameters():
-        #     m.requires_grad = False
+        for m in self.bert.parameters():
+            m.requires_grad = False
 
-        for i in range(0, 8):#l in self.bert.encoder.layer:
-            self.bert.encoder.layer[i].requires_grad = False
+        for i in range(8, 11+1):#l in self.bert.encoder.layer:
+            m = self.bert.encoder.layer[i]
+            m.trainable = True
+            for p in m.parameters():
+                p.requires_grad = True
 
         # for i in range(8, 11+1):#l in self.bert.encoder.layer:
         #     self.bert.encoder.layer[i].requires_grad = True
