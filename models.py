@@ -295,6 +295,7 @@ class GCNBert(nn.Module):
     def get_config_optim(self, lr, lrp):
         return [
                 {'params': self.bert.parameters(), 'lr': lrp},
+                {'params': self.bert.encoder.layer, 'lr': lrp},
                 {'params': self.gc1.parameters(), 'lr': lr},
                 {'params': self.gc2.parameters(), 'lr': lr},
                 {'params': self.linear0.parameters(), 'lr': lr},
