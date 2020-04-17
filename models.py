@@ -70,8 +70,8 @@ class GCNBert(nn.Module):
         for i in range(0, 8):#l in self.bert.encoder.layer:
             self.bert.encoder.layer[i].requires_grad = False
 
-        for i in range(8, 11+1):#l in self.bert.encoder.layer:
-            self.bert.encoder.layer[i].requires_grad = True
+        # for i in range(8, 11+1):#l in self.bert.encoder.layer:
+        #     self.bert.encoder.layer[i].requires_grad = True
 
         self.num_classes = num_classes
 
