@@ -196,15 +196,15 @@ class Engine(object):
 
             #self.cent = self.centroids / self.classcount[:, np.newaxis]
 
-            # remember best prec@1 and save checkpoint
-            is_best = prec1 > self.state['best_score']
-            self.state['best_score'] = max(prec1, self.state['best_score'])
-            self.save_checkpoint({
-                'epoch': epoch + 1,
-                'arch': self._state('arch'),
-                'state_dict': model.state_dict() if self.state['use_gpu'] else model.state_dict(),
-                'best_score': self.state['best_score'],
-            }, is_best)
+            # # remember best prec@1 and save checkpoint
+            # is_best = prec1 > self.state['best_score']
+            # self.state['best_score'] = max(prec1, self.state['best_score'])
+            # self.save_checkpoint({
+            #     'epoch': epoch + 1,
+            #     'arch': self._state('arch'),
+            #     'state_dict': model.state_dict() if self.state['use_gpu'] else model.state_dict(),
+            #     'best_score': self.state['best_score'],
+            # }, is_best)
 
             print(' *** best={best:.3f}'.format(best=self.state['best_score']))
         return self.state['best_score']
