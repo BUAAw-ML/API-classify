@@ -67,8 +67,11 @@ class GCNBert(nn.Module):
         # for m in self.bert.parameters():
         #     m.requires_grad = False
 
-        for l in self.bert.encoder.layer:
-            l.requires_grad = False
+        for i in range(0, 8):#l in self.bert.encoder.layer:
+            self.bert.encoder.layer[i].requires_grad = False
+
+        for i in range(8, 11+1):#l in self.bert.encoder.layer:
+            self.bert.encoder.layer[i].requires_grad = True
 
         self.num_classes = num_classes
 
@@ -199,10 +202,10 @@ class GCNBert(nn.Module):
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
         # # #
-        # x = x.transpose(0, 1)
+        x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
         #
-        x = torch.mul(sentence_feat.unsqueeze(1), x)
+        # x = torch.mul(sentence_feat.unsqueeze(1), x)
         # x = torch.sum(x, -1)
 
         # tag_embedding = t orch.matmul(self.adj, tag_embedding)
@@ -219,20 +222,23 @@ class GCNBert(nn.Module):
 
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
+
+
         # x = self.gc1(attention_out, self.adj)
         # x = self.relu1(x)
         # attention_out = self.gc2(x, self.adj)
 
-        # attention_out = torch.sum(attention_out, 1)
+        attention_out = torch.sum(attention_out, 1)
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
-        pred = attention_out + x
+        # pred = attention_out + x
 
         # x = torch.cat((x, attention_out), 2)
 
-        # pred = self.output_layer(pred)  # + x
-        pred = torch.sum(pred, -1)
+        # pred = self.output_layer(attention_out)  # + x
+        pred = torch.matmul(attention_out, x)
+        # pred = torch.sum(pred, -1)
 
         #x = x.unsqueeze(0)
         #print(x.shape)
