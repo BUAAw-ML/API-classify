@@ -206,7 +206,7 @@ class Engine(object):
             #     'best_score': self.state['best_score'],
             # }, is_best)
 
-            print(' *** best={best:.3f}'.format(best=self.state['best_score']))
+            # print(' *** best={best:.3f}'.format(best=self.state['best_score']))
         return self.state['best_score']
 
     def train(self, data_loader, model, criterion, optimizer, epoch):
