@@ -67,6 +67,9 @@ class GCNBert(nn.Module):
         for m in self.bert.parameters():
             m.requires_grad = False
 
+        print(self.bert.encoder.layer)
+        exit()
+
         self.num_classes = num_classes
 
         # self.tanh1 = nn.Tanh()
