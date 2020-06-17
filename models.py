@@ -61,7 +61,7 @@ class GCNBert(nn.Module):
     def __init__(self, bert, num_classes, t=0, co_occur_mat=None):
         super(GCNBert, self).__init__()
 
-        self.aa = torch.FloatTensor(co_occur_mat.numpy()).cuda(1)
+        self.aa = torch.FloatTensor(co_occur_mat.numpy()).cuda(0)
 
         self.add_module('bert', bert)
         for m in self.bert.parameters():
@@ -139,8 +139,8 @@ class GCNBert(nn.Module):
 
 
     def init_hidden(self, batch_size):
-        return (torch.randn(4, batch_size, self.lstm_hid_dim).cuda(1),
-                torch.randn(4, batch_size, self.lstm_hid_dim).cuda(1))
+        return (torch.randn(4, batch_size, self.lstm_hid_dim).cuda(0),
+                torch.randn(4, batch_size, self.lstm_hid_dim).cuda(0))
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file,
                 tfidf_result, title_ids, title_token_type_ids, title_attention_mask):
