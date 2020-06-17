@@ -137,6 +137,9 @@ class GCNBert(nn.Module):
         self.memory = torch.zeros(108, 768).cuda(0)
         self.relu = nn.ReLU()
 
+        self.class_weight = Parameter(torch.Tensor(num_classes, 768).uniform_(0, 1), requires_grad=False).cuda(0) #
+        self.class_weight.requires_grad = True
+
 
     def init_hidden(self, batch_size):
         return (torch.randn(4, batch_size, self.lstm_hid_dim).cuda(0),
@@ -230,7 +233,7 @@ class GCNBert(nn.Module):
         # attention_out = self.gc2(x, self.adj)
 
         # attention_out = torch.sum(attention_out, -1)
-        attention_out = attention_out * x
+        attention_out = attention_out * self.class_weight
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
@@ -293,7 +296,6 @@ class GCNBert(nn.Module):
 
         return pred
 
-
     def get_config_optim(self, lr, lrp):
         return [
                 {'params': self.bert.parameters(), 'lr': lr*lrp},
@@ -306,6 +308,7 @@ class GCNBert(nn.Module):
                 {'params': self.weight2.parameters(), 'lr': lr},
                 {'params': self.weight3, 'lr': lr},
                 {'params': self.adj, 'lr': lr},
+                {'params': self.class_weight, 'lr': lr},
                 {'params': self.attention.parameters(), 'lr': lr},
                 {'params': self.output_layer.parameters(), 'lr': lr},
                 ]
