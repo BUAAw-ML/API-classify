@@ -137,7 +137,7 @@ class GCNBert(nn.Module):
         self.memory = torch.zeros(108, 768).cuda(0)
         self.relu = nn.ReLU()
 
-        self.class_weight = Parameter(torch.Tensor(num_classes, 2000).uniform_(0, 1), requires_grad=False).cuda(0) #
+        self.class_weight = Parameter(torch.Tensor(num_classes, 1000).uniform_(0, 1), requires_grad=False).cuda(0) #
         self.class_weight.requires_grad = True
 
 
