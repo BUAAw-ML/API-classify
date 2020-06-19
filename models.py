@@ -111,7 +111,7 @@ class GCNBert(nn.Module):
         # print(weight_adj)
         self.weight_adj = torch.FloatTensor(origin_adj).cuda(0)
 
-        self.linear0 = nn.Linear(768 * 2, 1)
+        self.linear0 = nn.Linear(768, 2000)
 
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
@@ -137,7 +137,7 @@ class GCNBert(nn.Module):
         self.memory = torch.zeros(108, 768).cuda(0)
         self.relu = nn.ReLU()
 
-        self.class_weight = Parameter(torch.Tensor(num_classes, 768).uniform_(0, 1), requires_grad=False).cuda(0) #
+        self.class_weight = Parameter(torch.Tensor(num_classes, 2000).uniform_(0, 1), requires_grad=False).cuda(0) #
         self.class_weight.requires_grad = True
 
 
@@ -233,7 +233,7 @@ class GCNBert(nn.Module):
         # attention_out = self.gc2(x, self.adj)
 
         # attention_out = torch.sum(attention_out, -1)
-        attention_out = attention_out - tag_embedding
+        attention_out = self.linear0(attention_out) * self.class_weight
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
