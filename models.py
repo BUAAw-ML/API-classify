@@ -43,8 +43,8 @@ class GraphConvolution(nn.Module):
         # output = torch.matmul(support.transpose(1, 2), adj)
         # output = output.transpose(1, 2)
 
-        # support = torch.matmul(input, self.weight)
-        output = torch.matmul(adj, input)
+        support = torch.matmul(input, self.weight)
+        output = torch.matmul(adj, support)
 
         if self.bias is not None:
             return output + self.bias
@@ -204,9 +204,9 @@ class GCNBert(nn.Module):
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
         #
-        x = self.gc1(self.class_weight, self.adj)
-        # x = self.relu1(x)
-        # x = self.gc2(x, self.adj)
+        x = self.gc1(attention_mask, self.adj)
+        x = self.relu1(x)
+        x = self.gc2(x, self.adj)
         # # #
         # x = x.transpose(0, 1)
         # x = torch.matmul(sentence_feat, x)
@@ -233,7 +233,7 @@ class GCNBert(nn.Module):
         # attention_out = self.gc2(x, self.adj)
 
         # attention_out = torch.sum(attention_out, -1)
-        attention_out = attention_out * x
+        attention_out = attention_out * self.class_weight
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
