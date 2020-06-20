@@ -14,7 +14,7 @@ parser.add_argument('-seed', default=0, type=int, metavar='N',
                     help='random seed')
 parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                     help='number of data loading workers (default: 4)')
-parser.add_argument('--epochs', default=20, type=int, metavar='N',
+parser.add_argument('--epochs', default=25, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--epoch_step', default=[13], type=int, nargs='+',
                     help='number of epochs to change learning rate')
@@ -58,7 +58,7 @@ def multiLabel_text_classify():
 
     # define loss function (criterion)
     # criterion = nn.BCELoss()
-    criterion = nn.MultiLabelSoftMarginLoss() #weight=torch.from_numpy(np.array(tag_weight)).float().cuda(0)
+    criterion = nn.MultiLabelSoftMarginLoss(weight=torch.from_numpy(np.array(tag_weight)).float().cuda(0)) #
 
     # define optimizer
     optimizer = torch.optim.SGD(model.get_config_optim(args.lr, args.lrp),
