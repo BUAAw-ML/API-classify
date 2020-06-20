@@ -21,6 +21,7 @@ token_table = {'ecommerce': 'electronic commerce'}
 
 
 class ProgramWebDataset(Dataset):
+    tag_weight = []
     def __init__(self, data, co_occur_mat, tag2id, id2tag=None, tfidf_dict=None):
         self.data = data
         self.co_occur_mat = co_occur_mat
@@ -60,7 +61,7 @@ class ProgramWebDataset(Dataset):
         #
         # exit()
 
-        return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict)
+        return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict), ProgramWebDataset.tag_weight
 
     @classmethod
     def load(cls, f):
@@ -171,6 +172,13 @@ class ProgramWebDataset(Dataset):
 
         print("The number of tags for training: {}".format(len(tag2id)))
         os.makedirs('cache', exist_ok=True)
+
+        for id in range(len(id2tag)):
+            # if tag_occurance[id2tag[id]] < 100:
+            ProgramWebDataset.tag_weight.append(1 + 3.0 / tag_occurance[id2tag[id]])
+            # else:
+            #     ProgramWebDataset.tag_weight.append(1)
+        print(ProgramWebDataset.tag_weight)
 
         return data, tag2id, id2tag, document, tag_based
 
@@ -388,7 +396,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
         if not os.path.exists('cache'):
             os.makedirs('cache')
 
-        dataset = ProgramWebDataset.from_csv(api_csvfile, net_csvfile)
+        dataset, tag_weight = ProgramWebDataset.from_csv(api_csvfile, net_csvfile)
 
         encoded_tag, tag_mask = dataset.encode_tag()
 
@@ -412,4 +420,4 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
     tag_embedding_file = ''
     # tag_embedding_file = dataset.obtain_tag_embedding()
 
-    return train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file
+    return train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file, tag_weight

@@ -51,7 +51,7 @@ def multiLabel_text_classify():
     print("device_id: {}".format(args.device_ids))
 
     use_gpu = torch.cuda.is_available()
-    train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file = \
+    train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file, tag_weight = \
         load_dataset('../datasets/ProgrammerWeb/programweb-data.csv') #Programweb-domainFilter
 
     model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.4, co_occur_mat=train_dataset.co_occur_mat)
