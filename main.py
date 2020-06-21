@@ -58,7 +58,7 @@ def multiLabel_text_classify():
 
     # define loss function (criterion)
     # criterion = nn.BCELoss()
-    criterion = nn.MultiLabelSoftMarginLoss(weight=torch.from_numpy(np.array(tag_weight)).float().cuda(0)) #
+    criterion = nn.MultiLabelSoftMarginLoss() #weight=torch.from_numpy(np.array(tag_weight)).float().cuda(0)
 
     # define optimizer
     optimizer = torch.optim.SGD(model.get_config_optim(args.lr, args.lrp),
