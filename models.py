@@ -99,7 +99,7 @@ class GCNBert(nn.Module):
         _adj = torch.FloatTensor(_adj)
         _adj = _adj.transpose(0, 1)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
-        self.adj = nn.Parameter(_adj, requires_grad=False)
+        self.adj = nn.Parameter(_adj, requires_grad=True)
 
         _nums = co_occur_mat.numpy().diagonal()
         self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(0).unsqueeze(-1)
@@ -245,12 +245,11 @@ class GCNBert(nn.Module):
         # pred = self.output_layer(attention_out)  # + x
 
         pred = torch.sum(attention_out, -1)
+        pred = torch.matmul(self.adj, pred)
 
-        pred = torch.sigmoid(pred)
+        # pred *= torch.sigmoid(self.weight3)
 
-        pred *= torch.sigmoid(self.weight3)
 
-        pred = torch.sigmoid(pred)
         #x = x.unsqueeze(0)
         #print(x.shape)
         #x = sentence_feat * x
