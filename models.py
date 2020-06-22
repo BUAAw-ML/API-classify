@@ -246,7 +246,11 @@ class GCNBert(nn.Module):
 
         pred = torch.sum(attention_out, -1)
 
+        pred = torch.sigmoid(pred)
+
         pred *= torch.sigmoid(self.weight3)
+
+        pred = torch.sigmoid(pred)
         #x = x.unsqueeze(0)
         #print(x.shape)
         #x = sentence_feat * x
