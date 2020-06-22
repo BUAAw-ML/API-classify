@@ -129,7 +129,7 @@ class GCNBert(nn.Module):
         #                     batch_first=True, bidirectional=True)
         self.weight0 = torch.nn.Linear(768, 1)
 
-        self.weight3 = Parameter(torch.Tensor(768, 1))
+        self.weight3 = Parameter(torch.Tensor(1, num_classes))
         self.weight3.data.uniform_(-5, 5)
 
         # self.memory = Parameter(torch.Tensor(num_classes, 768), requires_grad=False).cuda(0)
@@ -246,6 +246,7 @@ class GCNBert(nn.Module):
 
         pred = torch.sum(attention_out, -1)
 
+        pred *= torch.sigmoid(self.weight3)
         #x = x.unsqueeze(0)
         #print(x.shape)
         #x = sentence_feat * x
