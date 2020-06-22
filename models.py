@@ -111,7 +111,7 @@ class GCNBert(nn.Module):
         # print(weight_adj)
         self.weight_adj = torch.FloatTensor(origin_adj).cuda(0)
 
-        self.linear0 = nn.Linear(768, 1000)
+        self.linear0 = nn.Linear(768, 768)
 
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
@@ -178,6 +178,8 @@ class GCNBert(nn.Module):
         tag_embedding = embed(encoded_tag)
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
+
+        tag_embedding = self.linear0(tag_embedding)
 
         # title_token_feat = self.bert(title_ids,
         #     token_type_ids=title_token_type_ids,
