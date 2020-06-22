@@ -179,8 +179,6 @@ class GCNBert(nn.Module):
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
 
-        tag_embedding = self.linear0(tag_embedding)
-
         # title_token_feat = self.bert(title_ids,
         #     token_type_ids=title_token_type_ids,
         #     attention_mask=title_attention_mask)[0]

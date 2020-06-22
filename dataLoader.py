@@ -175,7 +175,7 @@ class ProgramWebDataset(Dataset):
 
         for id in range(len(id2tag)):
             # if tag_occurance[id2tag[id]] < 100:
-            ProgramWebDataset.tag_weight.append(1 + 1.5 / tag_occurance[id2tag[id]])
+            ProgramWebDataset.tag_weight.append(1 + 2.5 / tag_occurance[id2tag[id]])
             # else:
             #     ProgramWebDataset.tag_weight.append(1)
         print(ProgramWebDataset.tag_weight)
