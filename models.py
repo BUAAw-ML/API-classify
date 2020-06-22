@@ -246,7 +246,7 @@ class GCNBert(nn.Module):
 
         pred = torch.sum(attention_out, -1)
 
-        pred *= torch.sigmoid(self.weight3)
+        # pred *= torch.sigmoid(self.weight3)
 
         # pred *= torch.sigmoid(self.weight3)
 
