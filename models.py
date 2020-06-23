@@ -129,7 +129,7 @@ class GCNBert(nn.Module):
         #                     batch_first=True, bidirectional=True)
         self.weight0 = torch.nn.Linear(768, 1)
 
-        self.weight3 = Parameter(torch.Tensor(1, 12))
+        self.weight3 = Parameter(torch.Tensor(1, 13))
         self.weight3.data.uniform_(0, 1)
 
         # self.memory = Parameter(torch.Tensor(num_classes, 768), requires_grad=False).cuda(0)
@@ -151,10 +151,10 @@ class GCNBert(nn.Module):
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[2]
-        token_feat = torch.stack(token_feat, dim=1)
-        print(token_feat)
+        token_feat = torch.stack(token_feat, dim=0)
+
+        token_feat = torch.matmul(self.weight3, token_feat)
         print(token_feat.shape)
-        torch.matmul(self.weight3, token_feat)
         exit()
 
         token_feat = self.bert(ids,
