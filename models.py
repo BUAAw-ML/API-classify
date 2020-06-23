@@ -149,6 +149,11 @@ class GCNBert(nn.Module):
                 tfidf_result, title_ids, title_token_type_ids, title_attention_mask):
 
         token_feat = self.bert(ids,
+                               token_type_ids=token_type_ids,
+                               attention_mask=attention_mask)
+        print(token_feat.shape)
+
+        token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
