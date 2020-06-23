@@ -152,8 +152,8 @@ class GCNBert(nn.Module):
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[2]
 
-        token_feat = torch.FloatTensor(np.array(token_feat))
-        print(torch.matmul(self.weight3, token_feat))
+        print(token_feat[0])
+        # print(torch.matmul(self.weight3, token_feat))
         exit()
 
         token_feat = self.bert(ids,
