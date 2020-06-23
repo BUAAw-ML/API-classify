@@ -152,14 +152,11 @@ class GCNBert(nn.Module):
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[2]
         token_feat = torch.stack(token_feat, dim=3)
-        print(token_feat.shape)
-        token_feat = torch.matmul(token_feat, self.weight3)
-        print(token_feat.shape)
-        exit()
+        token_feat = torch.matmul(token_feat, self.weight3).squeeze(-1)
 
-        token_feat = self.bert(ids,
-            token_type_ids=token_type_ids,
-            attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
+        # token_feat = self.bert(ids,
+        #     token_type_ids=token_type_ids,
+        #     attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
 
         # hidden_state = self.init_hidden(token_feat.shape[0])
