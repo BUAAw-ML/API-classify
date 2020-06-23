@@ -186,10 +186,7 @@ class GCNBert(nn.Module):
         tag_embedding = embed(encoded_tag)
 
         alpha = F.softmax(self.weight0(tag_embedding).squeeze(-1), dim=-1).unsqueeze(-1)
-        print(alpha.shape)
-        print(tag_embedding.shape)
         tag_embedding = tag_embedding * alpha
-        print(tag_embedding.shape)
         tag_embedding = torch.sum(tag_embedding, dim=1)
 
         # tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
