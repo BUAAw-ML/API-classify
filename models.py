@@ -111,7 +111,7 @@ class GCNBert(nn.Module):
         # print(weight_adj)
         self.weight_adj = torch.FloatTensor(origin_adj).cuda(0)
 
-        self.linear0 = nn.Linear(768, 768)
+        self.linear0 = nn.Linear(num_classes, num_classes)
 
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
