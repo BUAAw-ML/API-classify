@@ -178,7 +178,7 @@ class ProgramWebDataset(Dataset):
             ProgramWebDataset.tag_weight.append(1 + 2.5 / tag_occurance[id2tag[id]])
             # else:
             #     ProgramWebDataset.tag_weight.append(1)
-        print(ProgramWebDataset.tag_weight)
+        # print(ProgramWebDataset.tag_weight)
 
         return data, tag2id, id2tag, document, tag_based
 
