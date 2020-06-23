@@ -151,7 +151,7 @@ class GCNBert(nn.Module):
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[2]
-
+        torch.cat(token_feat, dim=0)
         print(token_feat)
         # print(torch.matmul(self.weight3, token_feat))
         exit()
