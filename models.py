@@ -127,9 +127,9 @@ class GCNBert(nn.Module):
         # self.lstm_hid_dim = num_classes / 2
         # self.lstm = torch.nn.LSTM(num_classes, hidden_size=self.lstm_hid_dim, num_layers=2,
         #                     batch_first=True, bidirectional=True)
-        self.weight0 = torch.nn.Linear(768, 1)
+        self.weight0 = torch.nn.Linear(768, num_classes)
 
-        self.weight3 = Parameter(torch.Tensor(13, 1))
+        self.weight3 = Parameter(torch.Tensor(num_classes, 768))
         self.weight3.data.uniform_(0, 1)
 
         # self.memory = Parameter(torch.Tensor(num_classes, 768), requires_grad=False).cuda(0)
@@ -182,7 +182,9 @@ class GCNBert(nn.Module):
 
         embed = self.bert.get_input_embeddings()
         tag_embedding = embed(encoded_tag)  #num_classes, 7, 768
-        alpha = self.weight0(tag_embedding).squeeze(-1)
+        alpha = tag_embedding * self.weight3.unsqueeze(1)
+
+        alpha = torch.sum(alpha, -1)
 
         alpha = alpha.masked_fill(1 - tag_mask.byte(), torch.tensor(-np.inf))
         alpha = F.softmax(alpha, -1).unsqueeze(1)  #num_classes, 7
