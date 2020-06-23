@@ -150,7 +150,7 @@ class GCNBert(nn.Module):
 
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
-            attention_mask=attention_mask, output_hidden_states=True)[2]
+            attention_mask=attention_mask)[2]
         print(token_feat)
         exit()
 
@@ -334,6 +334,6 @@ class GCNBert(nn.Module):
 
 
 def gcn_bert(num_classes, t, co_occur_mat=None):
-    bert = BertModel.from_pretrained('bert-base-uncased')
+    bert = BertModel.from_pretrained('bert-base-uncased',  output_hidden_states=True)
     return GCNBert(bert, num_classes, t=t, co_occur_mat=co_occur_mat)
 
