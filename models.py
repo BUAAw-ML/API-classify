@@ -164,8 +164,14 @@ class GCNBert(nn.Module):
         # token_feat = self.linear2(token_feat)
 
         #print(token_feat.shape)
-        # alpha = F.softmax(self.weight0(token_feat).squeeze(-1), dim=-1).unsqueeze(-1)  # [16, seq_len, 1]
-        # token_feat = token_feat * alpha  # [16, seq_len, 768]
+
+        alpha = (self.weight0(token_feat).squeeze(-1)).masked_fill(1 - attention_mask.byte(), torch.tensor(-np.inf))
+
+        alpha = F.softmax(alpha, -1).unsqueeze(1)  #16, seq_len
+
+        sentence_feat = alpha @ token_feat  #16,1,768
+
+        # [16, seq_len, 768]
 
         # torch.set_printoptions(threshold=np.inf)
 
@@ -173,9 +179,9 @@ class GCNBert(nn.Module):
         # exit()
         # * inputs_tfidf.unsqueeze(-1)
 
-        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
-        # sentence_feat = sentence_feat.unsqueeze(1)
+        # sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
+        #     / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
+        # # sentence_feat = sentence_feat.unsqueeze(1)
 
 
         # sentence_feat = token_feat[:,0,:]
@@ -241,6 +247,12 @@ class GCNBert(nn.Module):
 
         # attention_out = torch.sum(attention_out, -1)
         # attention_out = torch.matmul(self.adj, attention_out)
+
+        sentence_feat = sentence_feat.repeat(1,self.num_classes,1)
+        print(sentence_feat.shape)
+        attention_out = torch.cat((attention_out,sentence_feat),1)
+        print(attention_out.shape)
+        exit()
         attention_out = attention_out * self.class_weight
 
         # self.memory = torch.mean(attention_out, 0).clone()
