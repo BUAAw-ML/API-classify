@@ -185,6 +185,8 @@ class GCNBert(nn.Module):
 
         alpha = tag_embedding * self.weight3.unsqueeze(1)
 
+        alpha = torch.sum(alpha, -1)
+
         alpha = alpha.masked_fill(1 - tag_mask.byte(), torch.tensor(-np.inf))
         alpha = F.softmax(alpha, -1).unsqueeze(1)  #num_classes, 7
 
