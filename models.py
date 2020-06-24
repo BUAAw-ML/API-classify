@@ -148,15 +148,15 @@ class GCNBert(nn.Module):
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file,
                 tfidf_result, title_ids, title_token_type_ids, title_attention_mask):
 
-        token_feat = self.bert(ids,
-            token_type_ids=token_type_ids,
-            attention_mask=attention_mask)[2]
-        token_feat = torch.stack(token_feat, dim=3)
-        token_feat = torch.matmul(token_feat, self.weight3).squeeze(-1)
-
         # token_feat = self.bert(ids,
         #     token_type_ids=token_type_ids,
-        #     attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
+        #     attention_mask=attention_mask)[2]
+        # token_feat = torch.stack(token_feat, dim=3)
+        # token_feat = torch.matmul(token_feat, self.weight3).squeeze(-1)
+
+        token_feat = self.bert(ids,
+            token_type_ids=token_type_ids,
+            attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
 
         # hidden_state = self.init_hidden(token_feat.shape[0])
@@ -234,6 +234,13 @@ class GCNBert(nn.Module):
         # attention_out = attention * confidence
 
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
+
+        attention = (torch.bmm(token_feat, attention_out.transpose(1, 2))).transpose(1, 2).masked_fill(
+            1 - masks.byte(), torch.tensor(-np.inf))
+
+        attention = F.softmax(attention, -1)
+
+        attention_out = attention @ token_feat
 
         # x = self.gc1(attention_out, self.adj)
         # x = self.relu1(x)
