@@ -175,7 +175,7 @@ class ProgramWebDataset(Dataset):
 
         for id in range(len(id2tag)):
             # if tag_occurance[id2tag[id]] < 100:
-            ProgramWebDataset.tag_weight.append(1 + 2.5 / tag_occurance[id2tag[id]])
+            ProgramWebDataset.tag_weight.append(1 + 3. / tag_occurance[id2tag[id]])
             # else:
             #     ProgramWebDataset.tag_weight.append(1)
         # print(ProgramWebDataset.tag_weight)
@@ -322,6 +322,7 @@ class ProgramWebDataset(Dataset):
         tags = torch.zeros(size=(len(batch), self.get_tags_num()))
         for i in range(len(batch)):
             tags[i, batch[i]['tag_ids']] = 1.
+            tags[i] *= torch.from_numpy(np.array(ProgramWebDataset.tag_weight)).float()
 
         dscp = [e['dscp'] for e in batch]
 
