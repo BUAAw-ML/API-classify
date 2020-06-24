@@ -235,13 +235,6 @@ class GCNBert(nn.Module):
 
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        attention = (torch.bmm(token_feat, attention_out.transpose(1, 2))).transpose(1, 2).masked_fill(
-            1 - masks.byte(), torch.tensor(-np.inf))
-
-        attention = F.softmax(attention, -1)
-
-        attention_out = attention @ token_feat
-
         # x = self.gc1(attention_out, self.adj)
         # x = self.relu1(x)
         # attention_out = self.gc2(x, self.adj)
@@ -341,6 +334,6 @@ class GCNBert(nn.Module):
 
 
 def gcn_bert(num_classes, t, co_occur_mat=None):
-    bert = BertModel.from_pretrained('bert-base-uncased',  output_hidden_states=True)  #
+    bert = BertModel.from_pretrained('bert-base-uncased')  #,  output_hidden_states=True
     return GCNBert(bert, num_classes, t=t, co_occur_mat=co_occur_mat)
 
