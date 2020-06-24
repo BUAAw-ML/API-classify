@@ -278,7 +278,7 @@ class ProgramWebDataset(Dataset):
         mask = torch.zeros((self.get_tags_num(), max_num))
         for i in range(self.get_tags_num()):
             mask[i, :len(tag_ids[i])] = 1.
-            # padded_tag_ids[i, :len(tag_ids[i])] = torch.tensor(tag_ids[i])
+            padded_tag_ids[i, :len(tag_ids[i])] = torch.tensor(tag_ids[i])
         return padded_tag_ids, mask
 
     def obtain_tag_embedding(self, wv='glove', model_path='data'):
