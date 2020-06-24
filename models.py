@@ -137,7 +137,7 @@ class GCNBert(nn.Module):
         self.memory = torch.zeros(108, 768).cuda(0)
         self.relu = nn.ReLU()
 
-        self.class_weight = Parameter(torch.Tensor(num_classes, 768).uniform_(0, 1), requires_grad=False).cuda(0) #
+        self.class_weight = Parameter(torch.Tensor(num_classes, 768 * 2).uniform_(0, 1), requires_grad=False).cuda(0) #
         self.class_weight.requires_grad = True
 
 
@@ -249,10 +249,9 @@ class GCNBert(nn.Module):
         # attention_out = torch.matmul(self.adj, attention_out)
 
         sentence_feat = sentence_feat.repeat(1,self.num_classes,1)
-        print(sentence_feat.shape)
-        attention_out = torch.cat((attention_out,sentence_feat),1)
-        print(attention_out.shape)
-        exit()
+
+        attention_out = torch.cat((attention_out,sentence_feat),2)
+
         attention_out = attention_out * self.class_weight
 
         # self.memory = torch.mean(attention_out, 0).clone()
