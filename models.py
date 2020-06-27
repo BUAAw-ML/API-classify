@@ -130,7 +130,7 @@ class GCNBert(nn.Module):
         self.weight0 = torch.nn.Linear(768, 1)
 
         self.weight3 = Parameter(torch.Tensor(13, 1))
-        self.weight3.data.uniform_(0, 1)
+        # self.weight3.data.uniform_(0, 1)
 
         # self.memory = Parameter(torch.Tensor(num_classes, 768), requires_grad=False).cuda(0)
 
