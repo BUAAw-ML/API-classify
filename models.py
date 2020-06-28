@@ -187,6 +187,11 @@ class GCNBert(nn.Module):
 
         # sentence_feat = token_feat[:,0,:]
 
+        embed = self.bert(encoded_tag,
+            attention_mask=tag_mask)[2]
+        print(embed)
+        exit()
+
         embed = self.bert.get_input_embeddings()
         tag_embedding = embed(encoded_tag)  #num_classes, 7, 768
 
