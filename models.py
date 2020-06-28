@@ -149,15 +149,15 @@ class GCNBert(nn.Module):
                 tfidf_result, title_ids, title_token_type_ids, title_attention_mask):
 
 
-        token_feat = self.bert(ids,
-            token_type_ids=token_type_ids,
-            attention_mask=attention_mask)[2]
-        token_feat = torch.stack(token_feat, dim=3) #[batch_size, seq_len, 768, layer_num]
-        token_feat = torch.matmul(token_feat,  self.weight3).squeeze(-1)
-
         # token_feat = self.bert(ids,
         #     token_type_ids=token_type_ids,
-        #     attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
+        #     attention_mask=attention_mask)[2]
+        # token_feat = torch.stack(token_feat, dim=3) #[batch_size, seq_len, 768, layer_num]
+        # token_feat = torch.matmul(token_feat,  self.weight3).squeeze(-1)
+
+        token_feat = self.bert(ids,
+            token_type_ids=token_type_ids,
+            attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
 
         # hidden_state = self.init_hidden(token_feat.shape[0])
@@ -180,20 +180,18 @@ class GCNBert(nn.Module):
         # exit()
         # * inputs_tfidf.unsqueeze(-1)
 
-        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
-        # sentence_feat = sentence_feat.unsqueeze(1)
+        # sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
+        #     / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
+        # # sentence_feat = sentence_feat.unsqueeze(1)
 
 
         # sentence_feat = token_feat[:,0,:]
 
-        embed = self.bert(encoded_tag,
-            attention_mask=tag_mask)[2]
-        print(embed)
-        exit()
+        tag_embedding = self.bert(encoded_tag,
+            attention_mask=tag_mask)[0]
 
-        embed = self.bert.get_input_embeddings()
-        tag_embedding = embed(encoded_tag)  #num_classes, 7, 768
+        # embed = self.bert.get_input_embeddings()
+        # tag_embedding = embed(encoded_tag)  #num_classes, 7, 768
 
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
@@ -314,9 +312,9 @@ class GCNBert(nn.Module):
 
         # pred = self.linear1(attention_out).squeeze(-1)
 
-        x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
-        x = self.relu2(x)
-        pred = self.linear2(x)
+        # x = self.linear1(sentence_feat)  #sentence_feat + concept_selector *
+        # x = self.relu2(x)
+        # pred = self.linear2(x)
         # pred = x
         # print(pred.shape)
 
