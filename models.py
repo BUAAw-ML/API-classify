@@ -188,7 +188,12 @@ class GCNBert(nn.Module):
         # sentence_feat = token_feat[:,0,:]
 
         tag_embedding = self.bert(encoded_tag,
-            attention_mask=tag_mask)[0]
+            attention_mask=tag_mask)[2]
+        tag_embedding = torch.stack(tag_embedding, dim=3) #[batch_size, seq_len, 768, layer_num]
+        tag_embedding = torch.matmul(tag_embedding,  self.weight3).squeeze(-1)
+
+        # tag_embedding = self.bert(encoded_tag,
+        #     attention_mask=tag_mask)[0]
 
         # embed = self.bert.get_input_embeddings()
         # tag_embedding = embed(encoded_tag)  #num_classes, 7, 768
