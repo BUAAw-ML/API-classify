@@ -264,23 +264,6 @@ class ProgramWebDataset(Dataset):
     def get_tags_num(self):
         return len(self.tag2id)
 
-    def encode_tag(self):
-        tag_ids = []
-        tag_token_num = []
-        for i in range(self.get_tags_num()):
-            tag = self.id2tag[i]
-            tokens = tokenizer.tokenize(tag)
-            token_ids = tokenizer.convert_tokens_to_ids(tokens)
-            tag_ids.append(token_ids)
-            tag_token_num.append(len(tokens))
-        max_num = max(tag_token_num)
-        padded_tag_ids = torch.zeros((self.get_tags_num(), max_num), dtype=torch.long)
-        mask = torch.zeros((self.get_tags_num(), max_num))
-        for i in range(self.get_tags_num()):
-            mask[i, :len(tag_ids[i])] = 1.
-            padded_tag_ids[i, :len(tag_ids[i])] = torch.tensor(tag_ids[i])
-        return padded_tag_ids, mask
-
     # def encode_tag(self):
     #     tag_ids = []
     #     tag_token_num = []
@@ -291,13 +274,30 @@ class ProgramWebDataset(Dataset):
     #         tag_ids.append(token_ids)
     #         tag_token_num.append(len(tokens))
     #     max_num = max(tag_token_num)
-    #
-    #     inputs = [tokenizer.prepare_for_model(e, max_length=max_num + 2, pad_to_max_length=True) for e in tag_ids]
-    #
-    #     ids = torch.LongTensor([e['input_ids'] for e in inputs])
-    #     attention_mask = torch.FloatTensor([e['attention_mask'] for e in inputs])
-    #
-    #     return ids, attention_mask
+    #     padded_tag_ids = torch.zeros((self.get_tags_num(), max_num), dtype=torch.long)
+    #     mask = torch.zeros((self.get_tags_num(), max_num))
+    #     for i in range(self.get_tags_num()):
+    #         mask[i, :len(tag_ids[i])] = 1.
+    #         padded_tag_ids[i, :len(tag_ids[i])] = torch.tensor(tag_ids[i])
+    #     return padded_tag_ids, mask
+
+    def encode_tag(self):
+        tag_ids = []
+        tag_token_num = []
+        for i in range(self.get_tags_num()):
+            tag = self.id2tag[i]
+            tokens = tokenizer.tokenize(tag)
+            token_ids = tokenizer.convert_tokens_to_ids(tokens)
+            tag_ids.append(token_ids)
+            tag_token_num.append(len(tokens))
+        max_num = max(tag_token_num)
+
+        inputs = [tokenizer.prepare_for_model(e, max_length=max_num + 2, pad_to_max_length=True) for e in tag_ids]
+
+        ids = torch.LongTensor([e['input_ids'] for e in inputs])
+        attention_mask = torch.FloatTensor([e['attention_mask'] for e in inputs])
+
+        return ids, attention_mask
 
     def obtain_tag_embedding(self, wv='glove', model_path='data'):
 
