@@ -111,7 +111,7 @@ class GCNBert(nn.Module):
         # print(weight_adj)
         self.weight_adj = torch.FloatTensor(origin_adj).cuda(0)
 
-        self.linear0 = nn.Linear(num_classes, num_classes)
+        self.linear0 = nn.Linear(768, 768)
 
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
@@ -148,17 +148,16 @@ class GCNBert(nn.Module):
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file,
                 tfidf_result, title_ids, title_token_type_ids, title_attention_mask):
 
+        #
+        # token_feat = self.bert(ids,
+        #     token_type_ids=token_type_ids,
+        #     attention_mask=attention_mask)[2]
+        # token_feat = torch.stack(token_feat, dim=3) #[batch_size, seq_len, 768, layer_num]
+        # token_feat = torch.matmul(token_feat,  self.weight3).squeeze(-1)
 
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
-            attention_mask=attention_mask)[2]
-        token_feat = torch.stack(token_feat, dim=3) #[batch_size, seq_len, 768, layer_num]
-        token_feat = torch.matmul(token_feat,  self.weight3).squeeze(-1)
-
-        # token_feat = self.bert(ids,
-        #     token_type_ids=token_type_ids,
-        #     attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
-
+            attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
         # hidden_state = self.init_hidden(token_feat.shape[0])
         # token_feat, _ = self.lstm(token_feat, hidden_state)
@@ -187,19 +186,21 @@ class GCNBert(nn.Module):
 
         # sentence_feat = token_feat[:,0,:]
 
-        tag_embedding = self.bert(encoded_tag,
-            attention_mask=tag_mask)[2]
-        tag_embedding = torch.stack(tag_embedding, dim=3) #[batch_size, seq_len, 768, layer_num]
-        tag_embedding = torch.matmul(tag_embedding,  self.weight3).squeeze(-1)
+        # tag_embedding = self.bert(encoded_tag,
+        #     attention_mask=tag_mask)[2]
+        # tag_embedding = torch.stack(tag_embedding, dim=3) #[batch_size, seq_len, 768, layer_num]
+        # tag_embedding = torch.matmul(tag_embedding,  self.weight3).squeeze(-1)
 
         # tag_embedding = self.bert(encoded_tag,
         #     attention_mask=tag_mask)[0]
 
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)  #num_classes, 7, 768
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)  #num_classes, 7, 768
 
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
+
+        tag_embedding = self.linear0(tag_embedding)
 
         # title_token_feat = self.bert(title_ids,
         #     token_type_ids=title_token_type_ids,
