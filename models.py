@@ -156,7 +156,7 @@ class GCNBert(nn.Module):
         # token_feat = torch.matmul(token_feat,  self.weight3).squeeze(-1)
 
         token_feat = self.bert(ids,
-            token_type_ids=token_type_ids,
+            #token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
 
@@ -187,11 +187,11 @@ class GCNBert(nn.Module):
 
         # sentence_feat = token_feat[:,0,:]
 
-        tag_embedding = self.bert(encoded_tag,
-            attention_mask=tag_mask)[0]
+        # tag_embedding = self.bert(encoded_tag,
+        #     attention_mask=tag_mask)[0]
 
-        # embed = self.bert.get_input_embeddings()
-        # tag_embedding = embed(encoded_tag)  #num_classes, 7, 768
+        embed = self.bert.get_input_embeddings()
+        tag_embedding = embed(encoded_tag)  #num_classes, 7, 768
 
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)
