@@ -196,9 +196,9 @@ class GCNBert(nn.Module):
 
         embed = self.bert.get_input_embeddings()
         tag_words_embedding = embed(encoded_tag)  #num_classes, 7, 768
-
-        tag_embedding = torch.sum(tag_words_embedding * tag_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(tag_mask, dim=1, keepdim=True)  #num_classes, 768
+        #
+        # tag_embedding = torch.sum(tag_words_embedding * tag_mask.unsqueeze(-1), dim=1) \
+        #     / torch.sum(tag_mask, dim=1, keepdim=True)  #num_classes, 768
 
         # title_token_feat = self.bert(title_ids,
         #     token_type_ids=title_token_type_ids,
@@ -238,22 +238,22 @@ class GCNBert(nn.Module):
         # tag_embedding = t orch.matmul(self.adj, tag_embedding)
 
         masks = attention_mask.unsqueeze(1)#.unsqueeze(1)#.clone()  # N, 1, L
-        attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
-        attention = F.softmax(attention, -1)  # N, labels_num, seq_len
-        attention_out = attention @ token_feat   # N, labels_num, hidden_size
-
-
-        # attention = token_feat.unsqueeze(2).unsqueeze(2) * tag_words_embedding.unsqueeze(0).unsqueeze(0)
-        #
-        # attention = torch.sum(attention, -1)
-        #
-        #
-        # #N, seq_len,  num_classes, 7
-        # attention = attention.transpose(1, 2).transpose(2, 3).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
-        # attention = torch.max(attention, 2)[0]
-        #
-        # attention = F.softmax(attention, -1) #N, num_classes, seq_len
+        # attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
+        # attention = F.softmax(attention, -1)  # N, labels_num, seq_len
         # attention_out = attention @ token_feat   # N, labels_num, hidden_size
+
+
+        attention = token_feat.unsqueeze(2).unsqueeze(2) * tag_words_embedding.unsqueeze(0).unsqueeze(0)
+
+        attention = torch.sum(attention, -1)
+
+
+        #N, seq_len,  num_classes, 7
+        attention = attention.transpose(1, 2).transpose(2, 3).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
+        attention = torch.max(attention, 2)[0]
+
+        attention = F.softmax(attention, -1) #N, num_classes, seq_len
+        attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
         # x = self.gc1(attention_out, self.adj)
         # x = self.relu1(x)
