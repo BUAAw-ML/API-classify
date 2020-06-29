@@ -201,6 +201,8 @@ class GCNBert(nn.Module):
 
         masks = torch.unsqueeze(tag_mask, 1)#.clone()  # N, 1, L
         #num_classes, 7, batch_size
+        print(tag_words_embedding.shape)
+        print(torch.matmul(tag_words_embedding, sentence_feat.transpose(0, 1)).shape)
         tag_attention = (torch.matmul(tag_words_embedding, sentence_feat.transpose(0, 1))).transpose(2, 0).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
         # batch_size, num_classes, 7
         tag_attention = F.softmax(tag_attention, -1)
