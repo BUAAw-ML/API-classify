@@ -204,11 +204,8 @@ class GCNBert(nn.Module):
         tag_attention = (torch.matmul(tag_words_embedding, sentence_feat.transpose(0, 1))).transpose(2, 0).transpose(2, 1).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
         # batch_size, num_classes, 7
         tag_attention = F.softmax(tag_attention, -1)
-        print(tag_attention.shape)
         tag_attention = tag_attention.unsqueeze(-1) * tag_words_embedding.unsqueeze(0)  # batch_size, num_classes, 7, 768
         tag_attention = torch.sum(tag_attention, 2)
-        print(tag_attention.shape)
-        exit()
 
         # title_token_feat = self.bert(title_ids,
         #     token_type_ids=title_token_type_ids,
