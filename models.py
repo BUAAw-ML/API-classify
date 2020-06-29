@@ -149,18 +149,17 @@ class GCNBert(nn.Module):
                 tfidf_result, title_ids, title_token_type_ids, title_attention_mask):
 
         #
-        token_feat = self.bert(ids,
-            token_type_ids=token_type_ids,
-            attention_mask=attention_mask)[2]
-        token_feat2 = torch.stack(token_feat, dim=3)[:, :, :, -2]
-        token_feat = torch.stack(token_feat, dim=3)[:,:,:,-1] #[batch_size, seq_len, 768, layer_num]
+        # token_feat = self.bert(ids,
+        #     token_type_ids=token_type_ids,
+        #     attention_mask=attention_mask)[2]
+        # token_feat = torch.stack(token_feat, dim=3)[:,:,:,-1] #[batch_size, seq_len, 768, layer_num]
         # token_feat = torch.matmul(token_feat,  self.weight3).squeeze(-1)
 
 
 
-        # token_feat = self.bert(ids,
-        #     token_type_ids=token_type_ids,
-        #     attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
+        token_feat = self.bert(ids,
+            token_type_ids=token_type_ids,
+            attention_mask=attention_mask)[0]  # [batch_size, seq_len, embeding] [16, seq_len, 768]
 
         # hidden_state = self.init_hidden(token_feat.shape[0])
         # token_feat, _ = self.lstm(token_feat, hidden_state)
@@ -243,10 +242,6 @@ class GCNBert(nn.Module):
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-        attention2 = (torch.matmul(token_feat2, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
-        attention2 = F.softmax(attention2, -1)
-        attention_out2 = attention2 @ token_feat2
-
         # x = self.gc1(attention_out, self.adj)
         # x = self.relu1(x)
         # attention_out = self.gc2(x, self.adj)
@@ -255,9 +250,8 @@ class GCNBert(nn.Module):
         # attention_out = torch.matmul(self.adj, attention_out)
 
         # x = torch.cat((attention_out, attention_out2), 2)
-        x = attention_out + attention_out2
 
-        pred = x * self.class_weight
+        pred = attention_out * self.class_weight
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
