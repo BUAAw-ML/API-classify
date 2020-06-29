@@ -137,7 +137,7 @@ class GCNBert(nn.Module):
         self.memory = torch.zeros(108, 768).cuda(0)
         self.relu = nn.ReLU()
 
-        self.class_weight = Parameter(torch.Tensor(num_classes, 768).uniform_(0, 1), requires_grad=False).cuda(0) #
+        self.class_weight = Parameter(torch.Tensor(num_classes, 768 * 2).uniform_(0, 1), requires_grad=False).cuda(0) #
         self.class_weight.requires_grad = True
 
 
@@ -179,10 +179,8 @@ class GCNBert(nn.Module):
         # exit()
         # * inputs_tfidf.unsqueeze(-1)
 
-        # sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, seq_len, embeding] [16, seq_len, 768]
-        # # sentence_feat = sentence_feat.unsqueeze(1)
-
+        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, 768]
 
         # sentence_feat = token_feat[:,0,:]
 
@@ -198,7 +196,7 @@ class GCNBert(nn.Module):
         tag_embedding = embed(encoded_tag)  #num_classes, 7, 768
 
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(tag_mask, dim=1, keepdim=True)
+            / torch.sum(tag_mask, dim=1, keepdim=True)  #num_classes, 768
 
         # title_token_feat = self.bert(title_ids,
         #     token_type_ids=title_token_type_ids,
@@ -256,7 +254,11 @@ class GCNBert(nn.Module):
         # attention_out = torch.sum(attention_out, -1)
         # attention_out = torch.matmul(self.adj, attention_out)
 
-        attention_out = attention_out * self.class_weight
+        tag_attention = sentence_feat.unsqueeze(1) * tag_embedding  #batch_size, num_classes, 768
+
+        x = torch.cat((attention_out, tag_attention), 2)
+
+        pred = x * self.class_weight
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
@@ -266,7 +268,7 @@ class GCNBert(nn.Module):
 
         # pred = self.output_layer(attention_out)  # + x
 
-        pred = torch.sum(attention_out, -1)
+        pred = torch.sum(pred, -1)
 
         # pred *= torch.sigmoid(self.weight3)
 
