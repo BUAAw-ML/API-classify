@@ -245,7 +245,7 @@ class GCNBert(nn.Module):
         token_feat = token_feat.transpose(1, 2).unsqueeze(1).repeat(1,self.num_classes,1,1)
         tag_words_embedding = tag_words_embedding.unsqueeze(0).repeat(8, 1, 1, 1)
 
-        attention = torch.mutmul(tag_words_embedding, token_feat) #N, num_classes, 7, seq_len
+        attention = torch.matmul(tag_words_embedding, token_feat) #N, num_classes, 7, seq_len
 
         attention = attention.masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
         attention = torch.max(attention, 2)[0]
