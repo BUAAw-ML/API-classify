@@ -270,9 +270,11 @@ class ProgramWebDataset(Dataset):
         for i in range(self.get_tags_num()):
             tag = self.id2tag[i]
             tokens = tokenizer.tokenize(tag)
+            print(tokens)
             token_ids = tokenizer.convert_tokens_to_ids(tokens)
             tag_ids.append(token_ids)
             tag_token_num.append(len(tokens))
+        exit()
         max_num = max(tag_token_num)
         padded_tag_ids = torch.zeros((self.get_tags_num(), max_num), dtype=torch.long)
         mask = torch.zeros((self.get_tags_num(), max_num))
