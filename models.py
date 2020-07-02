@@ -179,8 +179,8 @@ class GCNBert(nn.Module):
         # exit()
         # * inputs_tfidf.unsqueeze(-1)
 
-        # sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
-        #     / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, 768]
+        sentence_feat = torch.sum(token_feat * attention_mask.unsqueeze(-1), dim=1) \
+            / torch.sum(attention_mask, dim=1, keepdim=True)  # [batch_size, 768]
 
         # sentence_feat = token_feat[:,0,:]
 
@@ -223,12 +223,12 @@ class GCNBert(nn.Module):
         # attention_out = torch.sum(attention_out, dim=2)
         # attention_out = torch.sum(attention_out, 1) / self.num_classes
         #
-        # x = self.gc1(tag_embedding, self.adj)
-        # x = self.relu1(x)
-        # x = self.gc2(x, self.adj)
+        x = self.gc1(tag_embedding, self.adj)
+        x = self.relu1(x)
+        x = self.gc2(x, self.adj)
         # # #
-        # x = x.transpose(0, 1)
-        # x = torch.matmul(sentence_feat, x)
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
         #
         # x = torch.mul(sentence_feat.unsqueeze(1), x)
         # x = torch.sum(x, -1)
@@ -271,6 +271,7 @@ class GCNBert(nn.Module):
         # pred = self.output_layer(attention_out)  # + x
 
         pred = torch.sum(pred, -1)
+        pred = x
 
         # pred *= torch.sigmoid(self.weight3)
 
