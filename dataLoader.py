@@ -103,7 +103,7 @@ class ProgramWebDataset(Dataset):
             if tag_occurance[tag] < 0:
                 ignored_tags.add(tag)
 
-        print(ignored_tags)
+        print(tag_occurance)
 
         # print(sorted(tag_occurance.items(), key=lambda item: item[1]))
         # exit()
@@ -145,8 +145,6 @@ class ProgramWebDataset(Dataset):
                         id2tag[tag_id] = t
 
                 tag_ids = [tag2id[t] for t in tag]
-
-
 
                 # for t in tag2token:
                 #     if tag2token[t] in dscp_tokens and t not in ignored_tags:
@@ -270,11 +268,9 @@ class ProgramWebDataset(Dataset):
         for i in range(self.get_tags_num()):
             tag = self.id2tag[i]
             tokens = tokenizer.tokenize(tag)
-            print(tokens)
             token_ids = tokenizer.convert_tokens_to_ids(tokens)
             tag_ids.append(token_ids)
             tag_token_num.append(len(tokens))
-        exit()
         max_num = max(tag_token_num)
         padded_tag_ids = torch.zeros((self.get_tags_num(), max_num), dtype=torch.long)
         mask = torch.zeros((self.get_tags_num(), max_num))
