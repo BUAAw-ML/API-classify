@@ -161,7 +161,7 @@ class ProgramWebDataset(Dataset):
                 #                 tag_based[tt][t] = 1
 
                 data.append({
-                    'id': int(id),
+                    'id': id, #int(id),
                     'title_ids': title_ids,
                     'title_tokens': title_tokens,
                     'dscp_ids': dscp_ids,
