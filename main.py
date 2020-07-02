@@ -22,7 +22,7 @@ parser.add_argument('--device_ids', default=[0], type=int, nargs='+',
                     help='')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
-parser.add_argument('-b', '--batch-size', default=8, type=int,
+parser.add_argument('-b', '--batch-size', default=12, type=int,
                     metavar='N', help='mini-batch size (default: 256)')
 parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
                     metavar='LR', help='initial learning rate')
@@ -52,7 +52,7 @@ def multiLabel_text_classify():
 
     use_gpu = torch.cuda.is_available()
     train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file, tag_weight = \
-        load_dataset('../datasets/ProgrammerWeb/programweb-data.csv') #Programweb-domainFilter
+        load_dataset('../datasets/ProgrammerWeb/Mashups.csv') #Programweb-domainFilter
 
     model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.4, co_occur_mat=train_dataset.co_occur_mat)
 
