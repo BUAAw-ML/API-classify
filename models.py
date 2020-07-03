@@ -137,7 +137,7 @@ class GCNBert(nn.Module):
         self.memory = torch.zeros(108, 768).cuda(0)
         self.relu = nn.ReLU()
 
-        self.class_weight = Parameter(torch.Tensor(num_classes, 768).uniform_(0, 1), requires_grad=False).cuda(0) #
+        self.class_weight = Parameter(torch.Tensor(num_classes, 768 * 2).uniform_(0, 1), requires_grad=False).cuda(0) #
         self.class_weight.requires_grad = True
 
 
@@ -227,10 +227,10 @@ class GCNBert(nn.Module):
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
         # # #
-        x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
-        #
-        # x = torch.mul(sentence_feat.unsqueeze(1), x)
+        # x = x.transpose(0, 1)
+        # x = torch.matmul(sentence_feat, x)
+
+        x = sentence_feat.unsqueeze(1) * x
         # x = torch.sum(x, -1)
 
         # tag_embedding = t orch.matmul(self.adj, tag_embedding)
@@ -260,18 +260,19 @@ class GCNBert(nn.Module):
 
         # x = torch.cat((attention_out, attention_out2), 2)
 
+        x = torch.cat((x, attention_out), 2)
+
         pred = attention_out * self.class_weight
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
         # pred = attention_out + x
 
-        # x = torch.cat((x, attention_out), 2)
+
 
         # pred = self.output_layer(attention_out)  # + x
 
         pred = torch.sum(pred, -1)
-        pred += x
 
         # pred *= torch.sigmoid(self.weight3)
 
