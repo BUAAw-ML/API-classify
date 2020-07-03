@@ -99,7 +99,7 @@ class GCNBert(nn.Module):
         _adj = torch.FloatTensor(_adj)
         _adj = _adj.transpose(0, 1)
         # self.adj = nn.Parameter(gen_adj(_adj), requires_grad=False)  #gen_adj(_adj)
-        self.adj = nn.Parameter(_adj, requires_grad=False)
+        self.adj = nn.Parameter(_adj, requires_grad=True)
 
         _nums = co_occur_mat.numpy().diagonal()
         self.class_weight = torch.FloatTensor(np.round(1 - _nums / _nums.max(),3)).cuda(0).unsqueeze(-1)
@@ -227,10 +227,10 @@ class GCNBert(nn.Module):
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
         # # #
-        # x = x.transpose(0, 1)
-        # x = torch.matmul(sentence_feat, x)
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
 
-        x = sentence_feat.unsqueeze(1) * x
+        # x = sentence_feat.unsqueeze(1) * x
         # x = torch.sum(x, -1)
 
         # tag_embedding = t orch.matmul(self.adj, tag_embedding)
@@ -260,19 +260,19 @@ class GCNBert(nn.Module):
 
         # x = torch.cat((attention_out, attention_out2), 2)
 
-        x = torch.cat((x, attention_out), 2)
+        # x = torch.cat((x, attention_out), 2)
 
-        pred = x * self.class_weight
+        # pred = x * self.class_weight
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
         # pred = attention_out + x
-
+        pred = x
 
 
         # pred = self.output_layer(attention_out)  # + x
 
-        pred = torch.sum(pred, -1)
+        # pred = torch.sum(pred, -1)
 
         # pred *= torch.sigmoid(self.weight3)
 
