@@ -113,15 +113,17 @@ class ProgramWebDataset(Dataset):
             for row in reader:
                 if len(row) != 4:
                     continue
-                id, title, dscp, tag = row
+                api, title, dscp, tag = row
 
+                api_tokens = tokenizer.tokenize(api.strip())
                 title_tokens = tokenizer.tokenize(title.strip())
                 dscp_tokens = tokenizer.tokenize(dscp.strip())
-                if len(title_tokens) + len(dscp_tokens) > 510:
+                if len(api_tokens) + len(title_tokens) + len(dscp_tokens) > 510:
                     continue
 
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
+                api_ids = tokenizer.convert_tokens_to_ids(api_tokens)
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
@@ -158,7 +160,7 @@ class ProgramWebDataset(Dataset):
                 #                 tag_based[tt][t] = 1
 
                 data.append({
-                    'id': id, #int(id),
+                    'id': api_ids, #int(id),
                     'title_ids': title_ids,
                     'title_tokens': title_tokens,
                     'dscp_ids': dscp_ids,
@@ -324,7 +326,7 @@ class ProgramWebDataset(Dataset):
         result = {}
         # construct input
 
-        inputs = [e['title_ids'] + e['dscp_ids'] for e in batch]  #e['title_ids'] +
+        inputs = [e['api_ids'] + e['title_ids'] + e['dscp_ids'] for e in batch]  #e['api_ids'] +
 
         lengths = np.array([len(e) for e in inputs])
         max_len = np.max(lengths)

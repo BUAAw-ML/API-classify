@@ -262,7 +262,7 @@ class GCNBert(nn.Module):
 
         # x = torch.cat((x, attention_out), 2)
 
-        pred = x * self.class_weight
+        pred = attention_out * self.class_weight
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
@@ -332,7 +332,7 @@ class GCNBert(nn.Module):
 
     def get_config_optim(self, lr, lrp):
         return [
-                {'params': self.bert.parameters(), 'lr': lr*lrp},
+                {'params': self.bert.parameters(), 'lr': lrp},
                 {'params': self.gc1.parameters(), 'lr': lr},
                 {'params': self.gc2.parameters(), 'lr': lr},
                 {'params': self.linear0.parameters(), 'lr': lr},
