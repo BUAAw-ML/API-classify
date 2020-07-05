@@ -22,7 +22,7 @@ token_table = {'ecommerce': 'electronic commerce'}
 
 class ProgramWebDataset(Dataset):
     tag_weight = []
-    def __init__(self, data, co_occur_mat, tag2id, id2tag=None, tfidf_dict=None):
+    def __init__(self, data, co_occur_mat, tag2id, id2tag=None, tfidf_dict=None, api2id=None):
         self.data = data
         self.co_occur_mat = co_occur_mat
         self.tag2id = tag2id
@@ -30,6 +30,8 @@ class ProgramWebDataset(Dataset):
             id2tag = {v: k for k, v in tag2id.items()}
         self.id2tag = id2tag
         self.tfidf_dict = tfidf_dict
+
+        self.id2tag = api2id
 
     @classmethod
     def from_dict(cls, data_dict):
@@ -40,7 +42,7 @@ class ProgramWebDataset(Dataset):
 
     @classmethod
     def from_csv(cls, api_csvfile, net_csvfile):
-        data, tag2id, id2tag, document,tag_based = ProgramWebDataset.load(api_csvfile)
+        data, tag2id, id2tag, document,tag_based, api2id = ProgramWebDataset.load(api_csvfile)
         co_occur_mat = ProgramWebDataset.stat_cooccurence(data,len(tag2id))
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
         tfidf_dict = {}
@@ -61,7 +63,7 @@ class ProgramWebDataset(Dataset):
         #
         # exit()
 
-        return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict), ProgramWebDataset.tag_weight
+        return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict, api2id), ProgramWebDataset.tag_weight
 
     @classmethod
     def load(cls, f):
@@ -74,6 +76,10 @@ class ProgramWebDataset(Dataset):
 
         document = []
         tag_occurance = {}
+
+        api2id = {}
+        id2api = {}
+
         #csv.field_size_limit(500 * 1024 * 1024)
         #csv.field_size_limit(sys.maxsize)
         with open(f, newline='') as csvfile:
@@ -123,7 +129,7 @@ class ProgramWebDataset(Dataset):
 
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
-                api_ids = tokenizer.convert_tokens_to_ids(api_tokens)
+                apis = tokenizer.convert_tokens_to_ids(api_tokens)
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
@@ -147,6 +153,17 @@ class ProgramWebDataset(Dataset):
 
                 tag_ids = [tag2id[t] for t in tag]
 
+                api = api.strip().split('@@@')
+                api = [t for t in api if t != '']
+
+                for t in api:
+                    if t not in api2id:
+                        api_id = len(api2id)
+                        api2id[t] = api_id
+                        id2api[api_id] = t
+
+                api_ids = [api2id[t] for t in tag]
+
                 # for t in tag2token:
                 #     if tag2token[t] in dscp_tokens and t not in ignored_tags:
                 #         for tt in tag:
@@ -160,13 +177,14 @@ class ProgramWebDataset(Dataset):
                 #                 tag_based[tt][t] = 1
 
                 data.append({
-                    'api_ids': api_ids, #int(id),
+                    'apis': apis, #int(id),
                     'title_ids': title_ids,
                     'title_tokens': title_tokens,
                     'dscp_ids': dscp_ids,
                     'dscp_tokens': dscp_tokens,
                     'tag_ids': tag_ids,
-                    'dscp': dscp
+                    'dscp': dscp,
+                    'api_ids': api_ids,
                 })
 
         print("The number of tags for training: {}".format(len(tag2id)))
@@ -179,7 +197,7 @@ class ProgramWebDataset(Dataset):
             #     ProgramWebDataset.tag_weight.append(1)
         # print(ProgramWebDataset.tag_weight)
 
-        return data, tag2id, id2tag, document, tag_based
+        return data, tag2id, id2tag, document, tag_based, api2id
 
     @classmethod
     def get_tfidf_dict(cls, document):
@@ -260,6 +278,9 @@ class ProgramWebDataset(Dataset):
     def __getitem__(self, index):
         return self.data[index]
 
+    def get_apis_num(self):
+        return len(self.api2id)
+
     def get_tags_num(self):
         return len(self.tag2id)
 
@@ -326,7 +347,7 @@ class ProgramWebDataset(Dataset):
         result = {}
         # construct input
 
-        inputs = [e['api_ids'] for e in batch]  #e['api_ids'] +e['api_ids'] + e['title_ids'] ++ e['dscp_ids']
+        inputs = [e['apis'] for e in batch]  #e['apis']  + e['title_ids'] ++ e['dscp_ids']
 
         lengths = np.array([len(e) for e in inputs])
         max_len = np.max(lengths)
@@ -340,6 +361,10 @@ class ProgramWebDataset(Dataset):
         for i in range(len(batch)):
             tags[i, batch[i]['tag_ids']] = 1.
             # tags[i] *= torch.from_numpy(np.array(ProgramWebDataset.tag_weight)).float()
+
+        apis = torch.zeros(size=(len(batch), self.get_apis_num()))
+        for i in range(len(batch)):
+            apis[i, batch[i]['api_ids']] = 1.
 
         dscp = [e['dscp'] for e in batch]
 
@@ -355,7 +380,6 @@ class ProgramWebDataset(Dataset):
         title_ids = torch.LongTensor([e['input_ids'] for e in title_inputs])
         title_token_type_ids = torch.LongTensor([e['token_type_ids'] for e in title_inputs])
         title_attention_mask = torch.FloatTensor([e['attention_mask'] for e in title_inputs])
-
         #######################
         #
 
@@ -373,7 +397,7 @@ class ProgramWebDataset(Dataset):
         # ids *= inputs_tfidf.long()
         # ids[ids==0]=103
 
-        return (ids, token_type_ids, attention_mask, inputs_tfidf, title_ids, title_token_type_ids, title_attention_mask), tags, dscp
+        return (ids, token_type_ids, attention_mask, inputs_tfidf, title_ids, title_token_type_ids, title_attention_mask, apis), tags, dscp
 
 
 # def CrossValidationSplitter(dataset, seed):

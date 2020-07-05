@@ -146,7 +146,7 @@ class GCNBert(nn.Module):
                 torch.randn(4, batch_size, self.lstm_hid_dim).cuda(0))
 
     def forward(self, ids, token_type_ids, attention_mask, inputs_tfidf, encoded_tag, tag_mask, tag_embedding_file,
-                tfidf_result, title_ids, title_token_type_ids, title_attention_mask):
+                tfidf_result, title_ids, title_token_type_ids, title_attention_mask, apis):
 
         #
         # token_feat = self.bert(ids,
@@ -155,6 +155,8 @@ class GCNBert(nn.Module):
         # token_feat = torch.stack(token_feat, dim=3)[:,:,:,-1] #[batch_size, seq_len, 768, layer_num]
         # token_feat = torch.matmul(token_feat,  self.weight3).squeeze(-1)
 
+        print(apis.shape)
+        exit()
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]  # [batch_size, seq_len, 768]
