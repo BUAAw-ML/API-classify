@@ -326,7 +326,7 @@ class ProgramWebDataset(Dataset):
         result = {}
         # construct input
 
-        inputs = [e['title_ids'] for e in batch]  #e['api_ids'] +e['api_ids'] + e['title_ids'] ++ e['dscp_ids']
+        inputs = [e['api_ids'] for e in batch]  #e['api_ids'] +e['api_ids'] + e['title_ids'] ++ e['dscp_ids']
 
         lengths = np.array([len(e) for e in inputs])
         max_len = np.max(lengths)
