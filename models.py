@@ -127,7 +127,7 @@ class GCNBert(nn.Module):
         # self.lstm_hid_dim = num_classes / 2
         # self.lstm = torch.nn.LSTM(num_classes, hidden_size=self.lstm_hid_dim, num_layers=2,
         #                     batch_first=True, bidirectional=True)
-        self.weight0 = torch.nn.Linear(768, 1)
+        self.weight0 = torch.nn.Linear(2411, num_classes)
 
         self.weight3 = Parameter(torch.Tensor(13, 1))
         self.weight3.data.uniform_(0, 1)
@@ -155,8 +155,6 @@ class GCNBert(nn.Module):
         # token_feat = torch.stack(token_feat, dim=3)[:,:,:,-1] #[batch_size, seq_len, 768, layer_num]
         # token_feat = torch.matmul(token_feat,  self.weight3).squeeze(-1)
 
-        print(apis.shape)
-        exit()
         token_feat = self.bert(ids,
             token_type_ids=token_type_ids,
             attention_mask=attention_mask)[0]  # [batch_size, seq_len, 768]
@@ -275,6 +273,7 @@ class GCNBert(nn.Module):
         # pred = self.output_layer(attention_out)  # + x
 
         pred = torch.sum(pred, -1)
+        pred = self.weight0(apis)
 
         # pred *= torch.sigmoid(self.weight3)
 
