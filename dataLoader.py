@@ -22,7 +22,7 @@ token_table = {'ecommerce': 'electronic commerce'}
 
 class ProgramWebDataset(Dataset):
     tag_weight = []
-    def __init__(self, data, co_occur_mat, tag2id, id2tag=None, tfidf_dict=None, api2id=None):
+    def __init__(self, data, co_occur_mat, tag2id, id2tag=None, tfidf_dict=None, id2api=None):
         self.data = data
         self.co_occur_mat = co_occur_mat
         self.tag2id = tag2id
@@ -31,7 +31,7 @@ class ProgramWebDataset(Dataset):
         self.id2tag = id2tag
         self.tfidf_dict = tfidf_dict
 
-        self.id2tag = api2id
+        self.id2tag = id2api
 
     @classmethod
     def from_dict(cls, data_dict):
@@ -42,7 +42,7 @@ class ProgramWebDataset(Dataset):
 
     @classmethod
     def from_csv(cls, api_csvfile, net_csvfile):
-        data, tag2id, id2tag, document,tag_based, api2id = ProgramWebDataset.load(api_csvfile)
+        data, tag2id, id2tag, document,tag_based, id2api = ProgramWebDataset.load(api_csvfile)
         co_occur_mat = ProgramWebDataset.stat_cooccurence(data,len(tag2id))
         #co_occur_mat = ProgramWebDataset.similar_net(net_csvfile, tag2id)
         tfidf_dict = {}
@@ -63,7 +63,7 @@ class ProgramWebDataset(Dataset):
         #
         # exit()
 
-        return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict, api2id), ProgramWebDataset.tag_weight
+        return ProgramWebDataset(data, co_occur_mat, tag2id, id2tag, tfidf_dict, id2api), ProgramWebDataset.tag_weight
 
     @classmethod
     def load(cls, f):
@@ -197,8 +197,9 @@ class ProgramWebDataset(Dataset):
             # else:
             #     ProgramWebDataset.tag_weight.append(1)
         # print(ProgramWebDataset.tag_weight)
+        print(id2tag)
 
-        return data, tag2id, id2tag, document, tag_based, api2id
+        return data, tag2id, id2tag, document, tag_based, id2api
 
     @classmethod
     def get_tfidf_dict(cls, document):
