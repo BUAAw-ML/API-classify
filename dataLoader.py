@@ -162,7 +162,7 @@ class ProgramWebDataset(Dataset):
                         api2id[t] = api_id
                         id2api[api_id] = t
 
-                api_ids = [api2id[t] for t in tag]
+                api_ids = [api2id[t] for t in api]
 
                 # for t in tag2token:
                 #     if tag2token[t] in dscp_tokens and t not in ignored_tags:
