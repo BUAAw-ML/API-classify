@@ -274,10 +274,6 @@ class GCNBert(nn.Module):
 
         pred = torch.sum(pred, -1)
 
-        pred = self.linear1(apis)
-        pred = self.relu2(pred)
-        pred = self.linear2(pred)
-
         # pred *= torch.sigmoid(self.weight3)
 
         # pred *= torch.sigmoid(self.weight3)
