@@ -196,7 +196,7 @@ class ProgramWebDataset(Dataset):
             # else:
             #     ProgramWebDataset.tag_weight.append(1)
         # print(ProgramWebDataset.tag_weight)
-        print(id2api)
+
         return data, tag2id, id2tag, document, tag_based, id2api
 
     @classmethod
@@ -279,7 +279,7 @@ class ProgramWebDataset(Dataset):
         return self.data[index]
 
     def get_apis_num(self):
-        return len(self.api2id)
+        return len(self.id2api)
 
     def get_tags_num(self):
         return len(self.tag2id)
