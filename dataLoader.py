@@ -31,7 +31,7 @@ class ProgramWebDataset(Dataset):
         self.id2tag = id2tag
         self.tfidf_dict = tfidf_dict
 
-        self.id2tag = id2api
+        self.id2api = id2api
 
     @classmethod
     def from_dict(cls, data_dict):
@@ -153,17 +153,16 @@ class ProgramWebDataset(Dataset):
 
                 tag_ids = [tag2id[t] for t in tag]
 
-                # api = api.strip().split('@@@')
-                # api = [t for t in api if t != '']
-                #
-                # for t in api:
-                #     if t not in api2id:
-                #         api_id = len(api2id)
-                #         api2id[t] = api_id
-                #         id2api[api_id] = t
-                #
-                # api_ids = [api2id[t] for t in api]
-                api_ids = []
+                api = api.strip().split('@@@')
+                api = [t for t in api if t != '']
+
+                for t in api:
+                    if t not in api2id:
+                        api_id = len(api2id)
+                        api2id[t] = api_id
+                        id2api[api_id] = t
+
+                api_ids = [api2id[t] for t in api]
 
                 # for t in tag2token:
                 #     if tag2token[t] in dscp_tokens and t not in ignored_tags:
@@ -197,8 +196,7 @@ class ProgramWebDataset(Dataset):
             # else:
             #     ProgramWebDataset.tag_weight.append(1)
         # print(ProgramWebDataset.tag_weight)
-        print(id2tag)
-
+        print(id2api)
         return data, tag2id, id2tag, document, tag_based, id2api
 
     @classmethod
