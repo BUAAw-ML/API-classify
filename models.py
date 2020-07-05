@@ -116,9 +116,9 @@ class GCNBert(nn.Module):
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768, 400)
+        self.linear1 = nn.Linear(2411, 1000)
         self.relu2 = nn.LeakyReLU()
-        self.linear2 = nn.Linear(400, num_classes)
+        self.linear2 = nn.Linear(1000, num_classes)
         self.output_layer = nn.Linear(768, num_classes)
 
         #self.cosnorm_classifier = CosNorm_Classifier(768, num_classes)
@@ -273,7 +273,10 @@ class GCNBert(nn.Module):
         # pred = self.output_layer(attention_out)  # + x
 
         pred = torch.sum(pred, -1)
-        pred = self.weight0(apis)
+
+        pred = self.linear1(apis)
+        pred = self.relu2(pred)
+        pred = self.linear2(pred)
 
         # pred *= torch.sigmoid(self.weight3)
 
