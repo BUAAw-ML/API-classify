@@ -153,16 +153,17 @@ class ProgramWebDataset(Dataset):
 
                 tag_ids = [tag2id[t] for t in tag]
 
-                api = api.strip().split('@@@')
-                api = [t for t in api if t != '']
-
-                for t in api:
-                    if t not in api2id:
-                        api_id = len(api2id)
-                        api2id[t] = api_id
-                        id2api[api_id] = t
-
-                api_ids = [api2id[t] for t in api]
+                # api = api.strip().split('@@@')
+                # api = [t for t in api if t != '']
+                #
+                # for t in api:
+                #     if t not in api2id:
+                #         api_id = len(api2id)
+                #         api2id[t] = api_id
+                #         id2api[api_id] = t
+                #
+                # api_ids = [api2id[t] for t in api]
+                api_ids = []
 
                 # for t in tag2token:
                 #     if tag2token[t] in dscp_tokens and t not in ignored_tags:
