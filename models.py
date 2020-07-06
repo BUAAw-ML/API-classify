@@ -227,10 +227,10 @@ class GCNBert(nn.Module):
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
         # # #
-        # x = x.transpose(0, 1)
-        # x = torch.matmul(sentence_feat, x)
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
 
-        x = sentence_feat.unsqueeze(1) * x
+        # x = sentence_feat.unsqueeze(1) * x
         # x = torch.sum(x, -1)
 
         # tag_embedding = t orch.matmul(self.adj, tag_embedding)
