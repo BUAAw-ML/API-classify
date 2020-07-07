@@ -129,8 +129,8 @@ class GCNBert(nn.Module):
         #                     batch_first=True, bidirectional=True)
         self.weight0 = torch.nn.Linear(2411, num_classes)
 
-        self.weight3 = Parameter(torch.Tensor(num_classes, 2))
-        self.weight3.data.uniform_(0, 100)
+        self.weight3 = Parameter(torch.FloatTensor(num_classes, 2))
+        # self.weight3.data.uniform_(0, 100)
 
         # self.memory = Parameter(torch.Tensor(num_classes, 768), requires_grad=False).cuda(0)
 
