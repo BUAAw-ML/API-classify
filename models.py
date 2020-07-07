@@ -268,7 +268,7 @@ class GCNBert(nn.Module):
         # pred = self.output_layer(attention_out)  # + x
         x = torch.cat((x.unsqueeze(-1), attention_out.unsqueeze(-1)), -1)
         # pred = torch.sum(attention_out, -1) + x
-        # self.weight3 = F.softmax(self.weight3, -1)
+        self.weight3 = torch.sigmoid(self.weight3)
         pred = x * self.weight3
         pred = torch.sum(pred, -1)
         # pred += x
