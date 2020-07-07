@@ -130,7 +130,7 @@ class GCNBert(nn.Module):
         self.weight0 = torch.nn.Linear(2411, num_classes)
 
         self.weight3 = Parameter(torch.Tensor(num_classes, 2))
-        self.weight3.data.uniform_(0, 1)
+        # self.weight3.data.uniform_(0, 1)
 
         # self.memory = Parameter(torch.Tensor(num_classes, 768), requires_grad=False).cuda(0)
 
@@ -268,7 +268,7 @@ class GCNBert(nn.Module):
         # pred = self.output_layer(attention_out)  # + x
         x = torch.cat((x.unsqueeze(-1), attention_out.unsqueeze(-1)), -1)
         # pred = torch.sum(attention_out, -1) + x
-
+        self.weight3 = F.softmax(self.weight3, -1)
         pred = x * self.weight3
         pred = torch.sum(pred, -1)
         # pred += x
