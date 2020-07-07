@@ -198,21 +198,11 @@ class GCNBert(nn.Module):
         tag_embedding = torch.sum(tag_words_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)  #num_classes, 768
 
-        title_token_feat = self.bert(title_ids,
-            token_type_ids=title_token_type_ids,
-            attention_mask=title_attention_mask)[0]
+        # title_token_feat = self.bert(title_ids,
+        #     token_type_ids=title_token_type_ids,
+        #     attention_mask=title_attention_mask)[0]
         # title_feat = title_token_feat[:, 0, :]
 
-        title_embedding = torch.sum(title_token_feat * title_attention_mask.unsqueeze(-1), dim=1) \
-            / torch.sum(title_attention_mask, dim=1, keepdim=True)
-
-        title_attention = token_feat * title_embedding.unsqueeze(1)
-        title_attention = torch.sum(title_attention, -1)
-        alpha = title_attention.masked_fill(1 - attention_mask.byte(), torch.tensor(-np.inf))
-
-        alpha = F.softmax(alpha, -1).unsqueeze(1)  #16, 1, seq_len
-
-        sentence_feat = alpha @ token_feat  #16,1,768
 
         # with open(tag_embedding_file, 'rb') as fp:
         #     feats = pkl.load(fp)#, encoding='utf-8')
@@ -276,11 +266,7 @@ class GCNBert(nn.Module):
 
         # pred = self.output_layer(attention_out)  # + x
 
-        x = self.linear1(sentence_feat.squeeze(1))  #sentence_feat + concept_selector *
-        x = self.relu2(x)
-        pred = self.output_layer(x)
-
-        pred += torch.sum(attention_out, -1)
+        pred = torch.sum(attention_out, -1)
         # pred += x
 
         # pred *= torch.sigmoid(self.weight3)
