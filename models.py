@@ -210,7 +210,7 @@ class GCNBert(nn.Module):
         title_attention = torch.sum(title_attention, -1)
         alpha = title_attention.masked_fill(1 - attention_mask.byte(), torch.tensor(-np.inf))
 
-        alpha = F.softmax(alpha, -1).unsqueeze(1)  #16, seq_len
+        alpha = F.softmax(alpha, -1).unsqueeze(1)  #16, 1, seq_len
 
         sentence_feat = alpha @ token_feat  #16,1,768
 
@@ -266,7 +266,7 @@ class GCNBert(nn.Module):
 
         # x = torch.cat((x, attention_out), 2)
 
-        pred = (attention_out + sentence_feat) * self.class_weight
+        pred = attention_out * self.class_weight + sentence_feat
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
