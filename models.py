@@ -334,8 +334,8 @@ class GCNBert(nn.Module):
     def get_config_optim(self, lr, lrp):
         return [
                 {'params': self.bert.parameters(), 'lr': lrp},
-                {'params': self.gc1.parameters(), 'lr': lr},
-                {'params': self.gc2.parameters(), 'lr': lr},
+                {'params': self.gc1.parameters(), 'lr': lrp},
+                {'params': self.gc2.parameters(), 'lr': lrp},
                 {'params': self.linear0.parameters(), 'lr': lr},
                 {'params': self.linear1.parameters(), 'lr': lr},
                 {'params': self.linear2.parameters(), 'lr': lr},
