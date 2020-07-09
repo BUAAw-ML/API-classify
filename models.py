@@ -86,11 +86,11 @@ class GCNBert(nn.Module):
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 2000)
+        self.gc1 = GraphConvolution(768, 1500)
         self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(2000, 768)
+        self.gc2 = GraphConvolution(1500, 2000)
         self.relu2 = nn.LeakyReLU(0.2)
-        self.gc3 = GraphConvolution(3000, 768)
+        self.gc3 = GraphConvolution(2000, 768)
 
         _adj, origin_adj = gen_A(num_classes, t, co_occur_mat)
 
@@ -232,8 +232,8 @@ class GCNBert(nn.Module):
         x = self.gc1(tag_embedding, self.adj)
         x = self.relu1(x)
         x = self.gc2(x, self.adj)
-        # x = self.relu2(x)
-        # x = self.gc3(x, self.adj)
+        x = self.relu2(x)
+        x = self.gc3(x, self.adj)
         # # #
         x = x.transpose(0, 1)
         x = torch.matmul(sentence_feat, x)
