@@ -234,12 +234,12 @@ class GCNBert(nn.Module):
         x = self.gc2(x, self.adj)
 
         # # #
-        # x = x.transpose(0, 1)
-        # x = torch.matmul(sentence_feat, x)
+        x = x.transpose(0, 1)
+        x = torch.matmul(sentence_feat, x)
 
         # x = torch.matmul(sentence_feat, tag_embedding.transpose(0, 1))
 
-        x = sentence_feat.unsqueeze(1) * x
+        # x = sentence_feat.unsqueeze(1) * x
         # x = torch.sum(x, -1)
 
         # tag_embedding = t orch.matmul(self.adj, tag_embedding)
@@ -259,21 +259,17 @@ class GCNBert(nn.Module):
         # attention = F.softmax(attention, -1) #N, num_classes, seq_len
         # attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
-
         # x = torch.cat((attention_out, attention_out2), 2)
-
 
         # attention_out = torch.cat((x, attention_out), 2)
 
-
-        attention_out = attention_out * self.class_weight
-
+        attention_out = attention_out * self.class_weight + x
+        pred = torch.sum(attention_out, -1)
 
         # self.memory = torch.mean(attention_out, 0).clone()
 
         # pred = attention_out + x
         # pred = x
-
 
         # pred = self.output_layer(attention_out)  # + x
         # x = torch.cat((x.unsqueeze(-1), attention_out.unsqueeze(-1)), -1)
@@ -298,13 +294,13 @@ class GCNBert(nn.Module):
         # m1 = torch.matmul(tag_embedding, token_feat.transpose(1, 2))
         # label_att = torch.bmm(m1, token_feat)
 
-        weight1 = torch.sigmoid(self.weight1(x))
-        weight2 = torch.sigmoid(self.weight2(attention_out))
-        weight1 = weight1 / (weight1 + weight2)
-        weight2 = 1 - weight1
+        # weight1 = torch.sigmoid(self.weight1(x))
+        # weight2 = torch.sigmoid(self.weight2(attention_out))
+        # weight1 = weight1 / (weight1 + weight2)
+        # weight2 = 1 - weight1
+        #
+        # pred = weight1 * x + weight2 * attention_out
 
-        pred = weight1 * x + weight2 * attention_out
-        pred = torch.sum(pred, -1)
         # # doc = attention_out + values_memory.unsqueeze(-1) * label_att
         #
         # values_memory = torch.sigmoid(self.fc_hallucinator(self.weight_adj)).squeeze(-1).unsqueeze(0)
