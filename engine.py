@@ -390,7 +390,7 @@ class MultiLabelMAPEngine(Engine):
             self.writer.add_scalar('mAP/eval_mAP', map, self.state['epoch'])
             self.writer.add_scalar('OF1/eval_OF1', OF1, self.state['epoch'])
             self.writer.add_scalar('CF1/eval_CF1', CF1, self.state['epoch'])
-        return map
+        return OF1
 
     def on_start_batch(self, training, model, criterion, data_loader, optimizer=None, display=True):
 
