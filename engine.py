@@ -320,7 +320,7 @@ class Engine(object):
                 if self._state('filename_previous_best') is not None:
                     os.remove(self._state('filename_previous_best'))
                 filename_best = os.path.join(self.state['save_model_path'],
-                                             'model_best_{score:.4f}.pth.tar'.format(score=state['best_score']))
+                                             'model_best_{score:.4f}.pth.tar'.format(score=state['best_score']['OF1']))
                 shutil.copyfile(filename, filename_best)
                 self.state['filename_previous_best'] = filename_best
 
