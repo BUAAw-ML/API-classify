@@ -63,7 +63,9 @@ class Engine(object):
         if self._state('print_freq') is None:
             self.state['print_freq'] = 0
         # best score
-        self.state['best_score'] = 0.
+        self.state['best_score'] = {}
+        self.state['best_score']['OF1'] = 0.
+        self.state['best_score']['map'] = 0.
         self.state['train_iters'] = 0
         self.state['eval_iters'] = 0
 
@@ -192,21 +194,23 @@ class Engine(object):
             self.train(train_loader, model, criterion, optimizer, epoch)
 
             # evaluate on validation set
-            prec1 = self.validate(val_loader, model, criterion, epoch)
+            OF1, map = self.validate(val_loader, model, criterion, epoch)
 
             #self.cent = self.centroids / self.classcount[:, np.newaxis]
 
             # remember best prec@1 and save checkpoint
-            is_best = prec1 > self.state['best_score']
-            self.state['best_score'] = max(prec1, self.state['best_score'])
+            is_best_OF1 = OF1 > self.state['best_score']['OF1']
+
+            self.state['best_score']['OF1'] = max(OF1, self.state['best_score']['OF1'])
+            self.state['best_score']['map'] = max(map, self.state['best_score']['map'])
             self.save_checkpoint({
                 'epoch': epoch + 1,
                 'arch': self._state('arch'),
                 'state_dict': model.state_dict() if self.state['use_gpu'] else model.state_dict(),
                 'best_score': self.state['best_score'],
-            }, is_best)
+            }, is_best_OF1)
 
-            print(' *** best={best:.3f}'.format(best=self.state['best_score']))
+            print(' *** best_OF1={best1:.4f} best_map={best2:.4f}'.format(best1=self.state['best_score']['OF1'], best2=self.state['best_score']['map']))
         return self.state['best_score']
 
     def train(self, data_loader, model, criterion, optimizer, epoch):
@@ -281,9 +285,9 @@ class Engine(object):
             # measure accuracy
             self.on_end_batch(False, model, criterion, data_loader)
 
-        score = self.on_end_epoch(False, model, criterion, data_loader)
+        OF1, map = self.on_end_epoch(False, model, criterion, data_loader)
 
-        return score
+        return OF1, map
 
     def recordResult(self, target, output):
         result = []
@@ -390,7 +394,7 @@ class MultiLabelMAPEngine(Engine):
             self.writer.add_scalar('mAP/eval_mAP', map, self.state['epoch'])
             self.writer.add_scalar('OF1/eval_OF1', OF1, self.state['epoch'])
             self.writer.add_scalar('CF1/eval_CF1', CF1, self.state['epoch'])
-        return OF1
+        return OF1, map
 
     def on_start_batch(self, training, model, criterion, data_loader, optimizer=None, display=True):
 
