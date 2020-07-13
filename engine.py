@@ -210,7 +210,7 @@ class Engine(object):
                 'best_score': self.state['best_score'],
             }, is_best_OF1)
 
-            print(' *** best_OF1={best1:.4f} best_map={best2:.4f}'.format(best1=self.state['best_score']['OF1'], best2=self.state['best_score']['map']))
+            print(' *** best_F1={best1:.4f} best_map={best2:.4f}'.format(best1=self.state['best_score']['OF1'], best2=self.state['best_score']['map']))
         return self.state['best_score']
 
     def train(self, data_loader, model, criterion, optimizer, epoch):
@@ -399,7 +399,7 @@ class MultiLabelMAPEngine(Engine):
             self.writer.add_scalar('mAP/eval_mAP', map, self.state['epoch'])
             self.writer.add_scalar('OF1/eval_OF1', OF1, self.state['epoch'])
             self.writer.add_scalar('CF1/eval_CF1', CF1, self.state['epoch'])
-        return OF1, map
+        return CF1, map
 
     def on_start_batch(self, training, model, criterion, data_loader, optimizer=None, display=True):
 
