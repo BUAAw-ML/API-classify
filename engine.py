@@ -356,7 +356,7 @@ class MultiLabelMAPEngine(Engine):
         map = 100 * np.nanmean(self.state['ap_meter'].value().numpy())
 
         loss = self.state['meter_loss'].value()[0]
-        OP, OR, OF1, CP, CR, CF1 = self.state['ap_meter'].overall()
+        OP, OR, OF1, CP, CR, CF1, Nc, Np, Ng = self.state['ap_meter'].overall()
         OP_k, OR_k, OF1_k, CP_k, CR_k, CF1_k = self.state['ap_meter'].overall_topk(3)
         if display:
             if training:
@@ -384,6 +384,10 @@ class MultiLabelMAPEngine(Engine):
                       'CP_3: {CP:.4f}\t'
                       'CR_3: {CR:.4f}\t'
                       'CF1_3: {CF1:.4f}'.format(OP=OP_k, OR=OR_k, OF1=OF1_k, CP=CP_k, CR=CR_k, CF1=CF1_k))
+                classP = Nc / (Np + 1e-5)
+                classR = Nc / (Ng + 1e-5)
+                classF1 = (2 * classP * classR) / (classP + classR + 1e-5)
+                print(enumerate(classF1))
         if training:
             self.writer.add_scalar('loss/train_epoch_loss', loss, self.state['epoch'])
             self.writer.add_scalar('mAP/train_mAP', map, self.state['epoch'])
