@@ -357,7 +357,7 @@ class MultiLabelMAPEngine(Engine):
 
         loss = self.state['meter_loss'].value()[0]
         OP, OR, OF1, CP, CR, CF1, Nc, Np, Ng = self.state['ap_meter'].overall()
-        OP_k, OR_k, OF1_k, CP_k, CR_k, CF1_k = self.state['ap_meter'].overall_topk(3)
+        OP_k, OR_k, OF1_k, CP_k, CR_k, CF1_k, _, _, _ = self.state['ap_meter'].overall_topk(3)
         if display:
             if training:
                 print('Epoch: [{0}]\t'
