@@ -14,9 +14,9 @@ parser.add_argument('-seed', default=0, type=int, metavar='N',
                     help='random seed')
 parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                     help='number of data loading workers (default: 4)')
-parser.add_argument('--epochs', default=150, type=int, metavar='N',
+parser.add_argument('--epochs', default=30, type=int, metavar='N',
                     help='number of total epochs to run')
-parser.add_argument('--epoch_step', default=[100], type=int, nargs='+',
+parser.add_argument('--epoch_step', default=[20], type=int, nargs='+',
                     help='number of epochs to change learning rate')
 parser.add_argument('--device_ids', default=[0], type=int, nargs='+',
                     help='')
@@ -52,7 +52,7 @@ def multiLabel_text_classify():
 
     use_gpu = torch.cuda.is_available()
     train_dataset, val_dataset, encoded_tag, tag_mask, tag_embedding_file, tag_weight = \
-        load_dataset('../datasets/ProgrammerWeb/Mashups.csv') #Programweb-domainFilter
+        load_dataset('../datasets/ProgrammerWeb/Programweb-domainFilter.csv') #Mashups
 
     model = gcn_bert(num_classes=len(train_dataset.tag2id), t=0.4, co_occur_mat=train_dataset.co_occur_mat)
 

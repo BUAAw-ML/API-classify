@@ -105,7 +105,7 @@ class ProgramWebDataset(Dataset):
 
         ignored_tags = set()#['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
         for tag in tag_occurance:
-            if tag_occurance[tag] > 100:
+            if tag_occurance[tag] < 0:#> 100:
                 ignored_tags.add(tag)
 
         print(tag_occurance)
@@ -129,7 +129,7 @@ class ProgramWebDataset(Dataset):
 
                 document.append(" ".join(title_tokens) + " ".join(dscp_tokens))
 
-                apis = tokenizer.convert_tokens_to_ids(api_tokens)
+                # apis = tokenizer.convert_tokens_to_ids(api_tokens)
                 title_ids = tokenizer.convert_tokens_to_ids(title_tokens)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
@@ -177,7 +177,7 @@ class ProgramWebDataset(Dataset):
                 #                 tag_based[tt][t] = 1
 
                 data.append({
-                    'apis': apis, #int(id),
+                    # 'apis': apis, #int(id),
                     'title_ids': title_ids,
                     'title_tokens': title_tokens,
                     'dscp_ids': dscp_ids,
@@ -362,9 +362,9 @@ class ProgramWebDataset(Dataset):
             tags[i, batch[i]['tag_ids']] = 1.
             # tags[i] *= torch.from_numpy(np.array(ProgramWebDataset.tag_weight)).float()
 
-        apis = torch.zeros(size=(len(batch), self.get_apis_num()))
-        for i in range(len(batch)):
-            apis[i, batch[i]['api_ids']] = 1.
+        apis = torch.zeros(size=(len(batch), 1))#self.get_apis_num()))
+        # for i in range(len(batch)):
+        #     apis[i, batch[i]['api_ids']] = 1.
 
         dscp = [e['dscp'] for e in batch]
 
