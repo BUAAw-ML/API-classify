@@ -103,7 +103,8 @@ class ProgramWebDataset(Dataset):
                     # if t not in tag2token:
                     #     tag2token[t] = tokenizer.tokenize(t.strip())[0]
 
-        ignored_tags = set()#['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
+        ignored_tags = set(['Video', 'Fitness', 'Cloud', 'News Services', 'File Sharing', 'Backend', 'Storage', 'Media', 'Streaming',
+                            'Gambling', 'Personal Information Management', 'TV', 'invoicing', 'Data Mining', 'purchasing'])#['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
         for tag in tag_occurance:
             if tag_occurance[tag] < 0:#> 100:
                 ignored_tags.add(tag)
