@@ -387,7 +387,7 @@ class MultiLabelMAPEngine(Engine):
                 classP = Nc / (Np + 1e-5)
                 classR = Nc / (Ng + 1e-5)
                 classF1 = (2 * classP * classR) / (classP + classR + 1e-5)
-                print(enumerate(classF1))
+                print(classF1)
         if training:
             self.writer.add_scalar('loss/train_epoch_loss', loss, self.state['epoch'])
             self.writer.add_scalar('mAP/train_mAP', map, self.state['epoch'])
