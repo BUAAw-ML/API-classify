@@ -265,7 +265,7 @@ class GCNBert(nn.Module):
 
         attention_out = attention_out * self.class_weight#x
         pred = torch.sum(attention_out, -1)
-        pred = torch.sigmoid(pred)
+        # pred = torch.sigmoid(pred)
         # self.memory = torch.mean(attention_out, 0).clone()
 
         # pred = attention_out + x
