@@ -234,8 +234,8 @@ class GCNBert(nn.Module):
         x = self.gc2(x, self.adj)
 
         # # #
-        x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
+        # x = x.transpose(0, 1)
+        # x = torch.matmul(sentence_feat, x)
 
         # x = torch.matmul(sentence_feat, tag_embedding.transpose(0, 1))
 
