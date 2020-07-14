@@ -357,7 +357,7 @@ class MultiLabelMAPEngine(Engine):
 
     def on_end_epoch(self, training, model, criterion, data_loader, optimizer=None, display=True):
         map = 100 * np.nanmean(self.state['ap_meter'].value().numpy())
-
+        classF1 = []
         loss = self.state['meter_loss'].value()[0]
         OP, OR, OF1, CP, CR, CF1, Nc, Np, Ng = self.state['ap_meter'].overall()
         OP_k, OR_k, OF1_k, CP_k, CR_k, CF1_k, _, _, _ = self.state['ap_meter'].overall_topk(3)
