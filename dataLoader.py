@@ -198,7 +198,7 @@ class ProgramWebDataset(Dataset):
             # else:
             #     ProgramWebDataset.tag_weight.append(1)
         # print(ProgramWebDataset.tag_weight)
-        print(tag2id)
+        # print(tag2id)
 
         return data, tag2id, id2tag, document, tag_based, id2api
 
