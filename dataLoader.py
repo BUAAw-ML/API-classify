@@ -110,7 +110,7 @@ class ProgramWebDataset(Dataset):
             if tag_occurance[tag] < 0:#> 100:
                 ignored_tags.add(tag)
 
-        print(tag_occurance)
+        # print(tag_occurance)
 
         # print(sorted(tag_occurance.items(), key=lambda item: item[1]))
         # exit()
