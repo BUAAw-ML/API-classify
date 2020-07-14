@@ -103,8 +103,8 @@ class ProgramWebDataset(Dataset):
                     # if t not in tag2token:
                     #     tag2token[t] = tokenizer.tokenize(t.strip())[0]
 
-        ignored_tags = set(['Video', 'Fitness', 'Cloud', 'News Services', 'File Sharing', 'Backend', 'Storage', 'Media', 'Streaming',
-                            'Gambling', 'Personal Information Management', 'TV', 'invoicing', 'Data Mining', 'purchasing'])#['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
+        ignored_tags = set(['Internet of Things', 'File Sharing','Wi-Fi','SEO','Tagging','Accounting',
+                            'Classification','Medical','Intelligence','Food','Support'])  #['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
         for tag in tag_occurance:
             if tag_occurance[tag] < 0:#> 100:
                 ignored_tags.add(tag)
@@ -197,7 +197,7 @@ class ProgramWebDataset(Dataset):
             # else:
             #     ProgramWebDataset.tag_weight.append(1)
         # print(ProgramWebDataset.tag_weight)
-        print(tag2id)
+        # print(tag2id)
 
         return data, tag2id, id2tag, document, tag_based, id2api
 
