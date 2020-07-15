@@ -218,13 +218,17 @@ class AveragePrecisionMeter(object):
 
 def gen_A(num_classes, t, co_occur_mat):
     import pickle
-    # np.set_printoptions(threshold=np.inf,suppress=True)
+    np.set_printoptions(threshold=np.inf,suppress=True)
     co_occur_mat = co_occur_mat.numpy()
     # origin_adj = co_occur_mat
     # _adj[_adj < 30] = 0
     #_adj = _adj + 1 * np.identity(num_classes, np.int)
 
     _nums = co_occur_mat.diagonal()
+
+    weight_mat = (_nums < np.mean(_nums)).diagonal()
+    print(weight_mat)
+
 
     _nums = _nums[:, np.newaxis]
     _adj = co_occur_mat / _nums
@@ -247,7 +251,9 @@ def gen_A(num_classes, t, co_occur_mat):
     _adj = _adj / (_adj.sum(0, keepdims=True))
     # _adj = _adj * 0.5 / (_adj.sum(0, keepdims=True) + 1e-6)
     # _adj = _adj * (1 - np.identity(num_classes, np.int))
-    _adj = _adj + 1 * np.identity(num_classes, np.int)
+    _adj = _adj + weight_mat #+ 1 * np.identity(num_classes, np.int)
+    print(_adj)
+    exit()
 
     # _adj = np.round(_adj, 1)
     #
