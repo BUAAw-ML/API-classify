@@ -226,7 +226,7 @@ def gen_A(num_classes, t, co_occur_mat):
 
     _nums = co_occur_mat.diagonal()
 
-    _nums = (_nums < 200) * 10000 + _nums
+    _nums = (_nums < 100) * 10000 + _nums
 
     _nums = _nums[:, np.newaxis]
     _adj = co_occur_mat / _nums
