@@ -226,7 +226,7 @@ def gen_A(num_classes, t, co_occur_mat):
 
     _nums = co_occur_mat.diagonal()
 
-    weight_mat = (_nums < np.mean(_nums)).diagonal()
+    weight_mat = (_nums < np.mean(_nums)).unsqueeze(-1).diagonal()
     print(weight_mat)
 
 
