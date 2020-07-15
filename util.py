@@ -226,13 +226,12 @@ def gen_A(num_classes, t, co_occur_mat):
 
     _nums = co_occur_mat.diagonal()
 
-    _nums = (_nums < 100) * 1000 + _nums
-    print(_nums)
+    _nums = (_nums < 100) * 10000 + _nums
 
     _nums = _nums[:, np.newaxis]
     _adj = co_occur_mat / _nums
 
-    t = 0.3
+    t = 0.1
     # _adj = _adj / (_adj.sum(axis=1) + 1e-6)[:, np.newaxis]
     print("the number of directed edges in the graph: {}".format(np.sum(_adj >= t)-num_classes))
 
@@ -251,8 +250,6 @@ def gen_A(num_classes, t, co_occur_mat):
     # _adj = _adj * 0.5 / (_adj.sum(0, keepdims=True) + 1e-6)
     # _adj = _adj * (1 - np.identity(num_classes, np.int))
     _adj = _adj + 1 * np.identity(num_classes, np.int)
-    print(_adj)
-    exit()
 
     # _adj = np.round(_adj, 1)
     #
