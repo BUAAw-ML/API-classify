@@ -226,9 +226,8 @@ def gen_A(num_classes, t, co_occur_mat):
 
     _nums = co_occur_mat.diagonal()
 
-    weight_mat = (_nums < np.mean(_nums)).unsqueeze(-1).diagonal()
-    print(weight_mat)
-
+    _nums = (_nums < np.mean(_nums)) * 1000 + _nums
+    print(_nums)
 
     _nums = _nums[:, np.newaxis]
     _adj = co_occur_mat / _nums
@@ -251,7 +250,7 @@ def gen_A(num_classes, t, co_occur_mat):
     _adj = _adj / (_adj.sum(0, keepdims=True))
     # _adj = _adj * 0.5 / (_adj.sum(0, keepdims=True) + 1e-6)
     # _adj = _adj * (1 - np.identity(num_classes, np.int))
-    _adj = _adj + weight_mat #+ 1 * np.identity(num_classes, np.int)
+    _adj = _adj + 1 * np.identity(num_classes, np.int)
     print(_adj)
     exit()
 
