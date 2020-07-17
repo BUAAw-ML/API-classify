@@ -86,9 +86,9 @@ class GCNBert(nn.Module):
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 2000)
+        self.gc1 = GraphConvolution(768, 1500)
         self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(2000, 768)
+        self.gc2 = GraphConvolution(1500, 768)
         self.relu2 = nn.LeakyReLU(0.2)
         self.gc3 = GraphConvolution(2000, 768)
 
@@ -264,7 +264,7 @@ class GCNBert(nn.Module):
         # attention_out = torch.cat((x, attention_out), 2)
 
         attention_out *= self.class_weight
-        pred = torch.sum(attention_out, -1)
+        pred = torch.sum(attention_out, -1) + x
         # pred = torch.sigmoid(pred)
         # self.memory = torch.mean(attention_out, 0).clone()
 
