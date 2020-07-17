@@ -218,7 +218,7 @@ class AveragePrecisionMeter(object):
 
 def gen_A(num_classes, t, co_occur_mat):
     import pickle
-    np.set_printoptions(threshold=np.inf,suppress=True)
+    # np.set_printoptions(threshold=np.inf,suppress=True)
     co_occur_mat = co_occur_mat.numpy()
     # origin_adj = co_occur_mat
     # _adj[_adj < 30] = 0
