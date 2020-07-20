@@ -145,6 +145,8 @@ class GCNBert(nn.Module):
         self.class_weight = Parameter(torch.Tensor(num_classes, 768 ).uniform_(0, 1), requires_grad=False).cuda(0) #
         self.class_weight.requires_grad = True
 
+        self.dropout = nn.Dropout(p=0.5)
+
 
     def init_hidden(self, batch_size):
         return (torch.randn(4, batch_size, self.lstm_hid_dim).cuda(0),
@@ -262,7 +264,8 @@ class GCNBert(nn.Module):
         # attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
         # x = torch.cat((attention_out, attention_out2), 2)
-        # attention_out = x + attention_out
+        attention_out = x + attention_out
+        attention_out = self.dropout(attention_out)
         # attention_out = torch.cat((x, attention_out), 2)
         # attention_out = self.tanh1(attention_out)
         attention_out *= self.class_weight
