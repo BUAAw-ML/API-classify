@@ -145,7 +145,7 @@ class GCNBert(nn.Module):
         self.class_weight = Parameter(torch.Tensor(num_classes, 768 ).uniform_(0, 1), requires_grad=False).cuda(0) #
         self.class_weight.requires_grad = True
 
-        self.dropout = nn.Dropout(p=0.5)
+        self.dropout = nn.Dropout(p=0.2)
 
 
     def init_hidden(self, batch_size):
