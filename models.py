@@ -265,7 +265,7 @@ class GCNBert(nn.Module):
 
         # x = torch.cat((attention_out, attention_out2), 2)
         attention_out = x + attention_out
-        attention_out = self.dropout(attention_out)
+        # attention_out = self.dropout(attention_out)
         # attention_out = torch.cat((x, attention_out), 2)
         # attention_out = self.tanh1(attention_out)
         attention_out *= self.class_weight
