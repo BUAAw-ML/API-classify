@@ -238,12 +238,12 @@ class GCNBert(nn.Module):
         # x = self.gc3(x, self.adj)
 
         # # #
-        x = x.transpose(0, 1)
-        x = torch.matmul(sentence_feat, x)
+        # x = x.transpose(0, 1)
+        # x = torch.matmul(sentence_feat, x)
 
         # x = torch.matmul(sentence_feat, tag_embedding.transpose(0, 1))
 
-        # x = sentence_feat.unsqueeze(1) * x
+        x = sentence_feat.unsqueeze(1) * x
         # x = torch.sum(x, -1)
 
         # tag_embedding = t orch.matmul(self.adj, tag_embedding)
@@ -264,13 +264,13 @@ class GCNBert(nn.Module):
         # attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
         # x = torch.cat((attention_out, attention_out2), 2)
-        # attention_out = x + attention_out
+        attention_out = x + attention_out
         # attention_out = self.dropout(attention_out)
         # attention_out = torch.cat((x, attention_out), 2)
         # attention_out = self.tanh1(attention_out)
         attention_out *= self.class_weight
 
-        pred = torch.sum(attention_out, -1) + x
+        pred = torch.sum(attention_out, -1)# + x
         # pred = torch.sigmoid(pred)
         # self.memory = torch.mean(attention_out, 0).clone()
 
