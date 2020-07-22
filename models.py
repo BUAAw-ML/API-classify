@@ -86,9 +86,9 @@ class GCNBert(nn.Module):
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 4000)
-        self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(4000, 768)
+        self.gc1 = GraphConvolution(768, 3000)
+        self.relu1 = nn.ReLU()#LeakyReLU(0.2)
+        self.gc2 = GraphConvolution(3000, 768)
         # self.relu2 = nn.LeakyReLU(0.2)
         # self.gc3 = GraphConvolution(2000, 768)
 
