@@ -452,7 +452,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
         train_dataset = dataset
         val_dataset = copy.copy(dataset)
         ind = np.random.RandomState(seed=8).permutation(len(data)) #10
-        split = int(len(data) * 0.6)
+        split = int(len(data) * 0.7)
         train_dataset.data = data[ind[:split]].tolist()
         val_dataset.data = data[ind[split:]].tolist()
 
