@@ -107,7 +107,7 @@ class ProgramWebDataset(Dataset):
         #                     'Classification','Medical','Intelligence','Food','Support',
         #                     'Politics','News Services','Wearable','Design'])  #['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
         for tag in tag_occurance:
-            if tag_occurance[tag] > 150:#> 100:
+            if tag_occurance[tag] > 100:#> 100:
                 ignored_tags.add(tag)
 
         # print(tag_occurance)
