@@ -118,7 +118,7 @@ class GCNBert(nn.Module):
         # self.fc_hallucinator = nn.Linear(768, num_classes)
         # self.fc_selector = nn.Linear(768, num_classes)
 
-        self.linear1 = nn.Linear(768, 2000)
+        self.linear1 = nn.Linear(768, 768)
         self.relu2 = nn.LeakyReLU()
         self.linear2 = nn.Linear(1000, num_classes)
         self.output_layer = nn.Linear(2000, num_classes)
@@ -205,6 +205,8 @@ class GCNBert(nn.Module):
         tag_embedding = torch.sum(tag_words_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)  #num_classes, 768
 
+        tag_embedding = self.linear1(tag_embedding)
+
         # title_token_feat = self.bert(title_ids,
         #     token_type_ids=title_token_type_ids,
         #     attention_mask=title_attention_mask)[0]
@@ -250,6 +252,7 @@ class GCNBert(nn.Module):
 
         masks = attention_mask.unsqueeze(1)#.clone()  # N, 1, L
         attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(1 - masks.byte(), torch.tensor(-np.inf))
+
         attention = F.softmax(attention, -1)  # N, labels_num, seq_len
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
 
