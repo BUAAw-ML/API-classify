@@ -206,6 +206,7 @@ class GCNBert(nn.Module):
             / torch.sum(tag_mask, dim=1, keepdim=True)  #num_classes, 768
 
         tag_embedding = self.linear1(tag_embedding)
+        tag_embedding = self.relu(tag_embedding)
 
         # title_token_feat = self.bert(title_ids,
         #     token_type_ids=title_token_type_ids,
