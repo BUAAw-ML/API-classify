@@ -253,7 +253,7 @@ def gen_A(num_classes, t, co_occur_mat):
     # _adj = np.round(_adj, 1)
     #
     #np.diag(co_occur_mat.diagonal() / co_occur_mat.diagonal().max())
-    print(_adj)
+    # print(_adj)
 
     #     # with open('adj.json', 'w') as f:
     #     #     json.dump(_adj, f)
