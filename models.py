@@ -207,7 +207,7 @@ class GCNBert(nn.Module):
 
         # tag_embedding = self.linear1(tag_embedding)
         # tag_embedding = self.relu(tag_embedding)
-        tag_embedding *= torch.sigmoid(self.weight4)
+        tag_embedding += self.weight4
 
         # title_token_feat = self.bert(title_ids,
         #     token_type_ids=title_token_type_ids,
