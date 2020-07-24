@@ -329,7 +329,7 @@ class GCNBert(nn.Module):
         # pred = torch.matmul(pred, x)
         # pred = self.output_layer(pred)
 
-        pred = torch.matmul(pred, self.adj.transpose(0, 1))
+        # pred = torch.matmul(pred, self.adj.transpose(0, 1))
 
         # pred = self.linear1(attention_out).squeeze(-1)
 
