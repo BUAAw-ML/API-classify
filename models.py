@@ -64,8 +64,8 @@ class GCNBert(nn.Module):
         self.aa = torch.FloatTensor(co_occur_mat.numpy()).cuda(0)
 
         self.add_module('bert', bert)
-        for m in self.bert.parameters():
-            m.requires_grad = True
+        # for m in self.bert.parameters():
+        #     m.requires_grad = True
 
         # for i in range(9, 11+1):#l in self.bert.encoder.layer:
         #     m = self.bert.encoder.layer[i]
@@ -73,8 +73,8 @@ class GCNBert(nn.Module):
         #     for p in m.parameters():
         #         p.requires_grad = True
 
-        # for i in range(8, 11+1):#l in self.bert.encoder.layer:
-        #     self.bert.encoder.layer[i].requires_grad = True
+        for i in range(8, 11+1):#l in self.bert.encoder.layer:
+            self.bert.encoder.layer[i].requires_grad = True
 
         self.num_classes = num_classes
 
@@ -207,7 +207,6 @@ class GCNBert(nn.Module):
 
         # tag_embedding = self.linear1(tag_embedding)
         # tag_embedding = self.relu(tag_embedding)
-        tag_embedding += self.weight4
 
         # title_token_feat = self.bert(title_ids,
         #     token_type_ids=title_token_type_ids,
