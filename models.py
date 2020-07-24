@@ -134,7 +134,7 @@ class GCNBert(nn.Module):
         self.weight3 = Parameter(torch.Tensor(num_classes, 2))
         self.weight3.data.uniform_(0, 100)
 
-        self.weight4 = Parameter(torch.Tensor(num_classes, 2), requires_grad=False).cuda(0) #
+        self.weight4 = Parameter(torch.Tensor(num_classes, 768).uniform_(0, 1), requires_grad=False).cuda(0) #
         self.weight4.requires_grad = True
 
         # self.memory = Parameter(torch.Tensor(num_classes, 768), requires_grad=False).cuda(0)
@@ -205,8 +205,9 @@ class GCNBert(nn.Module):
         tag_embedding = torch.sum(tag_words_embedding * tag_mask.unsqueeze(-1), dim=1) \
             / torch.sum(tag_mask, dim=1, keepdim=True)  #num_classes, 768
 
-        tag_embedding = self.linear1(tag_embedding)
-        tag_embedding = self.relu(tag_embedding)
+        # tag_embedding = self.linear1(tag_embedding)
+        # tag_embedding = self.relu(tag_embedding)
+        tag_embedding *= self.weight4
 
         # title_token_feat = self.bert(title_ids,
         #     token_type_ids=title_token_type_ids,
