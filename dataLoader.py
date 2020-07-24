@@ -107,7 +107,7 @@ class ProgramWebDataset(Dataset):
         #                     'Classification','Medical','Intelligence','Food','Support',
         #                     'Politics','News Services','Wearable','Design'])  #['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service','Data-as-a-Service'])  #
         for tag in tag_occurance:
-            if tag_occurance[tag] < 200:#> 100:
+            if tag_occurance[tag] > 100:#> 100:
                 ignored_tags.add(tag)
 
         # print(tag_occurance)
@@ -451,7 +451,7 @@ def load_dataset(api_csvfile=None, net_csvfile=None):
         data = np.array(dataset.data)
         train_dataset = dataset
         val_dataset = copy.copy(dataset)
-        ind = np.random.RandomState(seed=8).permutation(len(data)) #10
+        ind = np.random.RandomState(seed=10).permutation(len(data)) #10
         split = int(len(data) * 0.8)
         train_dataset.data = data[ind[:split]].tolist()
         val_dataset.data = data[ind[split:]].tolist()
