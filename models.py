@@ -67,7 +67,7 @@ class GCNBert(nn.Module):
         for m in self.bert.parameters():
             m.requires_grad = False
 
-        for i in range(9, 11+1):#l in self.bert.encoder.layer:
+        for i in range(6, 11+1):#l in self.bert.encoder.layer:
             m = self.bert.encoder.layer[i]
             m.trainable = True
             for p in m.parameters():
@@ -354,8 +354,6 @@ class GCNBert(nn.Module):
                 {'params': self.bert.encoder.layer[8].parameters(), 'lr': 0.05},
                 {'params': self.bert.encoder.layer[7].parameters(), 'lr': 0.01},
                 {'params': self.bert.encoder.layer[6].parameters(), 'lr': 0.01},
-                {'params': self.bert.encoder.layer[7].parameters(), 'lr': 0.005},
-                {'params': self.bert.encoder.layer[6].parameters(), 'lr': 0.005},
                 {'params': self.gc1.parameters(), 'lr': lr},
                 {'params': self.gc2.parameters(), 'lr': lr},
                 {'params': self.linear0.parameters(), 'lr': lr},
