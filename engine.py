@@ -330,6 +330,13 @@ class Engine(object):
     def adjust_learning_rate(self, optimizer):
         """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
         lr_list = []
+
+        for i in range(9, 11+1):#l in self.bert.encoder.layer:
+            m = self.bert.encoder.layer[i]
+            for p in m.parameters():
+                p['lr'] = 0.1
+
+
         decay = 0.1 if sum(self.state['epoch'] == np.array(self.state['epoch_step'])) > 0 else 1.0
         for param_group in optimizer.param_groups:
             param_group['lr'] = param_group['lr'] * decay
