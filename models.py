@@ -349,8 +349,8 @@ class GCNBert(nn.Module):
         return [
                 # {'params': self.bert.parameters(), 'lr': lrp},
                 {'params': self.bert.encoder.layer[11].parameters(), 'lr': 0.1},
-                {'params': self.bert.encoder.layer[10].parameters(), 'lr': 0.1},
-                {'params': self.bert.encoder.layer[9].parameters(), 'lr': 0.05},
+                {'params': self.bert.encoder.layer[10].parameters(), 'lr': 0.05},
+                {'params': self.bert.encoder.layer[9].parameters(), 'lr': 0.01},
                 {'params': self.bert.encoder.layer[8].parameters(), 'lr': 0.05},
                 {'params': self.bert.encoder.layer[7].parameters(), 'lr': 0.01},
                 {'params': self.bert.encoder.layer[6].parameters(), 'lr': 0.01},
