@@ -65,13 +65,13 @@ class GCNBert(nn.Module):
 
         self.add_module('bert', bert)
         for m in self.bert.parameters():
-            m.requires_grad = False
+            m.requires_grad = True
 
-        for i in range(6, 11+1):#l in self.bert.encoder.layer:
-            m = self.bert.encoder.layer[i]
-            m.trainable = True
-            for p in m.parameters():
-                p.requires_grad = True
+        # for i in range(6, 11+1):#l in self.bert.encoder.layer:
+        #     m = self.bert.encoder.layer[i]
+        #     m.trainable = True
+        #     for p in m.parameters():
+        #         p.requires_grad = True
 
         # for i in range(0, 11+1):#l in self.bert.encoder.layer:
         #     self.bert.encoder.layer[i].requires_grad = True
@@ -86,9 +86,9 @@ class GCNBert(nn.Module):
         nn.init.xavier_uniform_(self.attention.weight)
 
         # self.dropout = nn.Dropout(p=0.5)
-        self.gc1 = GraphConvolution(768, 3000)
+        self.gc1 = GraphConvolution(768, 2000)
         self.relu1 = nn.LeakyReLU(0.2)
-        self.gc2 = GraphConvolution(3000, 768)
+        self.gc2 = GraphConvolution(2000, 768)
         # self.relu2 = nn.LeakyReLU(0.2)
         # self.gc3 = GraphConvolution(2000, 768)
 
@@ -347,19 +347,19 @@ class GCNBert(nn.Module):
 
     def get_config_optim(self, lr, lrp):
         return [
-                # {'params': self.bert.parameters(), 'lr': lrp},
-                {'params': self.bert.encoder.layer[11].parameters(), 'lr': 0.1},
-                {'params': self.bert.encoder.layer[10].parameters(), 'lr': 0.1},
-                {'params': self.bert.encoder.layer[9].parameters(), 'lr': 0.05},
-                {'params': self.bert.encoder.layer[8].parameters(), 'lr': 0.05},
-                {'params': self.bert.encoder.layer[7].parameters(), 'lr': 0.01},
-                {'params': self.bert.encoder.layer[6].parameters(), 'lr': 0.01},
-                {'params': self.bert.encoder.layer[5].parameters(), 'lr': 0.04},
-                {'params': self.bert.encoder.layer[4].parameters(), 'lr': 0.04},
-                {'params': self.bert.encoder.layer[3].parameters(), 'lr': 0.02},
-                {'params': self.bert.encoder.layer[2].parameters(), 'lr': 0.02},
-                {'params': self.bert.encoder.layer[1].parameters(), 'lr': 0.01},
-                {'params': self.bert.encoder.layer[0].parameters(), 'lr': 0.01},
+                {'params': self.bert.parameters(), 'lr': lrp},
+                # {'params': self.bert.encoder.layer[11].parameters(), 'lr': 0.1},
+                # {'params': self.bert.encoder.layer[10].parameters(), 'lr': 0.1},
+                # {'params': self.bert.encoder.layer[9].parameters(), 'lr': 0.05},
+                # {'params': self.bert.encoder.layer[8].parameters(), 'lr': 0.05},
+                # {'params': self.bert.encoder.layer[7].parameters(), 'lr': 0.01},
+                # {'params': self.bert.encoder.layer[6].parameters(), 'lr': 0.01},
+                # {'params': self.bert.encoder.layer[5].parameters(), 'lr': 0.04},
+                # {'params': self.bert.encoder.layer[4].parameters(), 'lr': 0.04},
+                # {'params': self.bert.encoder.layer[3].parameters(), 'lr': 0.02},
+                # {'params': self.bert.encoder.layer[2].parameters(), 'lr': 0.02},
+                # {'params': self.bert.encoder.layer[1].parameters(), 'lr': 0.01},
+                # {'params': self.bert.encoder.layer[0].parameters(), 'lr': 0.01},
                 {'params': self.gc1.parameters(), 'lr': lr},
                 {'params': self.gc2.parameters(), 'lr': lr},
                 {'params': self.linear0.parameters(), 'lr': lr},
