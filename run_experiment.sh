@@ -15,12 +15,12 @@ python main.py \
         --save_model_path='./checkpoint' \
         --data_type='All' \
         --data_path='../datasets/ProgrammerWeb/programweb-data.csv' \
-        --use_previousData=1 \
-        --method='semiGAN_MultiLabelMAP' \
+        --use_previousData=0 \
+        --method='MultiLabelMAP' \
         --overlength_handle='skip' \
         --min_tagFrequence=0  \
-        --max_tagFrequence=100  \
-        --intanceNum_limit=10000 \
+        --max_tagFrequence=99999  \
+        --intanceNum_limit=99999 \
         --data_split=0.05  \
         --test_description=''  \
 

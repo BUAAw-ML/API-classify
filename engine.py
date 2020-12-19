@@ -456,8 +456,7 @@ class semiGAN_MultiLabelMAPEngine(MultiLabelMAPEngine):
 
 
         if semi_supervised == False: #train with labeled data
-
-            d_loss = criterion(self.state['output'], target_var) + D_L_unsupervised
+            d_loss = criterion(self.state['output'], target_var)
         else:
             d_loss = D_L_unsupervised
 
