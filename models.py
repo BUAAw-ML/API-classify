@@ -78,7 +78,7 @@ class Generator(nn.Module):
 
         self.dropout = nn.Dropout(p=0.5)
         self.act = nn.LeakyReLU(0.2) #nn.Sigmoid()#
-        self.input_dim = input_dim
+        self.num_classes = input_dim - 768
 
         self.num_hidden_generator = num_hidden_generator
         self.hidden_list_generator = nn.ModuleList()
@@ -99,8 +99,8 @@ class Generator(nn.Module):
             m.requires_grad = True
 
     def forward(self, feat, encoded_tag, tag_mask):
-        print(self.input_dim)
-        feat = feat.expand(feat.shape[0], self.input_dim, feat.shape[2])
+
+        feat = feat.expand(feat.shape[0], self.num_classes, feat.shape[2])
         #
         # embed = self.bert.get_input_embeddings()
         # tag_embedding = embed(encoded_tag)
@@ -108,7 +108,7 @@ class Generator(nn.Module):
         #                 / torch.sum(tag_mask, dim=1, keepdim=True)
         # tag_embedding = tag_embedding.detach().unsqueeze(0).expand_as(feat)
         #
-        tag_embedding = torch.eye(self.input_dim).cuda(0).unsqueeze(0).expand(feat.shape[0],self.input_dim,self.input_dim)
+        tag_embedding = torch.eye(self.num_classes).cuda(0).unsqueeze(0).expand(feat.shape[0],self.num_classes,self.num_classes)
         x = torch.cat((feat,tag_embedding),-1)
         # x = feat
 
