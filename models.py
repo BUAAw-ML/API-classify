@@ -99,7 +99,7 @@ class Generator(nn.Module):
             m.requires_grad = True
 
     def forward(self, feat, encoded_tag, tag_mask):
-
+        print(self.input_dim)
         feat = feat.expand(feat.shape[0], self.input_dim, feat.shape[2])
         #
         # embed = self.bert.get_input_embeddings()
