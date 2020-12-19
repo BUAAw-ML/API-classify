@@ -57,10 +57,9 @@ class MABert(nn.Module):
 
         flatten = torch.sum(attention_out, -1, keepdim=True)
         prob = torch.sum(prob, -1, keepdim=True)
-        prob = torch.sigmoid(prob)
 
-        # prob = torch.cat((prob,flatten),-1)
-        # prob = self.output(prob)[:,0]
+        prob = torch.cat((prob,flatten),-1)
+        prob = self.output(prob)[:,0]
 
         return flatten, logit, prob
 
@@ -74,12 +73,14 @@ class MABert(nn.Module):
 
 
 class Generator(nn.Module):
-    def __init__(self, bert, num_classes, hidden_dim=768, input_dim=768, num_hidden_generator=2, hidden_dim_generator=2000):
+    def __init__(self, bert, num_classes, hidden_dim=768, num_hidden_generator=2, hidden_dim_generator=2000):
         super(Generator, self).__init__()
 
         self.dropout = nn.Dropout(p=0.5)
         self.act = nn.LeakyReLU(0.2) #nn.Sigmoid()#
         self.num_classes = num_classes
+
+        input_dim = 768 + self.num_classes
 
         self.num_hidden_generator = num_hidden_generator
         self.hidden_list_generator = nn.ModuleList()
@@ -103,9 +104,9 @@ class Generator(nn.Module):
 
         feat = feat.expand(feat.shape[0], self.num_classes, feat.shape[2])
         #
-        # tag_embedding = torch.eye(self.num_classes).cuda(0).unsqueeze(0).expand(feat.shape[0],self.num_classes,self.num_classes)
-        # x = torch.cat((feat,tag_embedding),-1)
-        x = feat
+        tag_embedding = torch.eye(self.num_classes).cuda(0).unsqueeze(0).expand(feat.shape[0],self.num_classes,self.num_classes)
+        x = torch.cat((feat,tag_embedding),-1)
+        # x = feat
 
         for i in range(self.num_hidden_generator):
             x = self.hidden_list_generator[i](x)
