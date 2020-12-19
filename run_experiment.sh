@@ -24,27 +24,6 @@ python main.py \
         --data_split=0.05  \
         --test_description=''  \
 
-#python main.py \
-#        --experiment_no='tagFrequence<1000_Test'  \
-#        --epochs=50 \
-#        --epoch_step=40 \
-#        --device_ids=0 \
-#        --batch-size=4 \
-#        --G-lr=0.1 \
-#        --D-lr=0.1 \
-#        --B-lr=0.01 \
-#        --save_model_path='./checkpoint' \
-#        --data_type='TrainTest_agNews' \
-#        --data_path='../datasets/ag-news' \
-#        --use_previousData=0 \
-#        --method='semiGAN_MultiLabelMAP' \
-#        --overlength_handle='skip' \
-#        --min_tagFrequence=0  \
-#        --max_tagFrequence=1000  \
-#        --intanceNum_limit=10000 \
-#        --data_split=0.05  \
-#        --test_description=''  \
-
 
 #方法、epoch_step
 

@@ -456,37 +456,17 @@ class semiGAN_MultiLabelMAPEngine(MultiLabelMAPEngine):
                                                                       self.state['encoded_tag'],
                                                                       self.state['tag_mask'], x_g.detach())#
 
-        # self.state['output'] = F.softmax(logits, dim=-1)
-
-        # print("logits：")
-        # print(logits)
-
         self.state['output'] = logits
 
         D_L_unsupervised = -1 * torch.mean(torch.log(1 - prob + epsilon))
-        # D_L_unsupervised =  -1 * torch.mean(torch.mean(prob * torch.log(prob), -1))
-        # D_L_unsupervised = criterion(prob, target_zeros)
+
 
         if semi_supervised == False: #train with labeled data
-            # log_probs = F.log_softmax(logits, dim=-1)
-            # per_example_loss = -1 * torch.sum(target_var * log_probs, dim=-1) / target_var.shape[-1]
-            # D_L_Supervised = torch.mean(per_example_loss)
+
             d_loss = criterion(self.state['output'], target_var) #+ D_L_unsupervised
-        else:
-            # pseudo_label = torch.max(self.state['output'], -1, keepdim=True)[0]
-            # pseudo_label = self.state['output'] - pseudo_label
-            #
-            # pseudo_label[pseudo_label >= 0] = 1.
-            # pseudo_label[pseudo_label < 0] = 0.
-            #
-            # log_probs = F.log_softmax(logits, dim=-1)
-            # per_example_loss = -1 * torch.sum(pseudo_label * log_probs, dim=-1) / pseudo_label.shape[-1]
-            # D_L_Supervised = torch.mean(per_example_loss)
+        else
 
-            # D_L_unsupervised2 = -1 * torch.mean(torch.log(logits + epsilon))
-            # D_L_unsupervised3 = -1 * torch.mean(torch.log(1 - flatten[:,1] + epsilon))
-
-            d_loss = D_L_unsupervised #+ D_L_unsupervised2 #D_L_unsupervised +
+            d_loss = D_L_unsupervised
 
         if training:
             optimizer['enc'].zero_grad()
@@ -502,15 +482,7 @@ class semiGAN_MultiLabelMAPEngine(MultiLabelMAPEngine):
 
         g_loss = -1 * torch.mean(torch.log(prob + epsilon))
 
-        # D_L_unsupervised3 = -1 * torch.mean(torch.log(flatten[:,1] + epsilon))
-        # g_loss = criterion(prob, 1 - target_zeros)
-
-        # feature_error = torch.mean(torch.mean(features.detach(), dim=0) - torch.mean(x_g[:,:features.shape[1],:], dim=0), dim=0)
-
-        # feature_error = torch.mean(torch.mean(features.detach(), dim=0) - torch.mean(x_g, dim=0), dim=0)
-        # G_feat_match = torch.mean(feature_error * feature_error)
-        # print(G_feat_match)
-        g_loss = g_loss#+G_feat_match#
+        g_loss = g_loss
 
         if training:
             optimizer['Generator'].zero_grad()
@@ -521,7 +493,6 @@ class semiGAN_MultiLabelMAPEngine(MultiLabelMAPEngine):
         self.state['loss'] = [d_loss, g_loss]
 
         if not training:
-            # print(logits)
             return self.state['output']
 
     def on_end_batch(self, training, model, criterion, data_loader, optimizer=None, display=True):

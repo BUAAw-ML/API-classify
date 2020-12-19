@@ -41,61 +41,25 @@ class MABert(nn.Module):
         tag_embedding = embed(encoded_tag)
         tag_embedding = torch.sum(tag_embedding * tag_mask.unsqueeze(-1), dim=1) \
                         / torch.sum(tag_mask, dim=1, keepdim=True)
-        # print("similarity {}".format(torch.mean(torch.mean(tag_embedding, -1))))
 
         masks = torch.unsqueeze(attention_mask, 1)  # N, 1, L  .bool()
         attention = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill((1 - masks.byte()), torch.tensor(-np.inf))
 
-        similarity = (torch.matmul(token_feat, tag_embedding.transpose(0, 1))).transpose(1, 2).masked_fill(
-                    (1 - masks.byte()), torch.tensor(0))
-        # print("similarity {}".format(torch.mean(torch.sum(similarity, -1))))
 
         attention = F.softmax(attention, -1)
-
-        # print("1 {}".format(torch.max(torch.max(attention,-1)[0],-1)[1]))
-        # print("2 {}".format(torch.max(torch.max(attention, -1)[0], -1)[0]))
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
-        # print("0 {}".format(torch.sum(token_feat, -1)))
         attention_out = attention_out * self.class_weight
         attention_out = torch.sum(attention_out, -1)
-        # print("3 {}".format(torch.max(prob,-1)[1]))
-        # print("4 {}".format(torch.max(prob, -1)[0]))
-
         logit = torch.sigmoid(attention_out)
-        # logit = prob
-
-        flatten = torch.sum(attention_out, -1, keepdim=True)
 
         feat = feat * self.class_weight
         prob = torch.sum(feat, -1)
-        # prob = torch.sigmoid(prob)
+
+        flatten = torch.sum(attention_out, -1, keepdim=True)
         prob = torch.sum(prob, -1, keepdim=True)
 
         prob = torch.cat((prob,flatten),-1)
-
         prob = self.output(prob)[:,0]
-
-
-        # prob = attention
-
-        # discrimate = torch.sum(torch.matmul(feat, self.class_weight.transpose(0, 1)), -1, keepdim=True)
-        # discrimate = torch.matmul(feat, tag_embedding.transpose(0, 1))
-        # pred = torch.sum(logit, -1, keepdim=True)
-
-        # pred = torch.cat((discrimate, logit), -1)
-
-        # attention_out = torch.cat((feat.unsqueeze(1), attention_out), 1)
-        # pred = self.Linear1(attention_out)#.squeeze(-1)
-        # pred = self.act(pred)
-        # pred = self.Linear2(pred).squeeze(-1)
-        # pred = torch.sigmoid(pred)
-        # logit = pred[:,1:]
-
-
-        #
-        # flatten = torch.mean(attention_out,-2)
-
-        # prob = pred[:,0]
 
         return flatten, logit, prob
 
