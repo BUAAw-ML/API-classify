@@ -150,7 +150,7 @@
 - 学习率、批大小、优化器（Adam训练不起来）都无法解决不能进一步提高的问题
 - 把标注数据放在前面训练效果好一点
 
-# 实验结果 1205-
+# 实验结果 1205-1218
 ## programmerWeb数据集
 
 实验发现：
@@ -158,3 +158,20 @@
 - 采用tag注意力其实就是：计算出每个tag的注意力后，其中最大注意力值若在所有tag里还最大，则该tag很大可能就为预测结果。
 - 随着训练进行，tag和token的平均similarity会越来越小（从正到负）
 - 把对于真实类别的类别预测概率平均值通过设置loss函数快速抬起来往往导致训练崩溃，因为所有类别的预测概率都被一起抬起来了。
+
+# 实验结果 1218 -            
+## programmerWeb数据集   
+数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
+|---|---|---|---|                                                                                                                                                                        
+label,unlabel,test:72,,438（标签数：33）（tag频率<100）|Bert微调+多注意力|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|47.951|             
+label,unlabel,test:72,949,438（标签数：33）（tag频率<100）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|56.759|      
+|---|---|---|---| 
+label,unlabel,test:260,,1563（标签数：71）（tag频率<200）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|42|      
+label,unlabel,test:260,3385,1563（标签数：71）（tag频率<200）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|50| 
+|---|---|---|---|
+label,unlabel,test:360,,2166（标签数：88）（tag频率<300）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|42.163|      
+label,unlabel,test:360,4693,2166（标签数：88）（tag频率<300）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|45.856|
+|---|---|---|---|                                                                                                                             
+label,unlabel,test:612,,3677（标签数：115）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|45.633|      
+label,unlabel,test:612,7967,3677（标签数：115）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|41.466，41.465|  
+|---|---|---|---| 
