@@ -62,7 +62,6 @@ class MABert(nn.Module):
         # prob = self.output(prob)[:,0]
 
         prob = torch.sigmoid(prob)
-        print(prob.shape)
 
         return flatten, logit, prob
 
