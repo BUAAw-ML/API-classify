@@ -162,7 +162,7 @@
 # 实验结果 1218 -            
 ## programmerWeb数据集   
 数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
-|---|---|---|---|                                                                                                                                                                        
+|---|---|---|---|                                                                                                                                                                
 label,unlabel,test:14,,438（标签数：33）（tag频率<100）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|17.622|             
 label,unlabel,test:14,1007,438（标签数：33）（tag频率<100）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|24.300|   
 label,unlabel,test:72,,438（标签数：33）（tag频率<100）|Bert微调+多注意力|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|47.951|             
@@ -171,12 +171,12 @@ label,unlabel,test:72,,438（标签数：33）（tag频率<100）|Bert微调+多
 label,unlabel,test:145,,438（标签数：33）（tag频率<100）|Bert微调+多注意力|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|54.206|  
 label,unlabel,test:,,（标签数：33）（tag频率<100）|Bert微调+多注意力+GAN（不用unlabel）|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|61.973| 
 |---|---|---|---| 
-label,unlabel,test:,,1563（标签数：71）（tag频率<200）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|14.254|
-label,unlabel,test:,,1563（标签数：71）（tag频率<200）|Bert微调+多注意力+GAN（不用unlabel）|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|| 
+label,unlabel,test:52,,1563（标签数：71）（tag频率<200）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|14.254|
+label,unlabel,test:52,,1563（标签数：71）（tag频率<200）|Bert微调+多注意力+GAN（不用unlabel）|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|24.505| 
 label,unlabel,test:260,,1563（标签数：71）（tag频率<200）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|42|      
 label,unlabel,test:260,3385,1563（标签数：71）（tag频率<200）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|50| 
 label,unlabel,test:260,,1563（标签数：71）（tag频率<200）|Bert微调+多注意力+GAN（不用unlabel）|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|47.745|  
-label,unlabel,test:520,,1563（标签数：71）（tag频率<200）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01||
+label,unlabel,test:520,,1563（标签数：71）（tag频率<200）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|50.660|
 label,unlabel,test:520,,1563（标签数：71）（tag频率<200）|Bert微调+多注意力+GAN（不用unlabel）|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|55.658| 
 |---|---|---|---|
 label,unlabel,test:72,,2166（标签数：88）（tag频率<300）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|18.813|
@@ -184,7 +184,7 @@ label,unlabel,test:72,4981,2166（标签数：88）（tag频率<300）|Bert微�
 label,unlabel,test:360,,2166（标签数：88）（tag频率<300）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|42.163|      
 label,unlabel,test:360,4693,2166（标签数：88）（tag频率<300）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|45.856|
 label,unlabel,test:360,,2166（标签数：88）（tag频率<300）|Bert微调+多注意力+GAN（不用unlabel）|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|45| 
-label,unlabel,test:720,,2166（标签数：88）（tag频率<300）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01||    
+label,unlabel,test:720,,2166（标签数：88）（tag频率<300）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|53.853|    
 label,unlabel,test:720,,2166（标签数：88）（tag频率<300）|Bert微调+多注意力+GAN（不用unlabel）|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|53.802| 
 label,unlabel,test:1443,,2166（标签数：88）（tag频率<300）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|58.432|
 label,unlabel,test:1443,,2166（标签数：88）（tag频率<300）|Bert微调+多注意力+GAN（不用unlabel）|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|57.989| 
