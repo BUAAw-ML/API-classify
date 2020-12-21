@@ -4,7 +4,7 @@
 #EN='02'  #experiment_no
 
 python main.py \
-        --experiment_no='data_split=0.2'  \
+        --experiment_no='data_split=0.01'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -21,11 +21,11 @@ python main.py \
         --min_tagFrequence=0  \
         --max_tagFrequence=300 \
         --intanceNum_limit=99999 \
-        --data_split=0.2  \
+        --data_split=0.01  \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='data_split=0.2'  \
+        --experiment_no='data_split=0.01'  \
         --epochs=100 \
         --epoch_step=90 \
         --device_ids=0 \
@@ -42,7 +42,7 @@ python main.py \
         --min_tagFrequence=0  \
         --max_tagFrequence=300 \
         --intanceNum_limit=99999 \
-        --data_split=0.2  \
+        --data_split=0.01  \
         --test_description=''  \
 
 
