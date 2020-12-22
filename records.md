@@ -198,6 +198,13 @@ label,unlabel,test:612,7967,3677（标签数：115）|Bert微调+多注意力+GA
 用是label数据数量3倍的unlabel数据集做生成对抗训练
 数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
 |---|---|---|---|
+label,unlabel,test:14,,438（split:0.01,标签数：33）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01||      
+label,unlabel,test:14,,438（split:0.01,标签数：33）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001||  
+label,unlabel,test:72,,438（split:0.05,标签数：33）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|51.628|      
+label,unlabel,test:72,,438（split:0.05,标签数：33）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|52.131|  
+label,unlabel,test:145,,438（split:0.1,标签数：33）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|53.741|      
+label,unlabel,test:145,,438（split:0.1,标签数：33）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|63.502|
+|---|---|---|---|
 label,unlabel,test:72,,2166（标签数：88）（tag频率<300）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|18.560|
 label,unlabel,test:72,,2166（标签数：88）（tag频率<300）|Bert微调+多注意力+GAN（不用unlabel）|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|19.301| 
 label,unlabel,test:721,,2166（标签数：88）（tag频率<300）|Bert微调+多注意力|epoch:50;epoch_step:20;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|53.449|    
