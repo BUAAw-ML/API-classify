@@ -4,7 +4,7 @@
 #EN='02'  #experiment_no
 
 python main.py \
-        --experiment_no='data_split=0.7'  \
+        --experiment_no='max_tagFrequence=200'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -25,19 +25,19 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='data_split=0.7'  \
-        --epochs=50 \
-        --epoch_step=30 \
+        --experiment_no='max_tagFrequence=200'  \
+        --epochs=100 \
+        --epoch_step=90 \
         --device_ids=0 \
         --batch-size=4 \
         --G-lr=0.001 \
         --D-lr=0.1 \
-        --B-lr=0.01 \
+        --B-lr=0.001 \
         --save_model_path='./checkpoint' \
         --data_type='All' \
         --data_path='../datasets/ProgrammerWeb/programweb-data.csv' \
         --use_previousData=0 \
-        --method='MultiLabelMAP' \
+        --method='semiGAN_MultiLabelMAP' \
         --overlength_handle='skip' \
         --min_tagFrequence=0  \
         --max_tagFrequence=200 \
