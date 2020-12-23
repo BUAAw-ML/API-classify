@@ -285,3 +285,14 @@ label,unlabel,test:72,,438（split:0.05,标签数：33）|Bert微调+多注意�
 label,unlabel,test:145,,438（split:0.1,标签数：33）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01||      
 label,unlabel,test:145,,438（split:0.1,标签数：33）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001||
 |---|---|---|---|
+
+用最大训练数据量做生成对抗训练
+数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
+|---|---|---|---|
+label,unlabel,test:,,（split:,标签数：33）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01||      
+label,unlabel,test:,,（split:,标签数：33）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001||  
+label,unlabel,test:3645,,1563（split:,标签数：71）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|66.254|      
+label,unlabel,test:3645,3645,1563（split:,标签数：71）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|65.096|  
+label,unlabel,test:8579,,3677（split:,标签数：115）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|61.546|      
+label,unlabel,test:8579,8579,3677（split:,标签数：115）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|60.510|
+|---|---|---|---|

@@ -44,8 +44,8 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             split2 = int(len(data) * 0.7)
             split3 = int(len(data) * 1)
 
-            dataset.train_data = data[ind[:split2]].tolist()
-            dataset.unlabeled_train_data = data[ind[:split2]].tolist()
+            dataset.train_data = data[ind[:split]].tolist()
+            dataset.unlabeled_train_data = data[ind[:1000]].tolist()
             dataset.test_data = data[ind[split2:split3]].tolist()
 
         elif data_type == 'TrainTest_ganBert':
