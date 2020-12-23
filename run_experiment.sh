@@ -19,9 +19,9 @@ python main.py \
         --method='MultiLabelMAP' \
         --overlength_handle='skip' \
         --min_tagFrequence=0  \
-        --max_tagFrequence=99999 \
+        --max_tagFrequence=100 \
         --intanceNum_limit=99999 \
-        --data_split=0.05  \
+        --data_split=0.01  \
         --test_description=''  \
 
 python main.py \
@@ -40,9 +40,9 @@ python main.py \
         --method='semiGAN_MultiLabelMAP' \
         --overlength_handle='skip' \
         --min_tagFrequence=0  \
-        --max_tagFrequence=99999 \
+        --max_tagFrequence=100 \
         --intanceNum_limit=99999 \
-        --data_split=0.05  \
+        --data_split=0.01  \
         --test_description=''  \
 
 
