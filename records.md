@@ -319,6 +319,13 @@ label,unlabel,test:802,1000,438（split:0.55,标签数：33）|Bert微调+多注
 label,unlabel,test:1021,,438（split:0.7,标签数：33）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|79.664|      
 label,unlabel,test:1021,1000,438（split:0.7,标签数：33）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|78.949|                                                                                                                                                                      
 |---|---|---|---|
+label,unlabel,test:2343,,1563（split:0.45,标签数：71）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|62.160|      
+label,unlabel,test:2343,1000,1563（split:0.45,标签数：71）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|63.060|  
+label,unlabel,test:2864,,1563（split:0.55,标签数：71）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|65.241|      
+label,unlabel,test:2864,1000,1563（split:0.55,标签数：71）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|64.227|  
+label,unlabel,test:3645,,1563（split:0.7,标签数：71）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|65.363|      
+label,unlabel,test:3645,1000,1563（split:0.7,标签数：71）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|65.267|  
+|---|---|---|---|
 label,unlabel,test:122,,3677（split:0.01,标签数：115）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01|27.207|      
 label,unlabel,test:122,1000,3677（split:0.01,标签数：115）|Bert微调+多注意力+GAN|epoch:100;epoch_step:90;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.001|33.133|  
 label,unlabel,test:,,（split:0.05,标签数：115）|Bert微调+多注意力|epoch:50;epoch_step:30;batch-size:4;optimizer:SGD;learning-rate:G0.001,D0.1,B0.01||      
