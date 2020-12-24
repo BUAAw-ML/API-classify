@@ -175,7 +175,7 @@ class AveragePrecisionMeter(object):
         tmp = self.scores.cpu().numpy()
         for i in range(n):
             for ind in index[i]:
-                scores[i, ind] = 1 if tmp[i, ind] >= 0 else -1
+                scores[i, ind] = 1 if tmp[i, ind] >= 0.5 else 0
         return self.evaluation(scores, targets)
 
 
