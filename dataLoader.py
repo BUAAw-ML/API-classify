@@ -329,8 +329,8 @@ class dataEngine(Dataset):
             reader = pickle.load(pklfile)
             for row in reader:
 
-                if len(row) != 4:
-                    continue
+                # if len(row) != 4:
+                #     continue
 
                 tag = row["tags"]
 
