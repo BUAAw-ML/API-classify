@@ -48,10 +48,6 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             dataset.unlabeled_train_data = data[ind[:1000]].tolist()
             dataset.test_data = data[ind[split2:split3]].tolist()
 
-            print(len(dataset.train_data))
-            print(len(dataset.test_data))
-            exit()
-
         elif data_type == 'TrainTest':
 
             file = os.path.join(data_path, 'train.pkl')
@@ -336,11 +332,7 @@ class dataEngine(Dataset):
 
                 # tag = [t for t in tag if t != '']
 
-                if len(tag) != len(set(tag)):
-                    print(tag)
-                    tag = list(set(tag))
-                    print(tag)
-                    exit()
+                tag = list(set(tag))
 
                 for t in tag:
                     if t not in tag_occurance:
