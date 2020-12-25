@@ -353,12 +353,13 @@ class dataEngine(Dataset):
                 title_tokens = tokenizer.tokenize(title.strip())
                 dscp_tokens = title_tokens + tokenizer.tokenize(dscp.strip())
 
+                print(len(dscp_tokens))
                 if len(dscp_tokens) > 510:
                     if self.data_config['overlength_handle'] == 'truncation':
                         dscp_tokens = dscp_tokens[:510]
                     else:
                         continue
-
+                print(tag)
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
                 # tag = tag.strip().split('###')
@@ -372,7 +373,7 @@ class dataEngine(Dataset):
 
                 if len(tag) == 0:
                     continue
-                print(tag)
+
                 for t in tag:
                     if t not in self.tag2id:
                         tag_id = len(self.tag2id)
