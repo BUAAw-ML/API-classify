@@ -24,7 +24,67 @@ python main.py \
         --data_split=0.01 \
         --test_description=''  \
 
+python main.py \
+        --experiment_no='Linear+max_tagFrequence=200'  \
+        --epochs=50 \
+        --epoch_step=30 \
+        --device_ids=0 \
+        --batch-size=4 \
+        --G-lr=0.001 \
+        --D-lr=0.1 \
+        --B-lr=0.01 \
+        --save_model_path='./checkpoint' \
+        --data_type='All' \
+        --data_path='../datasets/ProgrammerWeb' \
+        --use_previousData=0 \
+        --method='MultiLabelMAP' \
+        --overlength_handle='skip' \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=200 \
+        --intanceNum_limit=99999 \
+        --data_split=0.05 \
+        --test_description=''  \
+python main.py \
+        --experiment_no='Linear+max_tagFrequence=200'  \
+        --epochs=50 \
+        --epoch_step=30 \
+        --device_ids=0 \
+        --batch-size=4 \
+        --G-lr=0.001 \
+        --D-lr=0.1 \
+        --B-lr=0.01 \
+        --save_model_path='./checkpoint' \
+        --data_type='All' \
+        --data_path='../datasets/ProgrammerWeb' \
+        --use_previousData=0 \
+        --method='MultiLabelMAP' \
+        --overlength_handle='skip' \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=200 \
+        --intanceNum_limit=99999 \
+        --data_split=0.1 \
+        --test_description=''  \
 
+python main.py \
+        --experiment_no='Linear+max_tagFrequence=200'  \
+        --epochs=50 \
+        --epoch_step=30 \
+        --device_ids=0 \
+        --batch-size=4 \
+        --G-lr=0.001 \
+        --D-lr=0.1 \
+        --B-lr=0.01 \
+        --save_model_path='./checkpoint' \
+        --data_type='All' \
+        --data_path='../datasets/ProgrammerWeb' \
+        --use_previousData=0 \
+        --method='MultiLabelMAP' \
+        --overlength_handle='skip' \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=200 \
+        --intanceNum_limit=99999 \
+        --data_split=0.15 \
+        --test_description=''  \
 
 #方法、epoch_step
 
