@@ -14,7 +14,7 @@ python main.py \
         --B-lr=0.01 \
         --save_model_path='./checkpoint' \
         --data_type='All' \
-        --data_path='../datasets/ProgrammerWeb' \
+        --data_path='../datasets/ProgrammerWeb/programweb-data.csv' \
         --use_previousData=0 \
         --method='MultiLabelMAP' \
         --overlength_handle='skip' \
@@ -35,7 +35,7 @@ python main.py \
         --B-lr=0.01 \
         --save_model_path='./checkpoint' \
         --data_type='All' \
-        --data_path='../datasets/ProgrammerWeb' \
+        --data_path='../datasets/ProgrammerWeb/programweb-data.csv' \
         --use_previousData=0 \
         --method='MultiLabelMAP' \
         --overlength_handle='skip' \
@@ -55,7 +55,7 @@ python main.py \
         --B-lr=0.01 \
         --save_model_path='./checkpoint' \
         --data_type='All' \
-        --data_path='../datasets/ProgrammerWeb' \
+        --data_path='../datasets/ProgrammerWeb/programweb-data.csv' \
         --use_previousData=0 \
         --method='MultiLabelMAP' \
         --overlength_handle='skip' \
@@ -76,7 +76,7 @@ python main.py \
         --B-lr=0.01 \
         --save_model_path='./checkpoint' \
         --data_type='All' \
-        --data_path='../datasets/ProgrammerWeb' \
+        --data_path='../datasets/ProgrammerWeb/programweb-data.csv' \
         --use_previousData=0 \
         --method='MultiLabelMAP' \
         --overlength_handle='skip' \
