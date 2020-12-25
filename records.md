@@ -351,6 +351,11 @@ label,unlabel,test:2343,,1563（split:0.45,标签数：71）|Bert微调+多注�
 label,unlabel,test:2864,,1563（split:0.55,标签数：71）|Bert微调+多注意力+直接相加|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01|63.878|     
 label,unlabel,test:3645,,1563（split:0.7,标签数：71）|Bert微调+多注意力+直接相加|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01|65.299| 
 |---|---|---|---|
+label,unlabel,test:52,,1563（split:0.01,标签数：71）|Bert微调+多注意力+Linear|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01|39.750| 
+label,unlabel,test:781,,1563（split:0.15,标签数：71）|Bert微调+多注意力+Linear|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01|56.733|  
+label,unlabel,test:1822,,1563（split:0.35,标签数：71）|Bert微调+多注意力+Linear|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01|61.379|    
+label,unlabel,test:3645,,1563（split:0.7,标签数：71）|Bert微调+多注意力+Linear|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01|64.077| 
+|---|---|---|---|
 label,unlabel,test:122,,3677（split:0.01,标签数：115）|Bert微调+多注意力|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01|27.207|      
 label,unlabel,test:122,1000,3677（split:0.01,标签数：115）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|33.133|  
 label,unlabel,test:,,（split:0.05,标签数：115）|Bert微调+多注意力|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01||      
