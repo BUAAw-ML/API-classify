@@ -17,7 +17,7 @@ python main.py \
         --data_path='../datasets/ProgrammerWeb' \
         --use_previousData=0 \
         --method='MultiLabelMAP' \
-        --overlength_handle='skip' \
+        --overlength_handle='truncation' \
         --min_tagFrequence=0  \
         --max_tagFrequence=99999 \
         --intanceNum_limit=99999 \

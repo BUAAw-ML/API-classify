@@ -324,7 +324,7 @@ class dataEngine(Dataset):
 
     def filter_tags(self, file):
         tag_occurance = {}
-        i = 0
+
         with open(file,'rb') as pklfile:
             reader = pickle.load(pklfile)
             for row in reader:
@@ -340,9 +340,6 @@ class dataEngine(Dataset):
                     if t not in tag_occurance:
                         tag_occurance[t] = 1
                     tag_occurance[t] += 1
-                i += 1
-
-        print(i)
 
         for tag in tag_occurance:
             if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
