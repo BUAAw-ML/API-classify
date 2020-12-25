@@ -367,16 +367,17 @@ class dataEngine(Dataset):
                 # tag = tag.strip().split('###')
                 # tag = [t for t in tag if t != '']
 
-                if self.use_tags is not None:
-                    tag = [t for t in tag if t in self.use_tags]
+                # if self.use_tags is not None:
+                #     tag = [t for t in tag if t in self.use_tags]
 
                 # if len(set(tag)) < 2:
                 #     continue
                 print(tag)
                 print(len(tag))
+                exit()
                 if len(tag) == 0:
                     continue
-                exit()
+
 
                 for t in tag:
                     if t not in self.tag2id:
