@@ -352,7 +352,7 @@ class dataEngine(Dataset):
                 title = row["api_name"]
                 dscp = row["descr"]
                 tag = row["tags"]
-
+                print(tag)
                 title_tokens = tokenizer.tokenize(title.strip())
                 dscp_tokens = title_tokens + tokenizer.tokenize(dscp.strip())
 
@@ -372,9 +372,11 @@ class dataEngine(Dataset):
 
                 # if len(set(tag)) < 2:
                 #     continue
+                print(tag)
                 print(len(tag))
                 if len(tag) == 0:
                     continue
+                exit()
 
                 for t in tag:
                     if t not in self.tag2id:
