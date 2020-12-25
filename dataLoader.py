@@ -372,7 +372,7 @@ class dataEngine(Dataset):
 
                 # if len(set(tag)) < 2:
                 #     continue
-
+                print(len(tag))
                 if len(tag) == 0:
                     continue
 
@@ -383,6 +383,7 @@ class dataEngine(Dataset):
                         self.id2tag[tag_id] = t
 
                 tag_ids = [self.tag2id[t] for t in tag]
+                print(tag_ids)
 
                 data.append({
                     'id': int(id),
