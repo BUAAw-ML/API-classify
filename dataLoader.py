@@ -341,13 +341,14 @@ class dataEngine(Dataset):
         with open(file,'rb') as pklfile:
 
             reader = pickle.load(pklfile)
-            print(reader)
-            exit()
+
 
             for row in reader:
-
+                print(len(row))
                 if len(row) != 4:
                     continue
+
+                print(row)
                 id, title, dscp, tag = row
 
                 title_tokens = tokenizer.tokenize(title.strip())
