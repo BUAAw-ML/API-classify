@@ -348,27 +348,13 @@ class dataEngine(Dataset):
                 if len(row) != 4:
                     continue
 
-                id, title, dscp, tag = row
-
-
-                print(row)
-                print(id)
-                print(title)
-                print(dscp)
-                print(tag)
                 id = row["id"]
                 title = row["api_name"]
                 dscp = row["descr"]
                 tag = row["tags"]
-                print(id)
-                print(title)
-                print(dscp)
-                print(tag)
-                exit()
 
                 title_tokens = tokenizer.tokenize(title.strip())
                 dscp_tokens = title_tokens + tokenizer.tokenize(dscp.strip())
-
 
                 if len(dscp_tokens) > 510:
                     if self.data_config['overlength_handle'] == 'truncation':
@@ -405,8 +391,6 @@ class dataEngine(Dataset):
                     'tag_ids': tag_ids,
                     'dscp': dscp
                 })
-                print(data)
-                exit()
 
         print("The number of tags for training: {}".format(len(self.tag2id)))
 
