@@ -335,9 +335,7 @@ class dataEngine(Dataset):
                 tag = row["tags"]
 
                 # tag = [t for t in tag if t != '']
-
-                if len(tag) != len(set(tag)):
-                    print("chongfu")
+                tag = set(tag).tolist()
 
                 for t in tag:
                     if t not in tag_occurance:
