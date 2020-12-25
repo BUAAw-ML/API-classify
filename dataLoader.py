@@ -328,7 +328,8 @@ class dataEngine(Dataset):
         with open(file,'rb') as pklfile:
             reader = pickle.load(pklfile)
             for row in reader:
-
+                print(row)
+                exit()
                 # if len(row) != 4:
                 #     continue
 
