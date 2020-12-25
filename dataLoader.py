@@ -336,6 +336,9 @@ class dataEngine(Dataset):
 
                 # tag = [t for t in tag if t != '']
 
+                if len(tag) != len(set(tag)):
+                    print("chongfu")
+
                 for t in tag:
                     if t not in tag_occurance:
                         tag_occurance[t] = 1
