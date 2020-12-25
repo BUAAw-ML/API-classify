@@ -334,7 +334,7 @@ class dataEngine(Dataset):
 
                 tag = row["tags"]
 
-                tag = [t for t in tag if t != '']
+                # tag = [t for t in tag if t != '']
 
                 for t in tag:
                     if t not in tag_occurance:
