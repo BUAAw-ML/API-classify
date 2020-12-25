@@ -338,7 +338,7 @@ class dataEngine(Dataset):
         data = []
         document = []
 
-        with open(file, newline='') as pklfile:
+        with open(file,'rb') as pklfile:
 
             reader = pickle.load(pklfile)
             for row in reader:
