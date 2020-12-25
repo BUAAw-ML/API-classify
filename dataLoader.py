@@ -237,7 +237,6 @@ class dataEngine(Dataset):
         document = []
         tag_occurance = {}
         # csv.field_size_limit(sys.maxsize)
-        i = 0
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)
             next(reader)
@@ -254,8 +253,7 @@ class dataEngine(Dataset):
                     if t not in tag_occurance:
                         tag_occurance[t] = 1
                     tag_occurance[t] += 1
-                i += 1
-        print(i)
+
         # ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service',
         # 'Data-as-a-Service'])  #
         for tag in tag_occurance:
@@ -337,11 +335,12 @@ class dataEngine(Dataset):
                 for t in tag:
                     if t not in tag_occurance:
                         tag_occurance[t] = 1
-                    tag_occurance[t] += 1
+                    else:
+                        tag_occurance[t] += 1
 
-        # for tag in tag_occurance:
-        #     if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
-        #         self.use_tags.add(tag)
+        for tag in tag_occurance:
+            if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
+                self.use_tags.add(tag)
         print('Total number of tags: {}'.format(len(tag_occurance)))
         print(sorted(tag_occurance.items(), key=lambda x: x[1], reverse=True))
 
