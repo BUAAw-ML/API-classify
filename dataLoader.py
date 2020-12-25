@@ -344,11 +344,10 @@ class dataEngine(Dataset):
 
 
             for row in reader:
-                print(len(row))
+
                 if len(row) != 4:
                     continue
 
-                print(row)
                 id, title, dscp, tag = row
 
                 title_tokens = tokenizer.tokenize(title.strip())
@@ -362,8 +361,8 @@ class dataEngine(Dataset):
 
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
-                tag = tag.strip().split('###')
-                tag = [t for t in tag if t != '']
+                # tag = tag.strip().split('###')
+                # tag = [t for t in tag if t != '']
 
                 if self.use_tags is not None:
                     tag = [t for t in tag if t in self.use_tags]
