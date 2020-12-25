@@ -357,9 +357,9 @@ class dataEngine(Dataset):
                 print(dscp)
                 print(tag)
                 id = row["id"]
-                title = row["title"]
-                dscp = row["dscp"]
-                tag = row["tag"]
+                title = row["api_name"]
+                dscp = row["descr"]
+                tag = row["tags"]
                 print(id)
                 print(title)
                 print(dscp)
