@@ -352,7 +352,7 @@ class dataEngine(Dataset):
                 title = row["api_name"]
                 dscp = row["descr"]
                 tag = row["tags"]
-                print(tag)
+
                 title_tokens = tokenizer.tokenize(title.strip())
                 dscp_tokens = title_tokens + tokenizer.tokenize(dscp.strip())
 
@@ -372,12 +372,9 @@ class dataEngine(Dataset):
 
                 # if len(set(tag)) < 2:
                 #     continue
-                print(tag)
-                print(len(tag))
-                exit()
+
                 if len(tag) == 0:
                     continue
-
 
                 for t in tag:
                     if t not in self.tag2id:
@@ -386,7 +383,6 @@ class dataEngine(Dataset):
                         self.id2tag[tag_id] = t
 
                 tag_ids = [self.tag2id[t] for t in tag]
-                print(tag_ids)
 
                 data.append({
                     'id': int(id),
