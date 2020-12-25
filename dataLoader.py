@@ -237,6 +237,7 @@ class dataEngine(Dataset):
         document = []
         tag_occurance = {}
         # csv.field_size_limit(sys.maxsize)
+        i = 0
         with open(f, newline='') as csvfile:
             reader = csv.reader(csvfile)
             next(reader)
@@ -253,7 +254,8 @@ class dataEngine(Dataset):
                     if t not in tag_occurance:
                         tag_occurance[t] = 1
                     tag_occurance[t] += 1
-
+                i += 1
+        print(i)
         # ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service',
         # 'Data-as-a-Service'])  #
         for tag in tag_occurance:
