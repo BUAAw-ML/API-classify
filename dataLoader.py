@@ -372,7 +372,7 @@ class dataEngine(Dataset):
 
                 if len(tag) == 0:
                     continue
-
+                print(tag)
                 for t in tag:
                     if t not in self.tag2id:
                         tag_id = len(self.tag2id)
@@ -380,6 +380,8 @@ class dataEngine(Dataset):
                         self.id2tag[tag_id] = t
 
                 tag_ids = [self.tag2id[t] for t in tag]
+                print(tag_ids)
+
 
                 data.append({
                     'id': int(id),
@@ -388,6 +390,8 @@ class dataEngine(Dataset):
                     'tag_ids': tag_ids,
                     'dscp': dscp
                 })
+                print(data)
+                exit()
 
         print("The number of tags for training: {}".format(len(self.tag2id)))
 
