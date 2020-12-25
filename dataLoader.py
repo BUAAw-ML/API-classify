@@ -247,8 +247,8 @@ class dataEngine(Dataset):
             next(reader)
             for row in reader:
 
-                if len(row) != 4:
-                    continue
+                # if len(row) != 4:
+                #     continue
                 _, _, _, tag = row
 
                 tag = tag.strip().split('###')
