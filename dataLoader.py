@@ -335,7 +335,12 @@ class dataEngine(Dataset):
                 tag = row["tags"]
 
                 # tag = [t for t in tag if t != '']
-                tag = list(set(tag))
+
+                if len(tag) != len(set(tag)):
+                    print(tag)
+                    tag = list(set(tag))
+                    print(tag)
+                    exit()
 
                 for t in tag:
                     if t not in tag_occurance:
