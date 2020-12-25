@@ -21,7 +21,7 @@ python main.py \
         --min_tagFrequence=0  \
         --max_tagFrequence=200 \
         --intanceNum_limit=99999 \
-        --data_split= 0.01 \
+        --data_split=0.01 \
         --test_description=''  \
 
 
