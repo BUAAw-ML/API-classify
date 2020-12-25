@@ -21,7 +21,7 @@ python main.py \
         --min_tagFrequence=0  \
         --max_tagFrequence=200 \
         --intanceNum_limit=99999 \
-        --data_split=0.01 \
+        --data_split=0.7 \
         --test_description=''  \
 
 python main.py \
@@ -42,7 +42,7 @@ python main.py \
         --min_tagFrequence=0  \
         --max_tagFrequence=200 \
         --intanceNum_limit=99999 \
-        --data_split=0.05 \
+        --data_split=0.55 \
         --test_description=''  \
 python main.py \
         --experiment_no='Linear+max_tagFrequence=200'  \
@@ -62,7 +62,7 @@ python main.py \
         --min_tagFrequence=0  \
         --max_tagFrequence=200 \
         --intanceNum_limit=99999 \
-        --data_split=0.1 \
+        --data_split=0.45 \
         --test_description=''  \
 
 python main.py \
@@ -83,7 +83,7 @@ python main.py \
         --min_tagFrequence=0  \
         --max_tagFrequence=200 \
         --intanceNum_limit=99999 \
-        --data_split=0.15 \
+        --data_split=0.35 \
         --test_description=''  \
 
 #方法、epoch_step
