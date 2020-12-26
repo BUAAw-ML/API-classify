@@ -159,7 +159,7 @@
 - 随着训练进行，tag和token的平均similarity会越来越小（从正到负）
 - 把对于真实类别的类别预测概率平均值通过设置loss函数快速抬起来往往导致训练崩溃，因为所有类别的预测概率都被一起抬起来了。
 
-# 实验结果 1218 -            
+# 实验结果 1218 - 1225           
 ## programmerWeb数据集 
 用所有的unlabel数据集做生成对抗训练
 数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
@@ -362,4 +362,19 @@ label,unlabel,test:,,（split:0.05,标签数：115）|Bert微调+多注意力|ep
 label,unlabel,test:,,（split:0.05,标签数：115）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||  
 label,unlabel,test:612,,3677（split:0.1,标签数：115）|Bert微调+多注意力|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01|44.704|      
 label,unlabel,test:612,1000,3677（split:0.1,标签数：115）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|49.585|
+|---|---|---|---|
+
+# 实验结果 1226 -         
+## programmerWeb数据集 
+用所有的unlabel数据集做生成对抗训练
+数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
+|---|---|---|---|     
+label,unlabel,test:645,,2584（split:0.05,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|32.499|
+label,unlabel,test:645,1000,2584（split:0.05,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|32.713|
+label,unlabel,test:1291,,2584（split:0.1,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|38.963|
+label,unlabel,test:1291,1000,2584（split:0.1,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|36.319|
+label,unlabel,test:2583,,2584（split:0.2,标签数：473）|Bert微调+多注意力|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01|43.523| 
+label,unlabel,test:2583,1000,2584（split:0.2,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|39.260|
+label,unlabel,test:3875,,2584（split:0.3,标签数：473）|Bert微调+多注意力|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01|43.523|      
+label,unlabel,test:3875,1000,2584（split:0.3,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
 |---|---|---|---|
