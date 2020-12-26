@@ -242,9 +242,9 @@ class dataEngine(Dataset):
             next(reader)
             for row in reader:
 
-                if len(row) != 4:
+                if len(row) != 3:
                     continue
-                _, _, _, tag = row
+                _, _, tag = row
 
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
@@ -268,9 +268,10 @@ class dataEngine(Dataset):
             next(reader)
             for row in reader:
 
-                if len(row) != 4:
+                if len(row) != 3:
                     continue
-                id, title, dscp, tag = row
+                title, dscp, tag = row
+                id = 1
 
                 title_tokens = tokenizer.tokenize(title.strip())
                 dscp_tokens = title_tokens + tokenizer.tokenize(dscp.strip())
