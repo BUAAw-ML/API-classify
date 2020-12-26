@@ -41,7 +41,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             ind = np.random.RandomState(seed=10).permutation(len(data))
 
             split = int(len(data) * data_config['data_split'])
-            split2 = int(len(data) * 0.7)
+            split2 = int(len(data) * 0.8)
             split3 = int(len(data) * 1)
 
             dataset.train_data = data[ind[:split]].tolist()
@@ -242,9 +242,9 @@ class dataEngine(Dataset):
             next(reader)
             for row in reader:
 
-                if len(row) != 3:
+                if len(row) != 4:
                     continue
-                _, _, tag = row
+                _, _, _, tag = row
 
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
@@ -268,10 +268,9 @@ class dataEngine(Dataset):
             next(reader)
             for row in reader:
 
-                if len(row) != 3:
+                if len(row) != 4:
                     continue
-                title, dscp, tag = row
-                id = 1
+                id, title, dscp, tag = row
 
                 title_tokens = tokenizer.tokenize(title.strip())
                 dscp_tokens = title_tokens + tokenizer.tokenize(dscp.strip())
