@@ -4,7 +4,7 @@
 #EN='02'  #experiment_no
 
 python main.py \
-        --experiment_no='min_tagFrequence=50'  \
+        --experiment_no='min_tagFrequence=50_test'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -25,7 +25,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='min_tagFrequence=50'  \
+        --experiment_no='min_tagFrequence=50_test'  \
         --epochs=100 \
         --epoch_step=90 \
         --device_ids=0 \
@@ -47,7 +47,7 @@ python main.py \
 
 
 python main.py \
-        --experiment_no='min_tagFrequence=50'  \
+        --experiment_no='min_tagFrequence=50_test'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -68,7 +68,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='min_tagFrequence=50'  \
+        --experiment_no='min_tagFrequence=50_test'  \
         --epochs=100 \
         --epoch_step=90 \
         --device_ids=0 \
@@ -90,7 +90,7 @@ python main.py \
 
 
 python main.py \
-        --experiment_no='min_tagFrequence=50'  \
+        --experiment_no='min_tagFrequence=50_test'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -111,7 +111,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='min_tagFrequence=50'  \
+        --experiment_no='min_tagFrequence=50_test'  \
         --epochs=100 \
         --epoch_step=90 \
         --device_ids=0 \
@@ -133,7 +133,7 @@ python main.py \
 
 
 python main.py \
-        --experiment_no='min_tagFrequence=50'  \
+        --experiment_no='min_tagFrequence=50_test'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -154,7 +154,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='min_tagFrequence=50'  \
+        --experiment_no='min_tagFrequence=50_test'  \
         --epochs=100 \
         --epoch_step=90 \
         --device_ids=0 \
@@ -175,7 +175,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='min_tagFrequence=50'  \
+        --experiment_no='min_tagFrequence=50_test'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -196,7 +196,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='min_tagFrequence=50'  \
+        --experiment_no='min_tagFrequence=50_test'  \
         --epochs=100 \
         --epoch_step=90 \
         --device_ids=0 \
