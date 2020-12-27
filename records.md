@@ -378,3 +378,19 @@ label,unlabel,test:2583,1000,2584（split:0.2,标签数：473）|Bert微调+多�
 label,unlabel,test:3875,,2584（split:0.3,标签数：473）|Bert微调+多注意力|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01|43.523|      
 label,unlabel,test:3875,1000,2584（split:0.3,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
 |---|---|---|---|
+
+-用3000的生成对抗训练更不好
+
+
+用所有的unlabel数据集做生成对抗训练
+数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
+|---|---|---|---|     
+label,unlabel,test:,,（split:0.05,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|47.136|
+label,unlabel,test:,3000,（split:0.05,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|49.122|
+label,unlabel,test:,,（split:0.1,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|52.026|
+label,unlabel,test:,3000,（split:0.1,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|52.412|
+label,unlabel,test:2555,,（split:0.2,标签数：473）|Bert微调+多注意力|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01|| 
+label,unlabel,test:2555,3000,（split:0.2,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|54.772|
+label,unlabel,test:,,（split:0.3,标签数：473）|Bert微调+多注意力|epoch:50;ES:30;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.01||      
+label,unlabel,test:,3000,（split:0.3,标签数：473）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
+|---|---|---|---|
