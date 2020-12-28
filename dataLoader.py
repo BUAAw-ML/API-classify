@@ -63,7 +63,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             dataset.unlabeled_train_data = data[ind[:500]].tolist()
 
             file = os.path.join(data_path, 'test.pkl')
-            dataset.filter_tags(file)
+
             dataset.test_data = dataset.load_agNews(file)
 
         torch.save(dataset.to_dict(), os.path.join('cache', cache_file_head + '.dataset'))
@@ -373,8 +373,8 @@ class dataEngine(Dataset):
 
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
-                # if self.use_tags is not None:
-                #     tag = [t for t in tag if t in self.use_tags]
+                if self.use_tags is not None:
+                    tag = [t for t in tag if t in self.use_tags]
 
                 if len(tag) == 0:
                     continue
