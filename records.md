@@ -364,8 +364,8 @@ label,unlabel,test:612,,3677（split:0.1,标签数：115）|Bert微调+多注意
 label,unlabel,test:612,1000,3677（split:0.1,标签数：115）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|49.585|
 |---|---|---|---|
 
-# 实验结果 1226 -         
-## programmerWeb数据集 
+# 实验结果 1226 - 1227
+## programmerWeb数据集 （全集473个tag）
 
 数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
 |---|---|---|---|     
@@ -401,3 +401,31 @@ label,unlabel,test:,,（split:0.3,标签数：）|Bert微调+多注意力|epoch:
 label,unlabel,test:,3000,（split:0.3,标签数：）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
 label,unlabel,test:,500,（split:0.3,标签数：）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|57.647|
 |---|---|---|---|
+
+过滤频率50以下的tag
+数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
+|---|---|---|---|   
+label,unlabel,test:644,,2579（split:0.05,标签数：244）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|38.875|
+label,unlabel,test:644,500,2579（split:0.05,标签数：244）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|41.994|
+label,unlabel,test:1289,,2579（split:0.1,标签数：244）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|44.329|
+label,unlabel,test:1289,500,2579（split:0.1,标签数：244）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|45.210|
+label,unlabel,test:2579,,2579（split:0.1,标签数：244）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|47.099|
+label,unlabel,test:2579,500,2579（split:0.1,标签数：244）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|47.762|
+label,unlabel,test:,,2579（split:0.2,标签数：244）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
+label,unlabel,test:,500,2579（split:0.2,标签数：244）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
+|---|---|---|---|   
+
+# 实验结果 1226 - 1227
+## programmerWeb数据集全集按照8：2对每个tag样本分割，过滤掉只有一两个样本的tag，剩406个tag
+此处的split只针对train数据集
+数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
+|---|---|---|---|   
+label,unlabel,test:513,,2579（split:0.05,标签数：）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|22.753|
+label,unlabel,test:513,1000,2579（split:0.05,标签数：）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|26.448|
+label,unlabel,test:1026,,2579（split:0.1,标签数：）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|30.056|
+label,unlabel,test:1026,1000,2579（split:0.1,标签数：）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|30.793|
+label,unlabel,test:2052,,2579（split:0.2,标签数：）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|35.568|
+label,unlabel,test:2052,1000,2579（split:0.2,标签数：）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
+label,unlabel,test:,,2579（split:,标签数：）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
+label,unlabel,test:,1000,2579（split:,标签数：）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
+|---|---|---|---|   

@@ -60,7 +60,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             # split2 = int(len(data) * 0.3)
 
             dataset.train_data = data[ind[:split]].tolist()
-            dataset.unlabeled_train_data = data[ind[:1000]].tolist()
+            dataset.unlabeled_train_data = data[ind[:500]].tolist()
 
             file = os.path.join(data_path, 'test.pkl')
             dataset.filter_tags(file)
