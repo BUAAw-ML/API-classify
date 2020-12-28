@@ -423,10 +423,22 @@ label,unlabel,test:,500,2579（split:0.2,标签数：244）|Bert微调+多注意
 label,unlabel,test:513,,2579（split:0.05,标签数：）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|22.753 23.298|
 label,unlabel,test:513,1000,2579（split:0.05,标签数：）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|26.448 28.282|
 label,unlabel,test:513,500,2579（split:0.05,标签数：）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|26.448|
-label,unlabel,test:1026,,2579（split:0.1,标签数：）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|30.056 31.188|
-label,unlabel,test:1026,1000,2579（split:0.1,标签数：）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|30.793|
-label,unlabel,test:2052,,2579（split:0.2,标签数：）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|35.568|
+label,unlabel,test:1026,,2579（split:0.1,标签数：）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|30.056 31.188  30.420|
+label,unlabel,test:1026,1000,2579（split:0.1,标签数：）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|30.793 31.148|
+label,unlabel,test:2052,,2579（split:0.2,标签数：）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|35.568 35.340|
 label,unlabel,test:2052,1000,2579（split:0.2,标签数：）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
 label,unlabel,test:,,2579（split:,标签数：）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
 label,unlabel,test:,1000,2579（split:,标签数：）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
+label,unlabel,test:4104,,2659（split:0.4,标签数：406）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|37.838|
+label,unlabel,test:4104,500,2659（split:0.4,标签数：406）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|35.172|
 |---|---|---|---|   
+
+过滤tag频率小于50的
+数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
+|---|---|---|---|   
+label,unlabel,test:490,,2544（split:0.05,标签数：112）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|34.223|
+label,unlabel,test:490,500,2544（split:0.05,标签数：112）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|38.627|
+label,unlabel,test:980,,2544（split:0.1,标签数：112）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|40.215|
+label,unlabel,test:980,500,2544（split:0.1,标签数：112）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|44.202|
+label,unlabel,test:1960,,2544（split:0.2,标签数：112）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|43.912|
+label,unlabel,test:1960,500,2544（split:0.2,标签数：112）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
