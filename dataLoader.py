@@ -342,8 +342,12 @@ class dataEngine(Dataset):
         print('Total number of tags: {}'.format(len(tag_occurance)))
         tags = sorted(tag_occurance.items(), key=lambda x: x[1], reverse=True)
         print(tags)
-        self.use_tags = tags[:100,0]
+
+        for item in tags[:100]:
+            print(item)
+            self.use_tags.add(item)
         print(self.use_tags)
+        exit()
         # for tag in tag_occurance:
         #     if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
         #         self.use_tags.add(tag)
