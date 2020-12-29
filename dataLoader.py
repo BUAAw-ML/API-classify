@@ -345,7 +345,7 @@ class dataEngine(Dataset):
 
         for item in tags[:100]:
             print(item)
-            self.use_tags.add(item)
+            self.use_tags.add(item[0])
         print(self.use_tags)
         exit()
         # for tag in tag_occurance:
