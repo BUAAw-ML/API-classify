@@ -338,11 +338,15 @@ class dataEngine(Dataset):
                     else:
                         tag_occurance[t] += 1
 
-        for tag in tag_occurance:
-            if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
-                self.use_tags.add(tag)
+
         print('Total number of tags: {}'.format(len(tag_occurance)))
-        print(sorted(tag_occurance.items(), key=lambda x: x[1], reverse=True))
+        tags = sorted(tag_occurance.items(), key=lambda x: x[1], reverse=True)
+        print(tags)
+        self.use_tags = tags[:100]
+        print(self.use_tags)
+        # for tag in tag_occurance:
+        #     if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
+        #         self.use_tags.add(tag)
 
     def load_agNews(self, file):
         data = []

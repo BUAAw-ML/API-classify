@@ -469,7 +469,7 @@ label,unlabel,test:2043,500,2648（split:0.2,标签数：291）|Bert微调+多�
 label,unlabel,test:4087,,2648（split:0.4,标签数：291）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|40.399|
 label,unlabel,test:4087,500,2648（split:0.4,标签数：291）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
 label,unlabel,test:,,2648（split:0.,标签数：291）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|41.924|
-label,unlabel,test:,500,2648（split:0.,标签数：291）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
+label,unlabel,test:,500,2648（split:0.,标签数：291）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|40.375|
 
 过滤tag频率小于5的
 数据配置|模型方法|训练参数|实验结果|            zyc                                                                                                                                                         
@@ -483,4 +483,4 @@ label,unlabel,test:2051,500,2656（split:0.2,标签数：370）|Bert微调+多�
 label,unlabel,test:,,2656（split:0.4,标签数：370）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|39.376|
 label,unlabel,test:,500,2656（split:0.4,标签数：370）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
 label,unlabel,test:,,2656（split:0.,标签数：370）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|40.296|
-label,unlabel,test:,500,2656（split:0.,标签数：370）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
+label,unlabel,test:,500,2656（split:0.,标签数：370）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|38.005|
