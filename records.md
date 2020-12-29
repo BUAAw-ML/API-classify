@@ -482,5 +482,5 @@ label,unlabel,test:2051,,2656（split:0.2,标签数：370）|Bert微调+多注�
 label,unlabel,test:2051,500,2656（split:0.2,标签数：370）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|34.578|
 label,unlabel,test:,,2656（split:0.4,标签数：370）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|39.376|
 label,unlabel,test:,500,2656（split:0.4,标签数：370）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
-label,unlabel,test:,,2656（split:0.,标签数：370）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|40.296|
-label,unlabel,test:,500,2656（split:0.,标签数：370）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|38.005|
+label,unlabel,test:,,2656（split:0.8,标签数：370）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|40.296|
+label,unlabel,test:,500,2656（split:0.8,标签数：370）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|38.005|
