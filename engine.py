@@ -179,7 +179,9 @@ class Engine(object):
             self.state['best_score']['CR'] = max(prec1['CR'], self.state['best_score']['CR'])
             self.state['best_score']['CF1'] = max(prec1['CF1'], self.state['best_score']['CF1'])
 
-            best_str = ' *** best *** {}'.format(self.state['best_score'])
+            best_str = ' **best** map:{.3f} OP:{.3f} OR:{.3f} OF1:{.3f} CP:{.3f} CR:{.3f} CF1:{.3f}'.format(
+                self.state['best_score']['map'],self.state['best_score']['OP'],self.state['best_score']['OR'],self.state['best_score']['OF1'],
+            self.state['best_score']['CP'],self.state['best_score']['CR'],self.state['best_score']['CF1'])
             print(best_str)
             self.result_file.write(best_str + '\n')
 
