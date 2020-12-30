@@ -59,7 +59,7 @@ class Engine(object):
         if self._state('print_freq') is None:
             self.state['print_freq'] = 0
         # best score
-        self.state['best_score'] = 0.
+        self.state['best_score'] = {'map': 0., 'OP': 0., 'OR': 0., 'OF1': 0., 'CP': 0., 'CR': 0., 'CF1': 0.}
         self.state['train_iters'] = 0
         self.state['eval_iters'] = 0
 
@@ -169,10 +169,17 @@ class Engine(object):
             prec1 = self.validate(val_loader, model, criterion, epoch)
 
             # remember best prec@1 and save checkpoint
-            is_best = prec1 > self.state['best_score']
-            self.state['best_score'] = max(prec1, self.state['best_score'])
+            # is_best = prec1 > self.state['best_score']
 
-            best_str = ' *** best={best:.3f}'.format(best=self.state['best_score'])
+            self.state['best_score']['map'] = max(prec1['map'], self.state['best_score']['map'])
+            self.state['best_score']['OP'] = max(prec1['OP'], self.state['best_score']['OP'])
+            self.state['best_score']['OR'] = max(prec1['OR'], self.state['best_score']['OR'])
+            self.state['best_score']['OF1'] = max(prec1['OF1'], self.state['best_score']['OF1'])
+            self.state['best_score']['CP'] = max(prec1['CP'], self.state['best_score']['CP'])
+            self.state['best_score']['CR'] = max(prec1['CR'], self.state['best_score']['CR'])
+            self.state['best_score']['CF1'] = max(prec1['CF1'], self.state['best_score']['CF1'])
+
+            best_str = ' *** best *** {}'.format(self.state['best_score'])
             print(best_str)
             self.result_file.write(best_str + '\n')
 
@@ -381,7 +388,10 @@ class MultiLabelMAPEngine(Engine):
             self.writer.add_scalar('mAP/eval_mAP', map, self.state['epoch'])
             self.writer.add_scalar('OF1/eval_OF1', OF1, self.state['epoch'])
             self.writer.add_scalar('CF1/eval_CF1', CF1, self.state['epoch'])
-        return map
+
+        result = {'map':map, 'OP':OP, 'OR': OR, 'OF1':OF1, 'CP': CP, 'CR': CR, 'CF1': CF1}
+
+        return result
 
     def on_start_batch(self, training, model, criterion, data_loader, optimizer=None, display=True):
 

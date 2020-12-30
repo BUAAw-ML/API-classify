@@ -343,8 +343,10 @@ class dataEngine(Dataset):
         tags = sorted(tag_occurance.items(), key=lambda x: x[1], reverse=True)
         print(tags)
 
-        for item in tags[:self.data_config['max_tagFrequence']]:
+        for item in tags[self.data_config['min_tagFrequence']:self.data_config['max_tagFrequence']]:
             self.use_tags.add(item[0])
+
+        print(self.use_tags)
 
         # for tag in tag_occurance:
         #     if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
