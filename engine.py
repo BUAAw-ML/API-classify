@@ -379,9 +379,8 @@ class MultiLabelMAPEngine(Engine):
                     loss=loss, map=map, OP=OP, OR=OR, OF1=OF1, CP=CP, CR=CR, CF1=CF1,
                     OP_3=OP_k, OR_3=OR_k, OF1_3=OF1_k, CP_3=CP_k, CR_3=CR_k, CF1_3=CF1_k)
 
-                self.result_file.write(reselt_str + '\n')
-
             print(reselt_str)
+            self.result_file.write(reselt_str + '\n')
 
         if training:
             self.writer.add_scalar('loss/train_epoch_loss', loss, self.state['epoch'])
