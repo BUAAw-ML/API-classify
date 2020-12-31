@@ -193,8 +193,8 @@ class AveragePrecisionMeter(object):
             Ng[k] = np.sum(targets == 1)
             Np[k] = np.sum(scores >= 0.5)
             Nc[k] = np.sum(targets * (scores >= 0.5))
-            print(Np[k])
-            print(Nc[k])
+            # print(Np[k])
+            # print(Nc[k])
 
         print(np.sum(Nc))
         print(np.sum(Np))
