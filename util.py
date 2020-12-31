@@ -181,8 +181,7 @@ class AveragePrecisionMeter(object):
 
     def evaluation(self, scores_, targets_):
 
-        print(scores_)
-        print(targets_)
+
 
         n, n_class = scores_.shape
         Nc, Np, Ng = np.zeros(n_class), np.zeros(n_class), np.zeros(n_class)
@@ -205,7 +204,7 @@ class AveragePrecisionMeter(object):
         print(OP)
         print(OR)
         print(OF1)
-        exit()
+
 
         CP = np.sum(Nc / (Np + 1e-5)) / n_class
         CR = np.sum(Nc / (Ng + 1e-5)) / n_class
