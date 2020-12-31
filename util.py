@@ -178,10 +178,7 @@ class AveragePrecisionMeter(object):
                 scores[i, ind] = 1 if tmp[i, ind] >= 0.5 else 0
         return self.evaluation(scores, targets)
 
-
     def evaluation(self, scores_, targets_):
-
-
 
         n, n_class = scores_.shape
         Nc, Np, Ng = np.zeros(n_class), np.zeros(n_class), np.zeros(n_class)
@@ -192,19 +189,11 @@ class AveragePrecisionMeter(object):
             Ng[k] = np.sum(targets == 1)
             Np[k] = np.sum(scores >= 0.5)
             Nc[k] = np.sum(targets * (scores >= 0.5))
-            # print(Np[k])
-            # print(Nc[k])
-
-
 
         # Np[Np == 0] = 1
         OP = np.sum(Nc) / np.sum(Np + 1e-5)
         OR = np.sum(Nc) / np.sum(Ng + 1e-5)
         OF1 = (2 * OP * OR) / (OP + OR + 1e-5)
-        print(OP)
-        print(OR)
-        print(OF1)
-
 
         CP = np.sum(Nc / (Np + 1e-5)) / n_class
         CR = np.sum(Nc / (Ng + 1e-5)) / n_class
