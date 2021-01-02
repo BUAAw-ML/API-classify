@@ -4,7 +4,7 @@
 #EN='02'  #experiment_no
 
 python main.py \
-        --experiment_no='wqb_linear_200<tags<300'  \
+        --experiment_no='zyc_sum_200<tags<300'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -25,7 +25,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='wqb_linear_200<tags<300'  \
+        --experiment_no='zyc_sum_200<tags<300'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -46,7 +46,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='wqb_linear_200<tags<300'  \
+        --experiment_no='zyc_sum_200<tags<300'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -67,7 +67,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='wqb_linear_200<tags<300'  \
+        --experiment_no='zyc_sum_200<tags<300'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -88,7 +88,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='wqb_linear_200<tags<300'  \
+        --experiment_no='zyc_sum_200<tags<300'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -107,6 +107,9 @@ python main.py \
         --intanceNum_limit=99999 \
         --data_split=1 \
         --test_description=''  \
+
+
+
 #方法、epoch_step
 
 #batch-size：1，4，8，16
