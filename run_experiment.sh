@@ -18,8 +18,8 @@ python main.py \
         --use_previousData=0 \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
-        --min_tagFrequence=300  \
-        --max_tagFrequence=400 \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=100 \
         --intanceNum_limit=99999 \
         --data_split=0.05 \
         --test_description=''  \
