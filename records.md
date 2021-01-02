@@ -584,6 +584,12 @@ label,unlabel,test:267,,609（split:0.2,标签数：100）|Bert微调+多注意�
 label,unlabel,test:535,,609（split:0.4 ,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=55.236 OP=0.823 OR=0.513 OF1=0.554 CP=0.724 CR=0.498 CF1=0.534|
 label,unlabel,test:1339,,609（split:1,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=61.817 OP=0.782 OR=0.614 OF1=0.624 CP=0.742 CR=0.594 CF1=0.610|
 |---|---|---|---|  
+label,unlabel,test:66,,609（split:0.05,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=42.713 OP=0.933 OR=0.208 OF1=0.312 CP=0.475 CR=0.206 CF1=0.287|
+label,unlabel,test:133,,609（split:0.1,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=49.676 OP=0.842 OR=0.374 OF1=0.470 CP=0.565 CR=0.348 CF1=0.417|
+label,unlabel,test:267,,609（split:0.2,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=52.906 OP=0.818 OR=0.510 OF1=0.529 CP=0.670 CR=0.491 CF1=0.517|
+label,unlabel,test:535,,609（split:0.4 ,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=55.376 OP=0.787 OR=0.506 OF1=0.564 CP=0.692 CR=0.489 CF1=0.548|
+label,unlabel,test:1339,,609（split:1,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=62.168 OP=0.868 OR=0.567 OF1=0.625 CP=0.751 CR=0.553 CF1=0.601|
+|---|---|---|---|
 
 300<tags<400    wqb
 数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
@@ -605,6 +611,12 @@ label,unlabel,test:108,,609（split:0.2,标签数：100）|Bert微调+多注意�
 label,unlabel,test:216,,609（split:0.4 ,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=54.804 OP=1.000 OR=0.439 OF1=0.531 CP=0.582 CR=0.437 CF1=0.494|
 label,unlabel,test:540,,609（split:1,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=58.528 OP=0.782 OR=0.531 OF1=0.578 CP=0.693 CR=0.541 CF1=0.569|
 |---|---|---|---|  
+label,unlabel,test:27,,609（split:0.05,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=43.025 OP=0.800 OR=0.142 OF1=0.238 CP=0.227 CR=0.166 CF1=0.192|
+label,unlabel,test:54,,609（split:0.1,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=50.324 OP=0.771 OR=0.297 OF1=0.414 CP=0.461 CR=0.312 CF1=0.368|
+label,unlabel,test:108,,609（split:0.2,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=53.604 OP=0.782 OR=0.467 OF1=0.491 CP=0.546 CR=0.460 CF1=0.490|
+label,unlabel,test:216,,609（split:0.4 ,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=56.471 OP=0.787 OR=0.456 OF1=0.529 CP=0.574 CR=0.449 CF1=0.495|
+label,unlabel,test:540,,609（split:1,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=58.797 OP=0.778 OR=0.511 OF1=0.598 CP=0.691 CR=0.513 CF1=0.581|
+|---|---|---|---| 
 
 200<tags<400    wqb
 数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
