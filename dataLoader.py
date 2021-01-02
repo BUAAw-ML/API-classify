@@ -410,6 +410,7 @@ class dataEngine(Dataset):
                 })
 
         print("average_tag_len: {}".format(tag_len / item_num))
+        print(item_num)
         print("The number of tags for training: {}".format(len(self.tag2id)))
 
         return data
