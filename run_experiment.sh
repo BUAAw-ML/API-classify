@@ -4,7 +4,7 @@
 #EN='02'  #experiment_no
 
 python main.py \
-        --experiment_no='zyz_100<tags<200'  \
+        --experiment_no='zyz_200<tags<300'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -18,8 +18,8 @@ python main.py \
         --use_previousData=0 \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
-        --min_tagFrequence=100  \
-        --max_tagFrequence=200 \
+        --min_tagFrequence=200  \
+        --max_tagFrequence=300 \
         --intanceNum_limit=99999 \
         --data_split=0.05 \
         --test_description=''  \
