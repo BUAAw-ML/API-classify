@@ -35,7 +35,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
         dataset = dataEngine(data_config=data_config)
 
         if data_type == 'All':
-            data = dataset.load_programWeb_AAPD(data_path)
+            data = dataset.load_All(data_path)
 
             data = np.array(data)
             ind = np.random.RandomState(seed=10).permutation(len(data))
@@ -52,7 +52,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
 
             file = os.path.join(data_path, 'train.pkl')
             dataset.filter_tags(file)
-            data = dataset.load_agNews(file)
+            data = dataset.load_TrainTest(file)
 
             data = np.array(data)
             ind = np.random.RandomState(seed=10).permutation(len(data))
@@ -64,7 +64,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
 
             file = os.path.join(data_path, 'test.pkl')
 
-            dataset.test_data = dataset.load_agNews(file)
+            dataset.test_data = dataset.load_TrainTest(file)
 
         torch.save(dataset.to_dict(), os.path.join('cache', cache_file_head + '.dataset'))
         encoded_tag, tag_mask = dataset.encode_tag()
@@ -231,7 +231,7 @@ class dataEngine(Dataset):
 
         return tfidf_dict
 
-    def load_programWeb_AAPD(self, f):
+    def load_All(self, f):
         data = []
 
         document = []
@@ -291,7 +291,7 @@ class dataEngine(Dataset):
 
                 # if len(set(tag)) < 2:
                 #     continue
-
+                
                 if len(tag) == 0:
                     continue
 
@@ -352,11 +352,14 @@ class dataEngine(Dataset):
         #     if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
         #         self.use_tags.add(tag)
 
-    def load_agNews(self, file):
+    def load_TrainTest(self, file):
         data = []
         document = []
 
-        with open(file,'rb') as pklfile:
+        tag_len = 0
+        item_num = 0
+
+        with open(file, 'rb') as pklfile:
 
             reader = pickle.load(pklfile)
 
@@ -387,6 +390,9 @@ class dataEngine(Dataset):
                 if len(tag) == 0:
                     continue
 
+                tag_len += len(tag)
+                item_num += 1
+
                 for t in tag:
                     if t not in self.tag2id:
                         tag_id = len(self.tag2id)
@@ -403,6 +409,7 @@ class dataEngine(Dataset):
                     'dscp': dscp
                 })
 
+        print("average_tag_len: {}".format(tag_len / item_num))
         print("The number of tags for training: {}".format(len(self.tag2id)))
 
         return data
