@@ -4,7 +4,7 @@
 #EN='02'  #experiment_no
 
 python main.py \
-        --experiment_no='zyc_sum_100<tags<200'  \
+        --experiment_no='zyz_linear_100<tags<200'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -25,7 +25,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='zyc_sum_100<tags<200'  \
+        --experiment_no='zyz_linear_100<tags<200'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -42,11 +42,11 @@ python main.py \
         --min_tagFrequence=100  \
         --max_tagFrequence=200 \
         --intanceNum_limit=99999 \
-        --data_split=0.1 \
+        --data_split=0.01 \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='zyc_sum_100<tags<200'  \
+        --experiment_no='zyz_linear_100<tags<200'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -67,7 +67,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='zyc_sum_100<tags<200'  \
+        --experiment_no='zyz_linear_100<tags<200'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -88,7 +88,7 @@ python main.py \
         --test_description=''  \
 
 python main.py \
-        --experiment_no='zyc_sum_100<tags<200'  \
+        --experiment_no='zyz_linear_100<tags<200'  \
         --epochs=50 \
         --epoch_step=30 \
         --device_ids=0 \
@@ -107,7 +107,6 @@ python main.py \
         --intanceNum_limit=99999 \
         --data_split=1 \
         --test_description=''  \
-
 #方法、epoch_step
 
 #batch-size：1，4，8，16
