@@ -13,15 +13,15 @@ python main.py \
         --D-lr=0.1 \
         --B-lr=0.01 \
         --save_model_path='./checkpoint' \
-        --data_type='TrainTest' \
-        --data_path='../datasets/ProgrammerWeb' \
+        --data_type='All' \
+        --data_path='../datasets/ProgrammerWeb/programweb-category.csv' \
         --use_previousData=0 \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
-        --min_tagFrequence=100  \
-        --max_tagFrequence=200 \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=99999 \
         --intanceNum_limit=99999 \
-        --data_split=1 \
+        --data_split=0.8 \
         --test_description=''  \
 
 

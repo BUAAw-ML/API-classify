@@ -617,17 +617,17 @@ label,unlabel,test:216,500,310（split:0.4 ,标签数：100）|Bert微调+多注
 label,unlabel,test:540,,310（split:1,标签数：100）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=58.272 OP=0.897 OR=0.433 OF1=0.548 CP=0.645 CR=0.452 CF1=0.526|
 label,unlabel,test:540,500,310（split:1,标签数：100）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=60.868 OP=1.000 OR=0.414 OF1=0.540 CP=0.635 CR=0.438 CF1=0.518|
 |---|---|---|---|
-label,unlabel,test:27,,609（split:0.05,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=45.589 OP=1.000 OR=0.253 OF1=0.368 CP=0.421 CR=0.272 CF1=0.331|
-label,unlabel,test:54,,609（split:0.1,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=48.861 OP=0.889 OR=0.353 OF1=0.444 CP=0.499 CR=0.362 CF1=0.418|
-label,unlabel,test:108,,609（split:0.2,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=52.245 OP=0.852 OR=0.469 OF1=0.502 CP=0.556 CR=0.497 CF1=0.492|
-label,unlabel,test:216,,609（split:0.4 ,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=54.804 OP=1.000 OR=0.439 OF1=0.531 CP=0.582 CR=0.437 CF1=0.494|
-label,unlabel,test:540,,609（split:1,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=58.528 OP=0.782 OR=0.531 OF1=0.578 CP=0.693 CR=0.541 CF1=0.569|
+label,unlabel,test:27,,310（split:0.05,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=45.589 OP=1.000 OR=0.253 OF1=0.368 CP=0.421 CR=0.272 CF1=0.331|
+label,unlabel,test:54,,310（split:0.1,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=48.861 OP=0.889 OR=0.353 OF1=0.444 CP=0.499 CR=0.362 CF1=0.418|
+label,unlabel,test:108,,310（split:0.2,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=52.245 OP=0.852 OR=0.469 OF1=0.502 CP=0.556 CR=0.497 CF1=0.492|
+label,unlabel,test:216,,310（split:0.4 ,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=54.804 OP=1.000 OR=0.439 OF1=0.531 CP=0.582 CR=0.437 CF1=0.494|
+label,unlabel,test:540,,310（split:1,标签数：100）|Bert微调+多注意力+Linear|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=58.528 OP=0.782 OR=0.531 OF1=0.578 CP=0.693 CR=0.541 CF1=0.569|
 |---|---|---|---|  
-label,unlabel,test:27,,609（split:0.05,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=43.025 OP=0.800 OR=0.142 OF1=0.238 CP=0.227 CR=0.166 CF1=0.192|
-label,unlabel,test:54,,609（split:0.1,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=50.324 OP=0.771 OR=0.297 OF1=0.414 CP=0.461 CR=0.312 CF1=0.368|
-label,unlabel,test:108,,609（split:0.2,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=53.604 OP=0.782 OR=0.467 OF1=0.491 CP=0.546 CR=0.460 CF1=0.490|
-label,unlabel,test:216,,609（split:0.4 ,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=56.471 OP=0.787 OR=0.456 OF1=0.529 CP=0.574 CR=0.449 CF1=0.495|
-label,unlabel,test:540,,609（split:1,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=58.797 OP=0.778 OR=0.511 OF1=0.598 CP=0.691 CR=0.513 CF1=0.581|
+label,unlabel,test:27,,310（split:0.05,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=43.025 OP=0.800 OR=0.142 OF1=0.238 CP=0.227 CR=0.166 CF1=0.192|
+label,unlabel,test:54,,310（split:0.1,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=50.324 OP=0.771 OR=0.297 OF1=0.414 CP=0.461 CR=0.312 CF1=0.368|
+label,unlabel,test:108,,310（split:0.2,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=53.604 OP=0.782 OR=0.467 OF1=0.491 CP=0.546 CR=0.460 CF1=0.490|
+label,unlabel,test:216,,310（split:0.4 ,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=56.471 OP=0.787 OR=0.456 OF1=0.529 CP=0.574 CR=0.449 CF1=0.495|
+label,unlabel,test:540,,310（split:1,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=58.797 OP=0.778 OR=0.511 OF1=0.598 CP=0.691 CR=0.513 CF1=0.581|
 |---|---|---|---| 
 
 200<tags<400    wqb
