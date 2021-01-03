@@ -182,6 +182,7 @@ class AveragePrecisionMeter(object):
 
         n, n_class = scores_.shape
         Nc, Np, Ng = np.zeros(n_class), np.zeros(n_class), np.zeros(n_class)
+        N, Na = np.zeros(n_class),np.zeros(n_class)
         for k in range(n_class):
             scores = scores_[:, k]
             targets = targets_[:, k]
@@ -190,8 +191,12 @@ class AveragePrecisionMeter(object):
             Np[k] = np.sum(scores >= 0.5)
             Nc[k] = np.sum(targets * (scores >= 0.5))
 
+            N[k] = np.sum(scores)
+            Na[k] = np.sum(targets * (scores >= 0.5)) + np.sum((1 - targets) * (scores < 0.5))
+
         # Np[Np == 0] = 1
-        OP = np.sum(Nc) / np.sum(Np + 1e-5)
+        # OP = np.sum(Nc) / np.sum(Np + 1e-5)
+        OP = np.sum(Na) / np.sum(N + 1e-5)
         OR = np.sum(Nc) / np.sum(Ng + 1e-5)
         OF1 = (2 * OP * OR) / (OP + OR + 1e-5)
 
