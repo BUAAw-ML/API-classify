@@ -197,9 +197,17 @@ class AveragePrecisionMeter(object):
             # print(Na[k])
             # print("----")
 
+        for i in range(len(scores_)):
+            max_value = max(scores_[i])
+            for j in range(len(scores_[i])):
+                if max_value == scores_[i][j]:
+                    scores_[i][j] = 1
+                else:
+                    scores_[i][j] = 0
+
         # Np[Np == 0] = 1
-        OP = np.sum(Nc) / np.sum(Np + 1e-5)
-        # OP = accuracy_score(targets_, scores_ >= 0.5)#np.sum(Na) / np.sum(N + 1e-5)
+        # OP = np.sum(Nc) / np.sum(Np + 1e-5)
+        OP = accuracy_score(targets_, scores_)#np.sum(Na) / np.sum(N + 1e-5)
         OR = np.sum(Nc) / np.sum(Ng + 1e-5)
         OF1 = (2 * OP * OR) / (OP + OR + 1e-5)
 
@@ -211,7 +219,7 @@ class AveragePrecisionMeter(object):
         f1_macro = f1_score(targets_, scores_ >= 0.5, average='macro')
         f1_micro = f1_score(targets_, scores_ >= 0.5, average='micro')
 
-        return f1_macro, OR, OF1, CP, CR, CF1
+        return OP, OR, OF1, CP, CR, CF1
 
 
 def gen_A(num_classes, t, co_occur_mat):
