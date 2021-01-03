@@ -3,7 +3,7 @@ from urllib.request import urlretrieve
 import torch
 from tqdm import tqdm
 import numpy as np
-from sklearn.metrics import accuracy_score, f1_score
+
 
 def download_url(url, destination=None, progress_bar=True):
     """Download a URL to a local file.
@@ -191,33 +191,14 @@ class AveragePrecisionMeter(object):
             Np[k] = np.sum(scores >= 0.5)
             Nc[k] = np.sum(targets * (scores >= 0.5))
 
-            N[k] = len(scores)
-            # print(N[k])
-            Na[k] = np.sum(targets * (scores >= 0.5)) + np.sum((1 - targets) * (scores < 0.5))
-            # print(Na[k])
-            # print("----")
-
-        for i in range(len(scores_)):
-            max_value = max(scores_[i])
-            for j in range(len(scores_[i])):
-                if max_value == scores_[i][j]:
-                    scores_[i][j] = 1
-                else:
-                    scores_[i][j] = 0
-
         # Np[Np == 0] = 1
-        # OP = np.sum(Nc) / np.sum(Np + 1e-5)
-        OP = accuracy_score(targets_, scores_)#np.sum(Na) / np.sum(N + 1e-5)
+        OP = np.sum(Nc) / np.sum(Np + 1e-5)
         OR = np.sum(Nc) / np.sum(Ng + 1e-5)
         OF1 = (2 * OP * OR) / (OP + OR + 1e-5)
 
         CP = np.sum(Nc / (Np + 1e-5)) / n_class
         CR = np.sum(Nc / (Ng + 1e-5)) / n_class
         CF1 = (2 * CP * CR) / (CP + CR + 1e-5)
-
-        f1_every_class = f1_score(targets_, scores_ >= 0.5, average=None)
-        f1_macro = f1_score(targets_, scores_ >= 0.5, average='macro')
-        f1_micro = f1_score(targets_, scores_ >= 0.5, average='micro')
 
         return OP, OR, OF1, CP, CR, CF1
 
