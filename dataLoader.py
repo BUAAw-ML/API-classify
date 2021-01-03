@@ -286,8 +286,13 @@ class dataEngine(Dataset):
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
 
+                tag2 = tag
+
                 if self.use_tags is not None:
                     tag = [t for t in tag if t in self.use_tags]
+
+                if len(tag2) != len(tag):
+                    continue
 
                 # if len(set(tag)) < 2:
                 #     continue
@@ -381,18 +386,8 @@ class dataEngine(Dataset):
 
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
-                tag2 = tag
                 if self.use_tags is not None:
                     tag = [t for t in tag if t in self.use_tags]
-
-                # print(tag2)
-                # print(tag)
-                # print(len(tag2))
-                # print(len(tag))
-                # exit()
-
-                if len(tag2) != len(tag):
-                    continue
 
                 if len(tag) == 0:
                     continue
