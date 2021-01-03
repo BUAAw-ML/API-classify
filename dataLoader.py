@@ -385,6 +385,12 @@ class dataEngine(Dataset):
                 if self.use_tags is not None:
                     tag = [t for t in tag if t in self.use_tags]
 
+                print(tag2)
+                print(tag)
+                print(len(tag2))
+                print(len(tag))
+                exit()
+
                 if len(tag2) != len(tag):
                     continue
 
