@@ -356,9 +356,6 @@ class dataEngine(Dataset):
         data = []
         document = []
 
-        tag_len = 0
-        item_num = 0
-
         with open(file, 'rb') as pklfile:
 
             reader = pickle.load(pklfile)
@@ -384,14 +381,15 @@ class dataEngine(Dataset):
 
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
+                tag2 = tag
                 if self.use_tags is not None:
                     tag = [t for t in tag if t in self.use_tags]
 
-                if len(tag) == 0:
+                if len(tag2) != len(tag):
                     continue
 
-                tag_len += len(tag)
-                item_num += 1
+                if len(tag) == 0:
+                    continue
 
                 for t in tag:
                     if t not in self.tag2id:
@@ -409,8 +407,6 @@ class dataEngine(Dataset):
                     'dscp': dscp
                 })
 
-        print("average_tag_len: {}".format(tag_len / item_num))
-        print(item_num)
         print("The number of tags for training: {}".format(len(self.tag2id)))
 
         return data
