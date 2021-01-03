@@ -3,7 +3,7 @@ from urllib.request import urlretrieve
 import torch
 from tqdm import tqdm
 import numpy as np
-
+from sklearn.metrics import accuracy_score
 
 def download_url(url, destination=None, progress_bar=True):
     """Download a URL to a local file.
@@ -199,7 +199,7 @@ class AveragePrecisionMeter(object):
 
         # Np[Np == 0] = 1
         # OP = np.sum(Nc) / np.sum(Np + 1e-5)
-        OP = np.sum(Na) / np.sum(N + 1e-5)
+        OP = accuracy_score(targets_, scores_)#np.sum(Na) / np.sum(N + 1e-5)
         OR = np.sum(Nc) / np.sum(Ng + 1e-5)
         OF1 = (2 * OP * OR) / (OP + OR + 1e-5)
 
