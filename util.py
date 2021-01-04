@@ -182,7 +182,6 @@ class AveragePrecisionMeter(object):
 
         n, n_class = scores_.shape
         Nc, Np, Ng = np.zeros(n_class), np.zeros(n_class), np.zeros(n_class)
-        N, Na = np.zeros(n_class),np.zeros(n_class)
         for k in range(n_class):
             scores = scores_[:, k]
             targets = targets_[:, k]
