@@ -361,6 +361,9 @@ class dataEngine(Dataset):
         data = []
         document = []
 
+        taglen = 0
+        item = 0
+
         with open(file, 'rb') as pklfile:
 
             reader = pickle.load(pklfile)
@@ -391,6 +394,8 @@ class dataEngine(Dataset):
 
                 if len(tag) == 0:
                     continue
+                taglen += len(tag)
+                item += 1
 
                 for t in tag:
                     if t not in self.tag2id:
@@ -409,5 +414,5 @@ class dataEngine(Dataset):
                 })
 
         print("The number of tags for training: {}".format(len(self.tag2id)))
-
+        print("taglen: {}".format(taglen/item))
         return data
