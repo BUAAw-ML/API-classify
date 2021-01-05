@@ -16,7 +16,7 @@ python main.py \
         --save_model_path='./checkpoint' \
         --data_type='TrainTest' \
         --data_path='../datasets/ProgrammerWeb/' \
-        --use_previousData=1 \
+        --use_previousData=0 \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=200  \
