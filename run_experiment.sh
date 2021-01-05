@@ -11,7 +11,7 @@ python main.py \
         --device_ids=0 \
         --batch-size=4 \
         --G-lr=0.001 \
-        --D-lr=0.01 \
+        --D-lr=0.1 \
         --B-lr=0.001 \
         --save_model_path='./checkpoint' \
         --data_type='TrainTest' \
