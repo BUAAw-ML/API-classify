@@ -353,6 +353,7 @@ class dataEngine(Dataset):
         'Data-as-a-Service','Widgets'])
 
         for item in ignored_tags:
+            print(item)
             tags.pop(item)
 
         print(tags)
