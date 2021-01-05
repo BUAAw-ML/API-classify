@@ -5,7 +5,7 @@ from tensorflow.keras.layers import Dense, Embedding, Input, Dropout, LSTM, Bidi
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.initializers import glorot_uniform
 
-from utils.dictionary import GloveDictionary
+from keras_utils.dictionary import GloveDictionary
 from .serve_net import trainable_embedding_layer
 
 

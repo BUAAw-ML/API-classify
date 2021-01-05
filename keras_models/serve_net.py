@@ -2,7 +2,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Embedding, Input, Dropout, LSTM, Bidirectional, Activation, Conv2D, Reshape, Average
 from tensorflow.keras.optimizers import Adam
 
-from utils.dictionary import GloveDictionary
+from keras_utils.dictionary import GloveDictionary
 
 
 def trainable_embedding_layer(dictionary):

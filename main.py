@@ -5,6 +5,9 @@ from util import *
 from dataLoader import *
 from transformers import BertModel
 
+from keras_utils.dataset_convert import convert
+from keras_model_train import train_keras_model
+
 import datetime
 
 import warnings
@@ -74,6 +77,13 @@ parser.add_argument('--experiment_no', default='01', type=str,
 parser.add_argument('--test_description', default='01', type=str,
                     help='test_description')
 
+parser.add_argument("--model_backend", default="pytorch", type=str,
+                    help="model backend (pytorch | keras)")
+parser.add_argument("--pretrained_word_emb_path", default="glove.6B.200d.txt", type=str,
+                    help="pretrained word embedding path")
+parser.add_argument("--keras_model_type", default="ServerNet", type=str,
+                    help="Keras model type")
+
 global args, use_gpu
 args = parser.parse_args()
 
@@ -113,43 +123,49 @@ data_size = "train_data_size: {} \nunlabeled_train_data: {} \nval_data_size: {} 
 print(data_size)
 fo.write(data_size)
 
-bert = BertModel.from_pretrained('bert-base-uncased')
+if args.model_backend == "pytorch":
+    bert = BertModel.from_pretrained('bert-base-uncased')
 
-model = {}
-model['Discriminator'] = Discriminator(num_classes=len(dataset.tag2id))
-model['Encoder'] = Bert_Encoder(bert, bert_trainable=args.bert_trainable)
-model['Generator'] = Generator(bert, num_classes=len(dataset.tag2id))
-model['MABert'] = MABert(bert, num_classes=len(dataset.tag2id), bert_trainable=args.bert_trainable, device=args.device_ids[0])
+    model = {}
+    model['Discriminator'] = Discriminator(num_classes=len(dataset.tag2id))
+    model['Encoder'] = Bert_Encoder(bert, bert_trainable=args.bert_trainable)
+    model['Generator'] = Generator(bert, num_classes=len(dataset.tag2id))
+    model['MABert'] = MABert(bert, num_classes=len(dataset.tag2id), bert_trainable=args.bert_trainable, device=args.device_ids[0])
 
-# define loss function (criterion)
-criterion = nn.BCELoss() #nn.MultiLabelSoftMarginLoss()#
+    # define loss function (criterion)
+    criterion = nn.BCELoss() #nn.MultiLabelSoftMarginLoss()#
 
 
-# define optimizer
-optimizer = {}
-optimizer['Generator'] = torch.optim.SGD([{'params': model['Generator'].parameters(), 'lr': args.G_lr}],
-                                         momentum=args.momentum, weight_decay=args.weight_decay)
+    # define optimizer
+    optimizer = {}
+    optimizer['Generator'] = torch.optim.SGD([{'params': model['Generator'].parameters(), 'lr': args.G_lr}],
+                                            momentum=args.momentum, weight_decay=args.weight_decay)
 
-optimizer['enc'] = torch.optim.SGD(model['MABert'].get_config_optim(args.D_lr, args.B_lr),
-                            momentum=args.momentum, weight_decay=args.weight_decay)
+    optimizer['enc'] = torch.optim.SGD(model['MABert'].get_config_optim(args.D_lr, args.B_lr),
+                                momentum=args.momentum, weight_decay=args.weight_decay)
 
-# optimizer['enc'] = torch.optim.Adam(model['MABert'].get_config_optim(args.D_lr, args.B_lr))
+    # optimizer['enc'] = torch.optim.Adam(model['MABert'].get_config_optim(args.D_lr, args.B_lr))
 
-state = {'batch_size': args.batch_size, 'max_epochs': args.epochs, 'evaluate': args.evaluate,
-         'resume': args.resume, 'num_classes': dataset.get_tags_num(), 'difficult_examples': False,
-         'save_model_path': args.save_model_path, 'log_dir': log_dir, 'workers': args.workers,
-         'epoch_step': args.epoch_step, 'lr': args.D_lr, 'encoded_tag': encoded_tag, 'tag_mask': tag_mask,
-         'device_ids': args.device_ids, 'print_freq': args.print_freq, 'id2tag': dataset.id2tag,
-         'result_file': fo, 'method': args.method}
+    state = {'batch_size': args.batch_size, 'max_epochs': args.epochs, 'evaluate': args.evaluate,
+            'resume': args.resume, 'num_classes': dataset.get_tags_num(), 'difficult_examples': False,
+            'save_model_path': args.save_model_path, 'log_dir': log_dir, 'workers': args.workers,
+            'epoch_step': args.epoch_step, 'lr': args.D_lr, 'encoded_tag': encoded_tag, 'tag_mask': tag_mask,
+            'device_ids': args.device_ids, 'print_freq': args.print_freq, 'id2tag': dataset.id2tag,
+            'result_file': fo, 'method': args.method}
 
-if args.evaluate:
-    state['evaluate'] = True
+    if args.evaluate:
+        state['evaluate'] = True
 
-if args.method == 'MultiLabelMAP':
-    engine = MultiLabelMAPEngine(state)
-elif args.method == 'semiGAN_MultiLabelMAP':
-    engine = semiGAN_MultiLabelMAPEngine(state)
+    if args.method == 'MultiLabelMAP':
+        engine = MultiLabelMAPEngine(state)
+    elif args.method == 'semiGAN_MultiLabelMAP':
+        engine = semiGAN_MultiLabelMAPEngine(state)
 
-engine.learning(model, criterion, dataset, optimizer)
+    engine.learning(model, criterion, dataset, optimizer)
 
-fo.close()
+    fo.close()
+
+else if args.model_backend == "keras":
+    X, Y, test_X, test_Y = convert(dataset, args.pretrained_word_emb_path)
+    
+    train_keras_model(args.keras_model_type, data={"train": (X, Y), "test": (test_X, test_Y)}, glove_path=args.pretrained_word_emb_path, args.save_model_path)

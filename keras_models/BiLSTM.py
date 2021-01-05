@@ -4,7 +4,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.initializers import glorot_uniform, Orthogonal
 
 
-from utils.dictionary import GloveDictionary
+from keras_utils.dictionary import GloveDictionary
 from .serve_net import trainable_embedding_layer
     
 
