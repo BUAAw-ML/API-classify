@@ -5,7 +5,175 @@
 
 
 python main.py \
-        --experiment_no='test'  \
+        --experiment_no='zyz_filter_0<tag<50'  \
+        --epochs=50 \
+        --epoch_step=40 \
+        --device_ids=0 \
+        --batch-size=4 \
+        --G-lr=0.001 \
+        --D-lr=0.1 \
+        --B-lr=0.01 \
+        --save_model_path='./checkpoint' \
+        --data_type='TrainTest' \
+        --data_path='../datasets/ProgrammerWeb/' \
+        --use_previousData=0 \
+        --method='MultiLabelMAP' \
+        --overlength_handle='truncation' \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=50 \
+        --intanceNum_limit=99999 \
+        --data_split=0.05 \
+        --test_description=''  \
+
+python main.py \
+        --experiment_no='zyz_filter_0<tag<50'  \
+        --epochs=100 \
+        --epoch_step=90 \
+        --device_ids=0 \
+        --batch-size=4 \
+        --G-lr=0.001 \
+        --D-lr=0.1 \
+        --B-lr=0.001 \
+        --save_model_path='./checkpoint' \
+        --data_type='TrainTest' \
+        --data_path='../datasets/ProgrammerWeb/' \
+        --use_previousData=0 \
+        --method='semiGAN_MultiLabelMAP' \
+        --overlength_handle='truncation' \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=50 \
+        --intanceNum_limit=99999 \
+        --data_split=0.05 \
+        --test_description=''  \
+
+python main.py \
+        --experiment_no='zyz_filter_0<tag<50'  \
+        --epochs=50 \
+        --epoch_step=40 \
+        --device_ids=0 \
+        --batch-size=4 \
+        --G-lr=0.001 \
+        --D-lr=0.1 \
+        --B-lr=0.01 \
+        --save_model_path='./checkpoint' \
+        --data_type='TrainTest' \
+        --data_path='../datasets/ProgrammerWeb/' \
+        --use_previousData=0 \
+        --method='MultiLabelMAP' \
+        --overlength_handle='truncation' \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=50 \
+        --intanceNum_limit=99999 \
+        --data_split=0.1 \
+        --test_description=''  \
+
+python main.py \
+        --experiment_no='zyz_filter_0<tag<50'  \
+        --epochs=100 \
+        --epoch_step=90 \
+        --device_ids=0 \
+        --batch-size=4 \
+        --G-lr=0.001 \
+        --D-lr=0.1 \
+        --B-lr=0.001 \
+        --save_model_path='./checkpoint' \
+        --data_type='TrainTest' \
+        --data_path='../datasets/ProgrammerWeb/' \
+        --use_previousData=0 \
+        --method='semiGAN_MultiLabelMAP' \
+        --overlength_handle='truncation' \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=50 \
+        --intanceNum_limit=99999 \
+        --data_split=0.1 \
+        --test_description=''  \
+
+python main.py \
+        --experiment_no='zyz_filter_0<tag<50'  \
+        --epochs=50 \
+        --epoch_step=40 \
+        --device_ids=0 \
+        --batch-size=4 \
+        --G-lr=0.001 \
+        --D-lr=0.1 \
+        --B-lr=0.01 \
+        --save_model_path='./checkpoint' \
+        --data_type='TrainTest' \
+        --data_path='../datasets/ProgrammerWeb/' \
+        --use_previousData=0 \
+        --method='MultiLabelMAP' \
+        --overlength_handle='truncation' \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=50 \
+        --intanceNum_limit=99999 \
+        --data_split=0.2 \
+        --test_description=''  \
+
+python main.py \
+        --experiment_no='zyz_filter_0<tag<50'  \
+        --epochs=100 \
+        --epoch_step=90 \
+        --device_ids=0 \
+        --batch-size=4 \
+        --G-lr=0.001 \
+        --D-lr=0.1 \
+        --B-lr=0.001 \
+        --save_model_path='./checkpoint' \
+        --data_type='TrainTest' \
+        --data_path='../datasets/ProgrammerWeb/' \
+        --use_previousData=0 \
+        --method='semiGAN_MultiLabelMAP' \
+        --overlength_handle='truncation' \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=50 \
+        --intanceNum_limit=99999 \
+        --data_split=0.2 \
+        --test_description=''  \
+
+python main.py \
+        --experiment_no='zyz_filter_0<tag<50'  \
+        --epochs=50 \
+        --epoch_step=40 \
+        --device_ids=0 \
+        --batch-size=4 \
+        --G-lr=0.001 \
+        --D-lr=0.1 \
+        --B-lr=0.01 \
+        --save_model_path='./checkpoint' \
+        --data_type='TrainTest' \
+        --data_path='../datasets/ProgrammerWeb/' \
+        --use_previousData=0 \
+        --method='MultiLabelMAP' \
+        --overlength_handle='truncation' \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=50 \
+        --intanceNum_limit=99999 \
+        --data_split=0.4 \
+        --test_description=''  \
+
+python main.py \
+        --experiment_no='zyz_filter_0<tag<50'  \
+        --epochs=100 \
+        --epoch_step=90 \
+        --device_ids=0 \
+        --batch-size=4 \
+        --G-lr=0.001 \
+        --D-lr=0.1 \
+        --B-lr=0.001 \
+        --save_model_path='./checkpoint' \
+        --data_type='TrainTest' \
+        --data_path='../datasets/ProgrammerWeb/' \
+        --use_previousData=0 \
+        --method='semiGAN_MultiLabelMAP' \
+        --overlength_handle='truncation' \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=50 \
+        --intanceNum_limit=99999 \
+        --data_split=0.4 \
+        --test_description=''  \
+
+python main.py \
+        --experiment_no='zyz_filter_0<tag<50'  \
         --epochs=50 \
         --epoch_step=40 \
         --device_ids=0 \
@@ -25,9 +193,26 @@ python main.py \
         --data_split=1 \
         --test_description=''  \
 
-
-
-
+python main.py \
+        --experiment_no='zyz_filter_0<tag<50'  \
+        --epochs=100 \
+        --epoch_step=90 \
+        --device_ids=0 \
+        --batch-size=4 \
+        --G-lr=0.001 \
+        --D-lr=0.1 \
+        --B-lr=0.001 \
+        --save_model_path='./checkpoint' \
+        --data_type='TrainTest' \
+        --data_path='../datasets/ProgrammerWeb/' \
+        --use_previousData=0 \
+        --method='semiGAN_MultiLabelMAP' \
+        --overlength_handle='truncation' \
+        --min_tagFrequence=0  \
+        --max_tagFrequence=50 \
+        --intanceNum_limit=99999 \
+        --data_split=1 \
+        --test_description=''  \
 
 #方法、epoch_step
 
