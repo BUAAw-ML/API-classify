@@ -415,5 +415,6 @@ class dataEngine(Dataset):
                 })
 
         print("The number of tags for training: {}".format(len(self.tag2id)))
+        print(self.id2tag)
         print("taglen: {}".format(taglen/item))
         return data
