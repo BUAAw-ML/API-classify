@@ -558,7 +558,7 @@ label,unlabel,test:,,2519（split:0.05,标签数：100）|Bert微调+多注意�
 label,unlabel,test:,,2519（split:0.1,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=43.843 OP=0.705 OR=0.516 OF1=0.470 CP=0.622 CR=0.468 CF1=0.464|
 label,unlabel,test:,,2519（split:0.2,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=46.446 OP=0.723 OR=0.479 OF1=0.492 CP=0.631 CR=0.445 CF1=0.48|
 label,unlabel,test:,,2519（split:0.4 ,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=49.068 OP=0.730 OR=0.578 OF1=0.506 CP=0.655 CR=0.536 CF1=0.502|
-label,unlabel,test:,,2519（split:1,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
+label,unlabel,test:,,2519（split:1,标签数：100）|Bert微调+多注意力+sum|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=52.006 OP=0.695 OR=0.455 OF1=0.507 CP=0.686 CR=0.416 CF1=0.481|
 |---|---|---|---|  
 
 100<tags<200    wqb
