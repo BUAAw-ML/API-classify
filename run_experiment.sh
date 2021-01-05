@@ -16,11 +16,11 @@ python main.py \
         --save_model_path='./checkpoint' \
         --data_type='TrainTest' \
         --data_path='../datasets/ProgrammerWeb/' \
-        --use_previousData=1 \
+        --use_previousData=0 \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
-        --max_tagFrequence=25 \
+        --max_tagFrequence=100 \
         --intanceNum_limit=99999 \
         --data_split=1 \
         --test_description=''  \
