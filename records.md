@@ -537,16 +537,16 @@ label,unlabel,test:10111,500,2618（split:1,标签数：200）|Bert微调+多注
 tags<150 样本数量最多的前150个tag   
 数据配置|模型方法|训练参数|实验结果|                                                                                                                                                                    
 |---|---|---|---|   
-label,unlabel,test:,,（split:0.05,标签数：150）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
-label,unlabel,test:,500,（split:0.05,标签数：150）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
-label,unlabel,test:,,（split:0.1,标签数：150）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
-label,unlabel,test:,500,（split:0.1,标签数：150）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
-label,unlabel,test:,,（split:0.2,标签数：150）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
-label,unlabel,test:,500,（split:0.2,标签数：150）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
-label,unlabel,test:,,（split:0.4 ,标签数：150）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
-label,unlabel,test:,500,（split:0.4 ,标签数：150）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
-label,unlabel,test:,,（split:1,标签数：150）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
-label,unlabel,test:,500,（split:1,标签数：150）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
+label,unlabel,test:498,,2587（split:0.05,标签数：150）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=31.648 OP=0.708 OR=0.275 OF1=0.361 CP=0.468 CR=0.198 CF1=0.274|
+label,unlabel,test:498,500,2587（split:0.05,标签数：150）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=37.176 OP=0.701 OR=0.262 OF1=0.370 CP=0.432 CR=0.196 CF1=0.268|
+label,unlabel,test:997,,2587（split:0.1,标签数：150）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=38.107 OP=0.665 OR=0.338 OF1=0.427 CP=0.533 CR=0.266 CF1=0.352|
+label,unlabel,test:997,500,2587（split:0.1,标签数：150）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=40.404 OP=0.659 OR=0.343 OF1=0.434 CP=0.559 CR=0.277 CF1=0.361|
+label,unlabel,test:1951,,2587（split:0.2,标签数：150）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=41.712 OP=0.683 OR=0.415 OF1=0.481 CP=0.610 CR=0.355 CF1=0.429|
+label,unlabel,test:1951,500,2587（split:0.2,标签数：150）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=44.192 OP=0.675 OR=0.419 OF1=0.485 CP=0.589 CR=0.364 CF1=0.433|
+label,unlabel,test:3878,,2587（split:0.4 ,标签数：150）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=45.071 OP=0.659 OR=0.457 OF1=0.500 CP=0.579 CR=0.394 CF1=0.457|
+label,unlabel,test:3878,500,2587（split:0.4 ,标签数：150）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001|map=47.255 OP=0.685 OR=0.562 OF1=0.516 CP=0.625 CR=0.501 CF1=0.488|
+label,unlabel,test:,,2587（split:1,标签数：150）|Bert微调+多注意力|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
+label,unlabel,test:,500,2587（split:1,标签数：150）|Bert微调+多注意力+GAN|epoch:100;ES:90;BS:4;OPT:SGD;LR:G0.001,D0.1,B0.001||
 |---|---|---|---|   
 
 tags<50 样本数量最多的前50个tag   zyz
