@@ -178,8 +178,8 @@ class AveragePrecisionMeter(object):
                 scores[i, ind] = 1 if tmp[i, ind] >= 0.5 else 0
         return self.evaluation(scores, targets)
 
-
     def evaluation(self, scores_, targets_):
+
         n, n_class = scores_.shape
         Nc, Np, Ng = np.zeros(n_class), np.zeros(n_class), np.zeros(n_class)
         for k in range(n_class):
@@ -198,7 +198,17 @@ class AveragePrecisionMeter(object):
         CP = np.sum(Nc / (Np + 1e-5)) / n_class
         CR = np.sum(Nc / (Ng + 1e-5)) / n_class
         CF1 = (2 * CP * CR) / (CP + CR + 1e-5)
-        
+
+        # print(Ng / n)
+        # print(Np / n)
+
+        # P = Nc / (Np + 1e-5)
+        # R = Nc / (Ng + 1e-5)
+        # print(P)
+        # print(R)
+        # print((2 * P * R) / (P + R + 1e-5))
+        # print("----------")
+
         return OP, OR, OF1, CP, CR, CF1
 
 

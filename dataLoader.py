@@ -35,7 +35,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
         dataset = dataEngine(data_config=data_config)
 
         if data_type == 'All':
-            data = dataset.load_programWeb_AAPD(data_path)
+            data = dataset.load_All(data_path)
 
             data = np.array(data)
             ind = np.random.RandomState(seed=10).permutation(len(data))
@@ -45,14 +45,14 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             split3 = int(len(data) * 1)
 
             dataset.train_data = data[ind[:split]].tolist()
-            dataset.unlabeled_train_data = data[ind[:1000]].tolist()
+            dataset.unlabeled_train_data = data[ind[:500]].tolist()
             dataset.test_data = data[ind[split2:split3]].tolist()
 
         elif data_type == 'TrainTest':
 
             file = os.path.join(data_path, 'train.pkl')
             dataset.filter_tags(file)
-            data = dataset.load_agNews(file)
+            data = dataset.load_TrainTest(file)
 
             data = np.array(data)
             ind = np.random.RandomState(seed=10).permutation(len(data))
@@ -60,11 +60,11 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             # split2 = int(len(data) * 0.3)
 
             dataset.train_data = data[ind[:split]].tolist()
-            dataset.unlabeled_train_data = data[ind[:1000]].tolist()
+            dataset.unlabeled_train_data = data[ind[:500]].tolist()
 
             file = os.path.join(data_path, 'test.pkl')
-            dataset.filter_tags(file)
-            dataset.test_data = dataset.load_agNews(file)
+
+            dataset.test_data = dataset.load_TrainTest(file)
 
         torch.save(dataset.to_dict(), os.path.join('cache', cache_file_head + '.dataset'))
         encoded_tag, tag_mask = dataset.encode_tag()
@@ -231,7 +231,7 @@ class dataEngine(Dataset):
 
         return tfidf_dict
 
-    def load_programWeb_AAPD(self, f):
+    def load_All(self, f):
         data = []
 
         document = []
@@ -286,12 +286,17 @@ class dataEngine(Dataset):
                 tag = tag.strip().split('###')
                 tag = [t for t in tag if t != '']
 
+                tag2 = tag
+
                 if self.use_tags is not None:
                     tag = [t for t in tag if t in self.use_tags]
 
+                if len(tag2) != len(tag):
+                    continue
+
                 # if len(set(tag)) < 2:
                 #     continue
-
+                
                 if len(tag) == 0:
                     continue
 
@@ -319,6 +324,9 @@ class dataEngine(Dataset):
     def filter_tags(self, file):
         tag_occurance = {}
 
+        ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service',
+        'Data-as-a-Service','Widgets'])
+
         with open(file,'rb') as pklfile:
             reader = pickle.load(pklfile)
             for row in reader:
@@ -333,22 +341,33 @@ class dataEngine(Dataset):
                 tag = list(set(tag))
 
                 for t in tag:
-                    if t not in tag_occurance:
+                    if t in ignored_tags:
+                        continue
+                    elif t not in tag_occurance:
                         tag_occurance[t] = 1
                     else:
                         tag_occurance[t] += 1
 
-        for tag in tag_occurance:
-            if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
-                self.use_tags.add(tag)
         print('Total number of tags: {}'.format(len(tag_occurance)))
-        print(sorted(tag_occurance.items(), key=lambda x: x[1], reverse=True))
+        tags = sorted(tag_occurance.items(), key=lambda x: x[1], reverse=True)
 
-    def load_agNews(self, file):
+        print(tags)
+
+        for item in tags[self.data_config['min_tagFrequence']:self.data_config['max_tagFrequence']]:
+            self.use_tags.add(item[0])
+
+        # for tag in tag_occurance:
+        #     if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
+        #         self.use_tags.add(tag)
+
+    def load_TrainTest(self, file):
         data = []
         document = []
 
-        with open(file,'rb') as pklfile:
+        taglen = 0
+        item = 0
+
+        with open(file, 'rb') as pklfile:
 
             reader = pickle.load(pklfile)
 
@@ -373,11 +392,13 @@ class dataEngine(Dataset):
 
                 dscp_ids = tokenizer.convert_tokens_to_ids(dscp_tokens)
 
-                # if self.use_tags is not None:
-                #     tag = [t for t in tag if t in self.use_tags]
+                if self.use_tags is not None:
+                    tag = [t for t in tag if t in self.use_tags]
 
                 if len(tag) == 0:
                     continue
+                taglen += len(tag)
+                item += 1
 
                 for t in tag:
                     if t not in self.tag2id:
@@ -396,5 +417,6 @@ class dataEngine(Dataset):
                 })
 
         print("The number of tags for training: {}".format(len(self.tag2id)))
-
+        # print(self.id2tag)
+        print("taglen: {}".format(taglen/item))
         return data
