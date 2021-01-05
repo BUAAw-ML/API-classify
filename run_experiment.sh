@@ -9,7 +9,7 @@ python main.py \
         --epochs=50 \
         --epoch_step=40 \
         --device_ids=0 \
-        --batch-size=16 \
+        --batch-size=10 \
         --G-lr=0.001 \
         --D-lr=0.1 \
         --B-lr=0.01 \
