@@ -204,6 +204,7 @@ class AveragePrecisionMeter(object):
         print(P)
         print(R)
         print((2 * P * R) / (P + R + 1e-5))
+        print("----------")
 
         return OP, OR, OF1, CP, CR, CF1
 
