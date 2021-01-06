@@ -51,19 +51,25 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
         elif data_type == 'TrainTest':
 
             file = os.path.join(data_path, 'train.pkl')
-            dataset.filter_tags(file)
+            dataset.filter_tags(file, data_config['data_split'])
             data = dataset.load_TrainTest(file)
-
             data = np.array(data)
             ind = np.random.RandomState(seed=10).permutation(len(data))
-            split = int(len(data) * data_config['data_split'])
-            # split2 = int(len(data) * 0.3)
+            data = data[ind]
 
-            dataset.train_data = data[ind[:split]].tolist()
-            dataset.unlabeled_train_data = data[ind[:500]].tolist()
+            dataset.train_data = []
+            for item in data:
+                if dataset.use_tags[dataset.id2tag[item['tag_ids'][0]]] >= 1:
+                    for tag_id in item['tag_ids']:
+                        dataset.use_tags[dataset.id2tag[tag_id]] -= 1
+                dataset.train_data.append(item)
+                if len(dataset.train_data) > data_config['data_split']:
+                    break
+
+            # dataset.train_data = data[ind[:data_config['data_split']]].tolist()
+            # dataset.unlabeled_train_data = data[ind[:500]].tolist()
 
             file = os.path.join(data_path, 'test.pkl')
-
             dataset.test_data = dataset.load_TrainTest(file)
 
         torch.save(dataset.to_dict(), os.path.join('cache', cache_file_head + '.dataset'))
@@ -84,7 +90,7 @@ class dataEngine(Dataset):
         self.tag2id = tag2id
         self.id2tag = id2tag
 
-        self.use_tags = set()
+        self.use_tags = {}
 
         self.co_occur_mat = co_occur_mat
         self.tfidf_dict = tfidf_dict
@@ -321,7 +327,7 @@ class dataEngine(Dataset):
 
         return data
 
-    def filter_tags(self, file):
+    def filter_tags(self, file, trainingData_num):
         tag_occurance = {}
 
         ignored_tags = set(['Tools','Applications','Other', 'API', 'Platform-as-a-Service',
@@ -352,9 +358,12 @@ class dataEngine(Dataset):
         tags = sorted(tag_occurance.items(), key=lambda x: x[1], reverse=True)
         print(tags)
         # print(tags[:self.data_config['max_tagFrequence']])
-
+        print(trainingData_num)
+        trainData_proportion = trainingData_num / (self.data_config['max_tagFrequence'] - self.data_config['min_tagFrequence'])
+        print(trainData_proportion)
         for item in tags[self.data_config['min_tagFrequence']:self.data_config['max_tagFrequence']]:
-            self.use_tags.add(item[0])
+            self.use_tags[item[0]] = int(item[1] * trainData_proportion)
+        print(self.use_tags)
 
         # for tag in tag_occurance:
         #     if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
