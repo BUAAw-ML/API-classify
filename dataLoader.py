@@ -61,8 +61,6 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             for tag in dataset.use_tags.keys():
                 dataset.use_tags[tag] *= data_config['data_split'] / len(data)
 
-            print(dataset.use_tags)
-
             tag_count = copy.deepcopy(dataset.use_tags)
             dataset.train_data = []
             candidate = []
@@ -88,10 +86,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
                     print("len(dataset.train_data):{}".format(len(dataset.train_data)))
                     break
 
-            print(len(data))
-            print(len(dataset.train_data))
-            print(len(candidate))
-            print(len(rest))
+            assert len(data) == len(dataset.train_data) + len(candidate) + len(rest)
 
             if len(candidate) >= data_config['data_split']-len(dataset.train_data):
                 dataset.train_data.extend(candidate[:int(data_config['data_split']-len(dataset.train_data))])
@@ -99,12 +94,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
                 dataset.train_data.extend(candidate)
                 dataset.train_data.extend(rest[:int(data_config['data_split']-len(dataset.train_data))])
 
-            print(len(dataset.train_data))
             print(tag_count)
-            assert len(dataset.train_data) == data_config['data_split']
-
-            exit()
-
             # dataset.train_data = data[ind[:data_config['data_split']]].tolist()
             # dataset.unlabeled_train_data = data[ind[:500]].tolist()
 
@@ -396,7 +386,7 @@ class dataEngine(Dataset):
 
         print('Total number of tags: {}'.format(len(tag_occurance)))
         tags = sorted(tag_occurance.items(), key=lambda x: x[1], reverse=True)
-        print(tags)
+        # print(tags)
         # print(tags[:self.data_config['max_tagFrequence']])
 
         for item in tags[self.data_config['min_tagFrequence']:self.data_config['max_tagFrequence']]:
