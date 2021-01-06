@@ -67,15 +67,15 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
 
 
             for item in data:
+                use = False
                 for tag_id in item['tag_ids']:
                     if tag_count[dataset.id2tag[tag_id]] == dataset.use_tags[dataset.id2tag[tag_id]]:
                         use = True
                         break
-                if use:
+                if use == True:
                     for tag_id in item['tag_ids']:
                         tag_count[dataset.id2tag[tag_id]] -= 1
                     dataset.train_data.append(item)
-                use = False
 
             print(len(dataset.train_data))
             assert len(dataset.train_data) < data_config['data_split']
