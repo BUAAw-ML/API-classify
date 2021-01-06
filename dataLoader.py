@@ -10,6 +10,7 @@ from transformers import BertTokenizer
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pickle
+import copy
 
 from word_embedding import *
 
@@ -62,7 +63,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
 
             print(dataset.use_tags)
 
-            tag_count = dataset.use_tags
+            tag_count = copy.deepcopy(dataset.use_tags)
             dataset.train_data = []
 
 
