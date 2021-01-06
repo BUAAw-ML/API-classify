@@ -101,18 +101,6 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             assert len(dataset.train_data) == data_config['data_split']
 
 
-            for item in data:
-                for tag_id in item['tag_ids']:
-                    if tag_count[dataset.id2tag[tag_id]] >= 1:
-                        use = True
-                        break
-                if use:
-
-                if len(dataset.train_data) >= data_config['data_split']:
-                    break
-
-            print(tag_count)
-            print(len(dataset.train_data))
             exit()
 
             # dataset.train_data = data[ind[:data_config['data_split']]].tolist()
