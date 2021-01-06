@@ -74,6 +74,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
                             tag_count[dataset.id2tag[tag_id]] -= 1
                         dataset.train_data.append(item)
                         break
+
                     elif tag_count[dataset.id2tag[tag_id]] >= 1:
                         for tag_id in item['tag_ids']:
                             tag_count[dataset.id2tag[tag_id]] -= 1
@@ -81,6 +82,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
                         break
                     else:
                         rest.append(item)
+                        break
 
                 if len(dataset.train_data) >= data_config['data_split']:
                     print("len(dataset.train_data):{}".format(len(dataset.train_data)))
@@ -90,6 +92,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             print(len(dataset.train_data))
             print(len(candidate))
             print(len(rest))
+            print(data_config['data_split']-len(dataset.train_data))
             if len(candidate) >= data_config['data_split']-len(dataset.train_data):
                 dataset.train_data.extend(candidate[:data_config['data_split']-len(dataset.train_data)])
             else:
@@ -99,7 +102,6 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             print(len(dataset.train_data))
             print(tag_count)
             assert len(dataset.train_data) == data_config['data_split']
-
 
             exit()
 
