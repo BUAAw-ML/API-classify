@@ -37,7 +37,7 @@ python main.py \
         --save_model_path='./checkpoint' \
         --data_type='TrainTest' \
         --data_path='../datasets/ProgrammerWeb/' \
-        --use_previousData=1 \
+        --use_previousData=0 \
         --method='semiGAN_MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
@@ -81,7 +81,7 @@ python main.py \
         --save_model_path='./checkpoint' \
         --data_type='TrainTest' \
         --data_path='../datasets/ProgrammerWeb/' \
-        --use_previousData=1 \
+        --use_previousData=0 \
         --method='semiGAN_MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
@@ -126,7 +126,7 @@ python main.py \
         --save_model_path='./checkpoint' \
         --data_type='TrainTest' \
         --data_path='../datasets/ProgrammerWeb/' \
-        --use_previousData=1 \
+        --use_previousData=0 \
         --method='semiGAN_MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
@@ -171,7 +171,7 @@ python main.py \
         --save_model_path='./checkpoint' \
         --data_type='TrainTest' \
         --data_path='../datasets/ProgrammerWeb/' \
-        --use_previousData=1 \
+        --use_previousData=0 \
         --method='semiGAN_MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
