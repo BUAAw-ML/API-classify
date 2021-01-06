@@ -92,9 +92,9 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             print(len(dataset.train_data))
             print(len(candidate))
             print(len(rest))
-            print(data_config['data_split']-len(dataset.train_data))
+
             if len(candidate) >= data_config['data_split']-len(dataset.train_data):
-                dataset.train_data.extend(candidate[:data_config['data_split']-len(dataset.train_data)])
+                dataset.train_data.extend(candidate[:int(data_config['data_split']-len(dataset.train_data))])
             else:
                 dataset.train_data.extend(candidate)
                 dataset.train_data.extend(rest[:data_config['data_split']-len(dataset.train_data)])
