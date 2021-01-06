@@ -325,7 +325,7 @@ class dataEngine(Dataset):
         tag_occurance = {}
 
         ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service',
-        'Data-as-a-Service','Widgets'])
+        'Data-as-a-Service','Widgets','Database','Application Development'])
 
         with open(file,'rb') as pklfile:
             reader = pickle.load(pklfile)
