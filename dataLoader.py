@@ -100,6 +100,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
 
             file = os.path.join(data_path, 'test.pkl')
             dataset.test_data = dataset.load_TrainTest(file)
+            dataset.unlabeled_train_data = dataset.test_data[:500]
 
         torch.save(dataset.to_dict(), os.path.join('cache', cache_file_head + '.dataset'))
         encoded_tag, tag_mask = dataset.encode_tag()
