@@ -333,38 +333,46 @@ class dataEngine(Dataset):
         ignored_tags = set(['Tools','Applications','Other', 'API', 'Platform-as-a-Service',
         'Data-as-a-Service', 'Database','Application Development', 'Text','Business','Location','Office','Content']) #'Software-as-a-Service','Widgets',
 
-        with open(file,'rb') as pklfile:
-            reader = pickle.load(pklfile)
-            for row in reader:
+        pklfile = open(file, 'rb')
+        reader = pickle.load(pklfile)
 
-                # if len(row) != 4:
-                #     continue
+        print(len(reader))
+        print(trainingData_num / len(reader))
 
-                tag = row["tags"]
+        for row in reader:
 
-                # tag = [t for t in tag if t != '']
+            # if len(row) != 4:
+            #     continue
 
-                tag = list(set(tag))
+            tag = row["tags"]
 
-                for t in tag:
-                    if t in ignored_tags:
-                        continue
-                    elif t not in tag_occurance:
-                        tag_occurance[t] = 1
-                    else:
-                        tag_occurance[t] += 1
+            # tag = [t for t in tag if t != '']
+
+            tag = list(set(tag))
+
+            for t in tag:
+                if t in ignored_tags:
+                    continue
+                elif t not in tag_occurance:
+                    tag_occurance[t] = 1
+                else:
+                    tag_occurance[t] += 1
 
         print('Total number of tags: {}'.format(len(tag_occurance)))
         tags = sorted(tag_occurance.items(), key=lambda x: x[1], reverse=True)
         print(tags)
         # print(tags[:self.data_config['max_tagFrequence']])
+
+
         print(trainingData_num)
         trainData_proportion = trainingData_num / (self.data_config['max_tagFrequence'] - self.data_config['min_tagFrequence'])
         print(trainData_proportion)
         for item in tags[self.data_config['min_tagFrequence']:self.data_config['max_tagFrequence']]:
-            self.use_tags[item[0]] = int(item[1] * trainData_proportion)
+            self.use_tags[item[0]] = int(trainingData_num / len(reader) * item[1])
         print(self.use_tags)
 
+        pklfile.close()
+        exit()
         # for tag in tag_occurance:
         #     if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
         #         self.use_tags.add(tag)
