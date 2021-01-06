@@ -4,7 +4,7 @@ import numpy as np
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.preprocessing.text import text_to_word_sequence
 
-from utils.dictionary import GloveDictionary
+from keras_utils.dictionary import GloveDictionary
 
 
 def convert_to_one_hot(Y, C):
