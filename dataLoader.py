@@ -94,8 +94,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
                 if len(dataset.train_data) >= data_config['data_split']:
                     break
 
-            print(dataset.use_tags)
-            print(dataset.tag_count)
+            print(tag_count)
             print(len(dataset.train_data))
             exit()
 
