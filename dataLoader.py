@@ -325,7 +325,7 @@ class dataEngine(Dataset):
         tag_occurance = {}
 
         ignored_tags = set(['Tools','Applications','Other', 'API', 'Software-as-a-Service','Platform-as-a-Service',
-        'Data-as-a-Service', 'Widgets','Database','Application Development', 'Text','Location','Content'])  #,'Office''Business',
+        'Data-as-a-Service', 'Widgets','Database','Application Development', 'Text','Business','Location','Office','Content'])
 
         with open(file,'rb') as pklfile:
             reader = pickle.load(pklfile)
@@ -342,7 +342,8 @@ class dataEngine(Dataset):
 
                 for t in tag:
                     if t in ignored_tags:
-                        continue
+                        x=1
+                        # continue
                     elif t not in tag_occurance:
                         tag_occurance[t] = 1
                     else:
