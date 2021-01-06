@@ -75,7 +75,9 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
                         tag_count[dataset.id2tag[tag_id]] -= 1
                     dataset.train_data.append(item)
 
+            print(len(dataset.train_data))
             assert len(dataset.train_data) < data_config['data_split']
+
 
             for item in data:
                 for tag_id in item['tag_ids']:
