@@ -51,7 +51,7 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
         elif data_type == 'TrainTest':
 
             file = os.path.join(data_path, 'train.pkl')
-            dataset.filter_tags(file, data_config['data_split'])
+            dataset.filter_tags(file)
             data = dataset.load_TrainTest(file)
             data = np.array(data)
             ind = np.random.RandomState(seed=10).permutation(len(data))
