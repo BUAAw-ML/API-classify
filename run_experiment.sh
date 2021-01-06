@@ -153,7 +153,7 @@ python main.py \
         --min_tagFrequence=0  \
         --max_tagFrequence=100 \
         --intanceNum_limit=99999 \
-        --data_split=7200 \
+        --data_split=6400 \
         --test_description=''  \
         --model_backend='pytorch'
 
@@ -175,7 +175,7 @@ python main.py \
         --min_tagFrequence=0  \
         --max_tagFrequence=100 \
         --intanceNum_limit=99999 \
-        --data_split=7200 \
+        --data_split=6400 \
         --test_description=''  \
         --model_backend='pytorch'
 
