@@ -23,6 +23,7 @@ python main.py \
         --intanceNum_limit=99999 \
         --data_split=1 \
         --test_description=''  \
+        --model_backend='pytorch'
 
 
 

@@ -165,7 +165,7 @@ if args.model_backend == "pytorch":
 
     fo.close()
 
-else if args.model_backend == "keras":
+elif args.model_backend == "keras":
     X, Y, test_X, test_Y = convert(dataset, args.pretrained_word_emb_path)
     
     train_keras_model(args.keras_model_type, data={"train": (X, Y), "test": (test_X, test_Y)}, glove_path=args.pretrained_word_emb_path, args.save_model_path)
