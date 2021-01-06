@@ -57,21 +57,40 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             ind = np.random.RandomState(seed=10).permutation(len(data))
             data = data[ind]
 
-            print(dataset.use_tags)
             for tag in dataset.use_tags.keys():
                 dataset.use_tags[tag] *= data_config['data_split'] / len(data)
+
             print(dataset.use_tags)
 
+            tag_count = dataset.use_tags
             dataset.train_data = []
+
             for item in data:
-                if dataset.use_tags[dataset.id2tag[item['tag_ids'][0]]] >= 1:
+                for tag_id in item['tag_ids']:
+                    if tag_count[dataset.id2tag[tag_id]] == dataset.use_tags[dataset.id2tag[tag_id]]:
+                        use = True
+                        break
+                if use:
                     for tag_id in item['tag_ids']:
-                        dataset.use_tags[dataset.id2tag[tag_id]] -= 1
-                dataset.train_data.append(item)
-                if len(dataset.train_data) > data_config['data_split']:
+                        tag_count[dataset.id2tag[tag_id]] -= 1
+                    dataset.train_data.append(item)
+
+            assert len(dataset.train_data) < data_config['data_split']
+
+            for item in data:
+                for tag_id in item['tag_ids']:
+                    if tag_count[dataset.id2tag[tag_id]] >= 1:
+                        use = True
+                        break
+                if use:
+                    for tag_id in item['tag_ids']:
+                        tag_count[dataset.id2tag[tag_id]] -= 1
+                    dataset.train_data.append(item)
+                if len(dataset.train_data) >= data_config['data_split']:
                     break
 
             print(dataset.use_tags)
+            print(dataset.tag_count)
             print(len(dataset.train_data))
             exit()
 
@@ -311,7 +330,7 @@ class dataEngine(Dataset):
 
                 # if len(set(tag)) < 2:
                 #     continue
-                
+
                 if len(tag) == 0:
                     continue
 
