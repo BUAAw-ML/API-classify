@@ -1,10 +1,7 @@
-import pickle as pk
-
 from tensorflow.keras import metrics
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.optimizers import Adam
 
-from datasets import program_web
 from keras_models.serve_net import ServeNet
 from keras_models.CNN import CNN
 from keras_models.LSTM import ServiceLSTM
