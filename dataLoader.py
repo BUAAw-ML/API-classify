@@ -341,10 +341,7 @@ class dataEngine(Dataset):
                 tag = list(set(tag))
 
                 for t in tag:
-                    if t in ignored_tags:
-                        x=1
-                        # continue
-                    elif t not in tag_occurance:
+                    if t not in tag_occurance:
                         tag_occurance[t] = 1
                     else:
                         tag_occurance[t] += 1
