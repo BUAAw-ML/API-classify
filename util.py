@@ -135,6 +135,7 @@ class AveragePrecisionMeter(object):
             targets = self.targets[:, k]
             # compute average precision
             ap[k] = AveragePrecisionMeter.average_precision(scores, targets, self.difficult_examples)
+        print(ap)
         return ap
 
     @staticmethod
@@ -202,12 +203,12 @@ class AveragePrecisionMeter(object):
         # print(Ng / n)
         # print(Np / n)
 
-        # P = Nc / (Np + 1e-5)
-        # R = Nc / (Ng + 1e-5)
+        P = Nc / (Np + 1e-5)
+        R = Nc / (Ng + 1e-5)
         # print(P)
         # print(R)
-        # print((2 * P * R) / (P + R + 1e-5))
-        # print("----------")
+        print((2 * P * R) / (P + R + 1e-5))
+        print("----------")
 
         return OP, OR, OF1, CP, CR, CF1
 

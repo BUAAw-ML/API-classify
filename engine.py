@@ -172,18 +172,19 @@ class Engine(object):
             # is_best = prec1 > self.state['best_score']
 
             self.state['best_score']['map'] = max(prec1['map'], self.state['best_score']['map'])
-            self.state['best_score']['OP'] = max(prec1['OP'], self.state['best_score']['OP'])
-            self.state['best_score']['OR'] = max(prec1['OR'], self.state['best_score']['OR'])
-            self.state['best_score']['OF1'] = max(prec1['OF1'], self.state['best_score']['OF1'])
-            self.state['best_score']['CP'] = max(prec1['CP'], self.state['best_score']['CP'])
-            self.state['best_score']['CR'] = max(prec1['CR'], self.state['best_score']['CR'])
-            self.state['best_score']['CF1'] = max(prec1['CF1'], self.state['best_score']['CF1'])
+            if prec1['OF1'] >= self.state['best_score']['OF1']:
+                self.state['best_score']['OF1'] = prec1['OF1']
+                self.state['best_score']['OP'] = prec1['OP']
+                self.state['best_score']['OR'] = prec1['OR']
+            if prec1['CF1'] >= self.state['best_score']['CF1']:
+                self.state['best_score']['CF1'] = prec1['CF1']
+                self.state['best_score']['CP'] = prec1['CP']
+                self.state['best_score']['CR'] = prec1['CR']
 
-            best_str = ' **best** map={map:.3f} OP={OP:.3f} OR={OR:.3f} OF1={OF1:.3f} CP={CP:.3f} CR={CR:.3f} CF1={CF1:.3f}'.format(
-                map=self.state['best_score']['map'],OP=self.state['best_score']['OP'],OR=self.state['best_score']['OR'],
-                OF1=self.state['best_score']['OF1'],CP=self.state['best_score']['CP'],
-                CR=self.state['best_score']['CR'],CF1=self.state['best_score']['CF1'])
-
+            best_str = '**best** map={map:.3f} OP={OP:.3f} OR={OR:.3f} OF1={OF1:.3f} CP={CP:.3f} CR={CR:.3f} CF1={CF1:.3f}'.format(
+                map=self.state['best_score']['map'], OP=self.state['best_score']['OP'], OR=self.state['best_score']['OR'],
+                OF1=self.state['best_score']['OF1'], CP=self.state['best_score']['CP'],
+                CR=self.state['best_score']['CR'], CF1=self.state['best_score']['CF1'])
 
             print(best_str)
             self.result_file.write(best_str + '\n')
