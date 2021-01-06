@@ -57,6 +57,11 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             ind = np.random.RandomState(seed=10).permutation(len(data))
             data = data[ind]
 
+            print(dataset.use_tags)
+            for tag in dataset.use_tags.keys():
+                dataset.use_tags[tag] *= data_config['data_split'] / len(data)
+            print(dataset.use_tags)
+
             dataset.train_data = []
             for item in data:
                 if dataset.use_tags[dataset.id2tag[item['tag_ids'][0]]] >= 1:
@@ -65,6 +70,10 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
                 dataset.train_data.append(item)
                 if len(dataset.train_data) > data_config['data_split']:
                     break
+
+            print(dataset.use_tags)
+            print(len(dataset.train_data))
+            exit()
 
             # dataset.train_data = data[ind[:data_config['data_split']]].tolist()
             # dataset.unlabeled_train_data = data[ind[:500]].tolist()
@@ -327,52 +336,42 @@ class dataEngine(Dataset):
 
         return data
 
-    def filter_tags(self, file, trainingData_num):
+    def filter_tags(self, file):
         tag_occurance = {}
 
         ignored_tags = set(['Tools','Applications','Other', 'API', 'Platform-as-a-Service',
         'Data-as-a-Service', 'Database','Application Development', 'Text','Business','Location','Office','Content']) #'Software-as-a-Service','Widgets',
 
-        pklfile = open(file, 'rb')
-        reader = pickle.load(pklfile)
+        with open(file,'rb') as pklfile:
+            reader = pickle.load(pklfile)
 
-        print(len(reader))
-        print(trainingData_num / len(reader))
+            for row in reader:
 
-        for row in reader:
+                # if len(row) != 4:
+                #     continue
 
-            # if len(row) != 4:
-            #     continue
+                tag = row["tags"]
 
-            tag = row["tags"]
+                # tag = [t for t in tag if t != '']
 
-            # tag = [t for t in tag if t != '']
+                tag = list(set(tag))
 
-            tag = list(set(tag))
-
-            for t in tag:
-                if t in ignored_tags:
-                    continue
-                elif t not in tag_occurance:
-                    tag_occurance[t] = 1
-                else:
-                    tag_occurance[t] += 1
+                for t in tag:
+                    if t in ignored_tags:
+                        continue
+                    elif t not in tag_occurance:
+                        tag_occurance[t] = 1
+                    else:
+                        tag_occurance[t] += 1
 
         print('Total number of tags: {}'.format(len(tag_occurance)))
         tags = sorted(tag_occurance.items(), key=lambda x: x[1], reverse=True)
         print(tags)
         # print(tags[:self.data_config['max_tagFrequence']])
 
-
-        print(trainingData_num)
-        trainData_proportion = trainingData_num / (self.data_config['max_tagFrequence'] - self.data_config['min_tagFrequence'])
-        print(trainData_proportion)
         for item in tags[self.data_config['min_tagFrequence']:self.data_config['max_tagFrequence']]:
-            self.use_tags[item[0]] = int(trainingData_num / len(reader) * item[1])
-        print(self.use_tags)
+            self.use_tags[item[0]] = int(item[1])
 
-        pklfile.close()
-        exit()
         # for tag in tag_occurance:
         #     if self.data_config['min_tagFrequence'] <= tag_occurance[tag] <= self.data_config['max_tagFrequence']:
         #         self.use_tags.add(tag)
