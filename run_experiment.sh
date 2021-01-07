@@ -5,18 +5,18 @@
 
 python main.py \
         --experiment_no='test'  \
-        --epochs=50 \
-        --epoch_step=40 \
+        --epochs=100 \
+        --epoch_step=90 \
         --device_ids=0 \
         --batch-size=4 \
         --G-lr=0.001 \
         --D-lr=0.1 \
-        --B-lr=0.01 \
+        --B-lr=0.001 \
         --save_model_path='./checkpoint' \
         --data_type='TrainTest' \
         --data_path='../datasets/ProgrammerWeb/' \
         --use_previousData=0 \
-        --method='MultiLabelMAP' \
+        --method='semiGAN_MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
         --max_tagFrequence=50 \
