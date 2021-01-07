@@ -5,7 +5,7 @@
 
 
 python main.py \
-        --experiment_no='zyz_linear_filter_0<tag<150'  \
+        --experiment_no='zyc_sum_filter_0<tag<50'  \
         --epochs=50 \
         --epoch_step=40 \
         --device_ids=0 \
@@ -20,14 +20,14 @@ python main.py \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
-        --max_tagFrequence=150 \
+        --max_tagFrequence=50 \
         --intanceNum_limit=99999 \
         --data_split=200 \
         --test_description=''  \
         --model_backend='pytorch'
 
 python main.py \
-        --experiment_no='zyz_linear_filter_0<tag<150'  \
+        --experiment_no='zyc_sum_filter_0<tag<50'  \
         --epochs=50 \
         --epoch_step=40 \
         --device_ids=0 \
@@ -42,14 +42,14 @@ python main.py \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
-        --max_tagFrequence=150 \
+        --max_tagFrequence=50 \
         --intanceNum_limit=99999 \
         --data_split=400 \
         --test_description=''  \
         --model_backend='pytorch'
 
 python main.py \
-        --experiment_no='zyz_linear_filter_0<tag<150'  \
+        --experiment_no='zyc_sum_filter_0<tag<50'  \
         --epochs=50 \
         --epoch_step=40 \
         --device_ids=0 \
@@ -64,14 +64,14 @@ python main.py \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
-        --max_tagFrequence=150 \
+        --max_tagFrequence=50 \
         --intanceNum_limit=99999 \
         --data_split=1600 \
         --test_description=''  \
         --model_backend='pytorch'
 
 python main.py \
-        --experiment_no='zyz_linear_filter_0<tag<150'  \
+        --experiment_no='zyc_sum_filter_0<tag<50'  \
         --epochs=50 \
         --epoch_step=40 \
         --device_ids=0 \
@@ -86,14 +86,14 @@ python main.py \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
-        --max_tagFrequence=150 \
+        --max_tagFrequence=50 \
         --intanceNum_limit=99999 \
         --data_split=6400 \
         --test_description=''  \
         --model_backend='pytorch'
 
 python main.py \
-        --experiment_no='zyz_linear_filter_0<tag<200'  \
+        --experiment_no='zyc_sum_filter_0<tag<100'  \
         --epochs=50 \
         --epoch_step=40 \
         --device_ids=0 \
@@ -108,14 +108,14 @@ python main.py \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
-        --max_tagFrequence=200 \
+        --max_tagFrequence=100 \
         --intanceNum_limit=99999 \
         --data_split=200 \
         --test_description=''  \
         --model_backend='pytorch'
 
 python main.py \
-        --experiment_no='zyz_linear_filter_0<tag<200'  \
+        --experiment_no='zyc_sum_filter_0<tag<100'  \
         --epochs=50 \
         --epoch_step=40 \
         --device_ids=0 \
@@ -130,14 +130,15 @@ python main.py \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
-        --max_tagFrequence=200 \
+        --max_tagFrequence=100 \
         --intanceNum_limit=99999 \
         --data_split=400 \
         --test_description=''  \
         --model_backend='pytorch'
 
+
 python main.py \
-        --experiment_no='zyz_linear_filter_0<tag<200'  \
+        --experiment_no='zyc_sum_filter_0<tag<100'  \
         --epochs=50 \
         --epoch_step=40 \
         --device_ids=0 \
@@ -152,14 +153,14 @@ python main.py \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
-        --max_tagFrequence=200 \
+        --max_tagFrequence=100 \
         --intanceNum_limit=99999 \
         --data_split=1600 \
         --test_description=''  \
         --model_backend='pytorch'
 
 python main.py \
-        --experiment_no='zyz_linear_filter_0<tag<200'  \
+        --experiment_no='zyc_sum_filter_0<tag<100'  \
         --epochs=50 \
         --epoch_step=40 \
         --device_ids=0 \
@@ -174,12 +175,11 @@ python main.py \
         --method='MultiLabelMAP' \
         --overlength_handle='truncation' \
         --min_tagFrequence=0  \
-        --max_tagFrequence=200 \
+        --max_tagFrequence=100 \
         --intanceNum_limit=99999 \
         --data_split=6400 \
         --test_description=''  \
         --model_backend='pytorch'
-
 #方法、epoch_step
 
 #batch-size：1，4，8，16
