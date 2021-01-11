@@ -6,7 +6,7 @@
 
 
 python main.py \
-        --experiment_no='wqb_gen768_0<tag<50'  \
+        --experiment_no='zyz_combineLoss_0<tag<50'  \
         --epochs=100 \
         --epoch_step=90 \
         --device_ids=0 \
@@ -28,7 +28,7 @@ python main.py \
         --model_backend='pytorch'
 
 python main.py \
-        --experiment_no='wqb_gen768_0<tag<50'  \
+        --experiment_no='zyz_combineLoss_0<tag<50'  \
         --epochs=100 \
         --epoch_step=90 \
         --device_ids=0 \
@@ -50,7 +50,7 @@ python main.py \
         --model_backend='pytorch'
 
 python main.py \
-        --experiment_no='wqb_gen768_0<tag<50'  \
+        --experiment_no='zyz_combineLoss_0<tag<50'  \
         --epochs=100 \
         --epoch_step=90 \
         --device_ids=0 \
@@ -72,7 +72,7 @@ python main.py \
         --model_backend='pytorch'
 
 python main.py \
-        --experiment_no='wqb_gen768_0<tag<50'  \
+        --experiment_no='zyz_combineLoss_0<tag<50'  \
         --epochs=100 \
         --epoch_step=90 \
         --device_ids=0 \

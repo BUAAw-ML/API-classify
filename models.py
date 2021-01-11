@@ -64,10 +64,10 @@ class MABert(nn.Module):
         flatten = torch.sum(attention_out, -1, keepdim=True)
         prob = torch.sum(prob, -1, keepdim=True)
 
-        # prob = torch.cat((prob,flatten),-1)
-        # prob = self.output(prob)[:,0]
+        # prob = torch.sigmoid(prob)
 
-        prob = torch.sigmoid(prob)
+        prob = torch.cat((prob,flatten),-1)
+        prob = self.output(prob)[:,0]
 
         return flatten, logit, prob
 
