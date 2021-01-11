@@ -21,6 +21,9 @@ class MABert(nn.Module):
         self.class_weight = Parameter(torch.Tensor(num_classes, 768).uniform_(0, 1), requires_grad=False).cuda(device)
         self.class_weight.requires_grad = True
 
+        self.class_bias = Parameter(torch.Tensor(num_classes, 768).uniform_(0, 1), requires_grad=False).cuda(device)
+        self.class_bias.requires_grad = True
+
         self.discriminator = Parameter(torch.Tensor(1, 768).uniform_(0, 1), requires_grad=False).cuda(device)
         self.discriminator.requires_grad = True
 
@@ -48,14 +51,14 @@ class MABert(nn.Module):
 
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
-        attention_out = attention_out * self.class_weight
+        attention_out = attention_out * self.class_weight + self.class_bias
         attention_out = torch.sum(attention_out, -1)
         # attention_out = self.Linear1(attention_out)#.squeeze(-1)
         # attention_out = self.act(attention_out)
         # attention_out = self.Linear2(attention_out).squeeze(-1)
         logit = torch.sigmoid(attention_out)
 
-        feat = feat * self.class_weight
+        feat = feat * self.class_weight + self.class_bias
         prob = torch.sum(feat, -1)
 
         flatten = torch.sum(attention_out, -1, keepdim=True)
