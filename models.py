@@ -51,14 +51,14 @@ class MABert(nn.Module):
 
         attention = F.softmax(attention, -1)
         attention_out = attention @ token_feat   # N, labels_num, hidden_size
-        attention_out = attention_out * self.class_weight + self.class_bias
+        attention_out = attention_out * self.class_weight
         attention_out = torch.sum(attention_out, -1)
         # attention_out = self.Linear1(attention_out)#.squeeze(-1)
         # attention_out = self.act(attention_out)
         # attention_out = self.Linear2(attention_out).squeeze(-1)
         logit = torch.sigmoid(attention_out)
 
-        feat = feat * self.class_weight + self.class_bias
+        feat = feat * self.class_weight
         prob = torch.sum(feat, -1)
 
         flatten = torch.sum(attention_out, -1, keepdim=True)
@@ -89,7 +89,7 @@ class Generator(nn.Module):
         self.act = nn.LeakyReLU(0.2) #nn.Sigmoid()#
         self.num_classes = num_classes
 
-        input_dim = 768 + self.num_classes
+        input_dim = 768 #+ self.num_classes
 
         self.num_hidden_generator = num_hidden_generator
         self.hidden_list_generator = nn.ModuleList()
@@ -113,9 +113,9 @@ class Generator(nn.Module):
 
         feat = feat.expand(feat.shape[0], self.num_classes, feat.shape[2])
         #
-        tag_embedding = torch.eye(self.num_classes).cuda(0).unsqueeze(0).expand(feat.shape[0],self.num_classes,self.num_classes)
-        x = torch.cat((feat,tag_embedding),-1)
-        # x = feat
+        # tag_embedding = torch.eye(self.num_classes).cuda(0).unsqueeze(0).expand(feat.shape[0],self.num_classes,self.num_classes)
+        # x = torch.cat((feat,tag_embedding),-1)
+        x = feat
 
         for i in range(self.num_hidden_generator):
             x = self.hidden_list_generator[i](x)
