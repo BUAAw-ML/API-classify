@@ -74,6 +74,7 @@ class MABert(nn.Module):
     def get_config_optim(self, lr, lrp):
         return [
             {'params': self.class_weight, 'lr': lr},
+            {'params': self.class_bias, 'lr': lr},
             {'params': self.bert.parameters(), 'lr': lrp},
             {'params': self.Linear1.parameters(), 'lr': lr},
             {'params': self.Linear2.parameters(), 'lr': lr},
