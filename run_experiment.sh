@@ -6,7 +6,7 @@
 
 
 python main.py \
-        --experiment_no='wqb_alldata_0<tag<200'  \
+        --experiment_no='zyz_bias_0<tag<200'  \
         --epochs=50 \
         --epoch_step=40 \
         --device_ids=0 \
@@ -28,7 +28,7 @@ python main.py \
         --model_backend='pytorch'
 
 python main.py \
-        --experiment_no='wqb_alldata_0<tag<200'  \
+        --experiment_no='zyz_bias_0<tag<200'  \
         --epochs=100 \
         --epoch_step=90 \
         --device_ids=0 \
