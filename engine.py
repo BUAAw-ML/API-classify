@@ -483,6 +483,7 @@ class semiGAN_MultiLabelMAPEngine(MultiLabelMAPEngine):
                 nn.utils.clip_grad_norm_(optimizer['enc'].param_groups[0]["params"], max_norm=10.0)
                 optimizer['enc'].step()
 
+            self.state['loss'] = [d_loss, d_loss]
 
         else:
             # -----------train Generator-----------
