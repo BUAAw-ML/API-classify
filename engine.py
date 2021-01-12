@@ -163,7 +163,7 @@ class Engine(object):
             if self.state['method'] == 'semiGAN_MultiLabelMAP':
                 # train for one epoch
                 print("Train with unlabeled data:")
-                self.train(train_loader, model, criterion, optimizer, epoch, True)
+                self.train(unlabeled_train_loader, model, criterion, optimizer, epoch, True)
 
             # evaluate on validation set
             prec1 = self.validate(val_loader, model, criterion, epoch)
