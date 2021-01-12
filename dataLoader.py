@@ -98,11 +98,8 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             # dataset.train_data = data[ind[:data_config['data_split']]].tolist()
             # dataset.unlabeled_train_data = data[ind[:500]].tolist()
 
-            dataset.unlabeled_train_data = dataset.train_data
+            dataset.unlabeled_train_data = copy.deepcopy(dataset.train_data)
             dataset.unlabeled_train_data.extend(dataset.train_data)
-            print(len(dataset.train_data))
-            print(len(dataset.unlabeled_train_data))
-            exit()
 
             file = os.path.join(data_path, 'test.pkl')
             dataset.test_data = dataset.load_TrainTest(file)
