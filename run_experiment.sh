@@ -23,7 +23,7 @@ python main.py \
         --min_tagFrequence=0  \
         --max_tagFrequence=50 \
         --intanceNum_limit=99999 \
-        --data_split=200 \
+        --data_split=400 \
         --test_description=''  \
         --model_backend='pytorch'
 
