@@ -64,13 +64,13 @@ class MABert(nn.Module):
         flatten = torch.sum(attention_out, -1, keepdim=True)
         prob = torch.sum(prob, -1, keepdim=True)
 
-        prob = torch.sigmoid(prob)
-        flatten = torch.sigmoid(flatten)
+        # prob = torch.sigmoid(prob)
+        # flatten = torch.sigmoid(flatten)
 
-        # prob = torch.cat((prob,flatten),-1)
-        # prob = self.output(prob)[:,0]
+        prob = torch.cat((prob,flatten),-1)
+        prob = self.output(prob)
 
-        return flatten, logit, prob
+        return prob[:,1], logit, prob[:,0]
 
     def get_config_optim(self, lr, lrp):
         return [
