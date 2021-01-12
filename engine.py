@@ -474,34 +474,38 @@ class semiGAN_MultiLabelMAPEngine(MultiLabelMAPEngine):
 
         if semi_supervised == False: #train with labeled data
             d_loss = criterion(self.state['output'], target_var)
+
+            # d_loss = criterion(self.state['output'], target_var) + D_L_unsupervised + D_L_unsupervised2
+
+            if training:
+                optimizer['enc'].zero_grad()
+                d_loss.backward()
+                nn.utils.clip_grad_norm_(optimizer['enc'].param_groups[0]["params"], max_norm=10.0)
+                optimizer['enc'].step()
+
+
         else:
+            # -----------train Generator-----------
             d_loss = D_L_unsupervised + D_L_unsupervised2
+            if training:
+                optimizer['enc'].zero_grad()
+                d_loss.backward()
+                nn.utils.clip_grad_norm_(optimizer['enc'].param_groups[0]["params"], max_norm=10.0)
+                optimizer['enc'].step()
 
-        # d_loss = criterion(self.state['output'], target_var) + D_L_unsupervised + D_L_unsupervised2
+            flatten, _, prob = model['MABert'](ids, token_type_ids, attention_mask,
+                                               self.state['encoded_tag'],
+                                               self.state['tag_mask'], x_g)
 
-        if training:
-            optimizer['enc'].zero_grad()
-            d_loss.backward()
-            nn.utils.clip_grad_norm_(optimizer['enc'].param_groups[0]["params"], max_norm=10.0)
-            optimizer['enc'].step()
+            g_loss = -1 * torch.mean(torch.log(prob + epsilon))
 
-        #-----------train Generator-----------
+            if training:
+                optimizer['Generator'].zero_grad()
+                g_loss.backward()
+                nn.utils.clip_grad_norm_(model['Generator'].parameters(), max_norm=10.0)
+                optimizer['Generator'].step()
 
-        flatten, _, prob = model['MABert'](ids, token_type_ids, attention_mask,
-                                                                      self.state['encoded_tag'],
-                                                                      self.state['tag_mask'], x_g)
-
-        g_loss = -1 * torch.mean(torch.log(prob + epsilon))
-
-        g_loss = g_loss
-
-        if training:
-            optimizer['Generator'].zero_grad()
-            g_loss.backward()
-            nn.utils.clip_grad_norm_(model['Generator'].parameters(), max_norm=10.0)
-            optimizer['Generator'].step()
-
-        self.state['loss'] = [d_loss, g_loss]
+            self.state['loss'] = [d_loss, g_loss]
 
         if not training:
             return self.state['output']

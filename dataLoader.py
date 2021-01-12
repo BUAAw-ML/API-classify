@@ -99,10 +99,13 @@ def load_data(data_config, data_path=None, data_type='allData', use_previousData
             # dataset.unlabeled_train_data = data[ind[:500]].tolist()
 
             dataset.unlabeled_train_data = copy.deepcopy(dataset.train_data)
-            if len(dataset.train_data) < 400:
+
+            if len(dataset.unlabeled_train_data) >= 800:
+                dataset.unlabeled_train_data = dataset.train_data[:800]
+
+            while len(dataset.unlabeled_train_data) < 800:
                 dataset.unlabeled_train_data.extend(dataset.train_data)
-            else:
-                dataset.unlabeled_train_data = dataset.train_data[:400]
+
 
             file = os.path.join(data_path, 'test.pkl')
             dataset.test_data = dataset.load_TrainTest(file)
