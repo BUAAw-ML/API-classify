@@ -27,7 +27,7 @@
 
 
 python main.py \
-        --experiment_no='hhm_generateEmbedding_detach'  \
+        --experiment_no='zyz_generateEmbedding'  \
         --epochs=120 \
         --epoch_step=110 \
         --device_ids=0 \
