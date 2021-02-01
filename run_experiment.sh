@@ -27,7 +27,7 @@
 
 
 python main.py \
-        --experiment_no='zyc_generateEmbedding_detach'  \
+        --experiment_no='hhm_generateEmbedding_detach'  \
         --epochs=120 \
         --epoch_step=110 \
         --device_ids=0 \
@@ -36,8 +36,8 @@ python main.py \
         --D-lr=0.1 \
         --B-lr=0.001 \
         --save_model_path='./checkpoint' \
-        --data_type='TrainTestTextTag' \
-        --data_path='../datasets/stack-overflow2000' \
+        --data_type='TrainTest_programWeb_freecode_AAPD' \
+        --data_path='../datasets/AAPD' \
         --use_previousData=0 \
         --model_type='MABert' \
         --method='semiGAN_MultiLabelMAP' \
